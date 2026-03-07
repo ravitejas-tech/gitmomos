@@ -2,23 +2,7 @@ import { Section } from '../ui/Section';
 import { CodeBlock } from '../ui/CodeBlock';
 import { motion } from 'framer-motion';
 
-const cliOutput = `> gitmomos login
-Opening browser for authentication...
-Login successful! Welcome to gitmomos.
-
-> gitmomos project add
-Detected git repository: frontend-app
-Project 'frontend-app' added to tracking.
-
-> gitmomos sync
-Syncing 12 new commits...
-Generated daily report successfully.
-
-> gitmomos report today
-[09:00 AM] Refactored authentication store
-[11:30 AM] Implemented UI Badge component
-[02:15 PM] Fixed production CORS issue
-`;
+import { CLI_OUTPUT } from '~/data/landing-page/cli-preview.data';
 
 export function CliPreviewSection() {
     return (
@@ -50,7 +34,7 @@ export function CliPreviewSection() {
                 >
                     <div className="absolute -inset-1 bg-primary-gradient rounded-xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
                     <CodeBlock
-                        code={cliOutput}
+                        code={CLI_OUTPUT}
                         className="min-h-[250px] shadow-2xl relative bg-slate-950 border-slate-800"
                     />
                 </motion.div>

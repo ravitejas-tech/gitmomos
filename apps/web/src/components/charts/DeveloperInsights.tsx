@@ -10,25 +10,10 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+import { ACTIVITY_DATA } from '~/data/developer-insights/activity.data';
+import { PRODUCTIVITY_DATA } from '~/data/developer-insights/productivity.data';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Section } from '../ui/Section';
-
-const ACTIVITY_DATA = [
-    { name: 'Mon', commits: 12 },
-    { name: 'Tue', commits: 19 },
-    { name: 'Wed', commits: 15 },
-    { name: 'Thu', commits: 22 },
-    { name: 'Fri', commits: 28 },
-    { name: 'Sat', commits: 5 },
-    { name: 'Sun', commits: 2 },
-];
-
-const PRODUCTIVITY_DATA = [
-    { week: 'W1', score: 65 },
-    { week: 'W2', score: 72 },
-    { week: 'W3', score: 85 },
-    { week: 'W4', score: 91 },
-];
 
 export function DeveloperInsights() {
     return (

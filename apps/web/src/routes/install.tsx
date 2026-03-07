@@ -3,6 +3,8 @@ import { Section } from '../components/ui/Section';
 import { CodeBlock } from '../components/ui/CodeBlock';
 import { Badge } from '../components/ui/Badge';
 
+import { INSTALL_STEPS } from '~/data/install/steps.data';
+
 export default function Install() {
     return (
         <Section>
@@ -19,56 +21,24 @@ export default function Install() {
                 </div>
 
                 <div className="space-y-12">
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-200 flex items-center gap-4">
-                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-blue/20 text-primary-blue text-sm border border-primary-blue/50">
-                                1
-                            </span>
-                            Install the CLI globally
-                        </h3>
-                        <div className="pl-12">
-                            <CodeBlock code="npm install -g gitmomos" />
+                    {INSTALL_STEPS.map((step) => (
+                        <div key={step.number} className="space-y-4">
+                            <h3 className="text-xl font-semibold text-gray-200 flex items-center gap-4">
+                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-blue/20 text-primary-blue text-sm border border-primary-blue/50">
+                                    {step.number}
+                                </span>
+                                {step.title}
+                            </h3>
+                            <div className="pl-12">
+                                {step.description && (
+                                    <p className="text-gray-400 text-sm mb-3">
+                                        {step.description}
+                                    </p>
+                                )}
+                                <CodeBlock code={step.code} />
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-200 flex items-center gap-4">
-                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-blue/20 text-primary-blue text-sm border border-primary-blue/50">
-                                2
-                            </span>
-                            Authenticate your account
-                        </h3>
-                        <div className="pl-12">
-                            <CodeBlock code="gitmomos login" />
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-200 flex items-center gap-4">
-                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-blue/20 text-primary-blue text-sm border border-primary-blue/50">
-                                3
-                            </span>
-                            Add a project
-                        </h3>
-                        <div className="pl-12">
-                            <p className="text-gray-400 text-sm mb-3">
-                                Navigate to your codebase directory and run:
-                            </p>
-                            <CodeBlock code={'> cd path/to/my-codebase\n> gitmomos project add'} />
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-200 flex items-center gap-4">
-                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-blue/20 text-primary-blue text-sm border border-primary-blue/50">
-                                4
-                            </span>
-                            Generate your first report
-                        </h3>
-                        <div className="pl-12">
-                            <CodeBlock code="gitmomos sync" />
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </Container>
         </Section>
