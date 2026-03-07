@@ -1,27 +1,56 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import 'tailwindcss';
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --color-primary-purple: #c026ff;
-  --color-primary-purple-dark: #9333ea;
-  --color-primary-blue: #4f46e5;
-  --color-bg-base: #0f172a;
+    --font-sans:
+        'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-heading: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono:
+        'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+    --color-primary-purple: #c026ff;
+    --color-primary-purple-dark: #9333ea;
+    --color-primary-blue-dark: #1e1b4b;
+    --color-bg-base: #000112;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5f5;
+    --color-surface: #020720;
 }
 
 @utility bg-primary-gradient {
-  background-image: linear-gradient(to right, var(--color-primary-purple), var(--color-primary-blue));
+    background-image: linear-gradient(
+        to right,
+        var(--color-primary-purple-dark),
+        var(--color-primary-purple)
+    );
 }
 
 @utility text-primary-gradient {
-  background-image: linear-gradient(to right, var(--color-primary-purple), var(--color-primary-blue));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+    background-image: linear-gradient(
+        to right,
+        var(--color-primary-purple-dark),
+        var(--color-primary-purple)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@utility bg-gitmomos-background {
+    background-color: #000112;
+    background-image: radial-gradient(
+            circle at top right,
+            rgba(192, 38, 255, 0.35),
+            transparent 40%
+        ),
+        radial-gradient(circle at center, rgba(147, 51, 234, 0.25), transparent 50%),
+        radial-gradient(circle at bottom left, rgba(30, 27, 75, 0.4), transparent 45%);
 }
 
 html,
 body {
-  @apply bg-bg-base text-gray-50;
-  color-scheme: dark;
+    @apply bg-gitmomos-background text-text-primary;
+    color-scheme: dark;
+    min-height: 100vh;
 }
