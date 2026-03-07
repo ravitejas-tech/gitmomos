@@ -1,77 +1,111 @@
 import { Container } from '../components/ui/Container';
 
 export default function Docs() {
-  return (
-    <Container className="py-12 md:py-16 flex justify-center">
-      <article className="prose prose-invert max-w-3xl w-full">
-        <h1 className="text-4xl font-extrabold tracking-tight mb-8">Documentation</h1>
-        
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="intro">Introduction</h2>
-        <p className="text-gray-400 mb-6 leading-relaxed">
-          Welcome to the official Gitmomos documentation. This guide covers everything from installation to maximizing your daily development analytics using our secure terminal-first tool builder.
-        </p>
+    return (
+        <Container className="py-12 md:py-16 flex justify-center">
+            <article className="prose prose-invert max-w-3xl w-full">
+                <h1 className="text-4xl font-extrabold font-heading tracking-tight mb-8">
+                    Documentation
+                </h1>
+                <p className="text-text-secondary mb-10 text-lg">
+                    Follow this complete guide to get started with gitmomos. We've designed a
+                    powerful workflow that stays out of your way while keeping your team
+                    consistently informed.
+                </p>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="what-is">What is gitmomos?</h2>
-        <p className="text-gray-400 mb-6 leading-relaxed">
-          Gitmomos is designed to automate your daily work reporting by securely aggregating your local git commits. It respects your privacy by analyzing only metadata locally, avoiding any upload of proprietary codebase logic, while rendering beautiful developer reports in natural language natively in your CLI and Web Dashboard.
-        </p>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 1 — Create Account
+                </h3>
+                <p className="text-text-secondary mb-6">
+                    Start by visiting our{' '}
+                    <a href="/signup" className="text-primary-purple hover:underline">
+                        Signup page
+                    </a>
+                    . You will need to provide a username, your work email address, and a secure
+                    password to create your cloud dashboard profile.
+                </p>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="installation">Installation</h2>
-        <p className="text-gray-400 mb-6 leading-relaxed">
-          Gitmomos requires Node.js v18+. You can install the CLI globally using npm.
-        </p>
-        <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 font-mono text-sm mb-6 overflow-x-auto text-primary-purple">
-          npm install -g gitmomos
-        </pre>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 2 — Install CLI
+                </h3>
+                <p className="text-text-secondary mb-4">
+                    Gitmomos is a terminal-native tool. Install it globally on your machine using
+                    npm:
+                </p>
+                <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 font-mono text-sm mb-6 text-primary-purple">
+                    npm install -g gitmomos
+                </pre>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="cli-commands">CLI Commands</h2>
-        <ul className="list-disc pl-6 text-gray-400 space-y-2 mb-6">
-          <li><strong>gitmomos login</strong> - Authenticate CLI securely via web PKCE flow.</li>
-          <li><strong>gitmomos project add</strong> - Register current directory for tracking locally.</li>
-          <li><strong>gitmomos sync</strong> - Analyze new commits and generate daily reports.</li>
-          <li><strong>gitmomos report today</strong> - View the report directly in terminal.</li>
-        </ul>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 3 — Login via CLI
+                </h3>
+                <p className="text-text-secondary mb-4">
+                    Authenticate your terminal instance using the credentials you created on the
+                    website.
+                </p>
+                <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 font-mono text-sm mb-6 text-gray-300">
+                    gitmomos login
+                </pre>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="adding-project">Adding a Project</h2>
-        <p className="text-gray-400 leading-relaxed mb-6">
-          Ensure you are inside the root directory of a valid <code>.git</code> repository. When you execute <code>gitmomos project add</code>, the CLI binds this local path to your gitmomos tracking registry. You only need to perform this step once per repository.
-        </p>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 4 — Add a Project
+                </h3>
+                <p className="text-text-secondary mb-4">
+                    Navigate to your local git repository and link it. You will be prompted to
+                    provide a project name and confirm the repository path.
+                </p>
+                <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 font-mono text-sm mb-6 text-gray-300">
+                    gitmomos project add
+                </pre>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="syncing">Syncing Commits</h2>
-        <p className="text-gray-400 leading-relaxed mb-6">
-          Execute <code>gitmomos sync</code> at the end of your day. The tool scans the standard Git history within the predefined `since` time range filtering by your specific Author email. 
-        </p>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 5 — Sync Work
+                </h3>
+                <p className="text-text-secondary mb-4">
+                    At the end of your session, instruct the CLI to collect all new commit messages
+                    securely and dispatch them to the backend context engine.
+                </p>
+                <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 font-mono text-sm mb-6 text-gray-300">
+                    gitmomos sync
+                </pre>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="daily-reports">Daily Reports</h2>
-        <p className="text-gray-400 leading-relaxed mb-6">
-          Instead of manually copy-pasting git messages, Gitmomos utilizes its AI module to generate a natural, fluent English daily summary outputting exactly what features you shipped and bugs you tracked. Retrieve it easily using <code>gitmomos report today</code>.
-        </p>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 6 — AI Report Generation
+                </h3>
+                <p className="text-text-secondary mb-6">
+                    You don't need to write manual updates anymore. Every day, our backend scheduled
+                    job processes your synced commit metadata, translates technical jargon, and
+                    generates a cohesive, natural language report using advanced AI models.
+                </p>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="privacy">Privacy Model</h2>
-        <p className="text-gray-400 leading-relaxed mb-6">
-          Your codebase stays 100% local. When you execute the sync command, the CLI extracts exclusively the commit titles, timestamps, and hash metadata. No actual source code or `diff` logs are ever pulled or parsed, ensuring comprehensive proprietary security.
-        </p>
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 7 — View Reports
+                </h3>
+                <p className="text-text-secondary mb-6">
+                    Open the gitmomos web dashboard to view your generated Daily reports, Weekly
+                    high-level summaries, and visual Activity graphs mapping your productivity
+                    trends.
+                </p>
 
-        <h2 className="text-2xl font-bold mt-10 mb-4 text-gray-200" id="faq">FAQ</h2>
-        <div className="space-y-4">
-          <details className="group border-b border-slate-800 pb-4">
-            <summary className="text-lg font-medium text-gray-300 cursor-pointer outline-none marker:text-primary-blue">
-               Can I track multiple projects?
-            </summary>
-            <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-              Yes, you can run <code>project add</code> inside as many git projects as you want. The sync command aggregates them all.
-            </p>
-          </details>
-          <details className="group border-b border-slate-800 pb-4">
-            <summary className="text-lg font-medium text-gray-300 cursor-pointer outline-none marker:text-primary-blue">
-               Do you store my code?
-            </summary>
-            <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-              Never. Only the commit hash strings, metadata (author, date), and commit messages are synced to the cloud.
-            </p>
-          </details>
-        </div>
-      </article>
-    </Container>
-  );
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 8 — Manual Reports
+                </h3>
+                <p className="text-text-secondary mb-6">
+                    Not all work results in code commits. If you spent the day locked in research,
+                    planning, or meetings, you can easily log into the dashboard and append manual
+                    reports explicitly categorizing non-coding work hours.
+                </p>
+
+                <h3 className="text-xl font-bold font-heading mt-10 mb-2 text-gray-200">
+                    Step 9 — Notifications
+                </h3>
+                <p className="text-text-secondary mb-6">
+                    Never miss a standup update. If the system detects no git syncs or manual
+                    reports near the end of your day, you will receive an automated email reminder.
+                    You can directly reply or mark the day as "absent/PTO" gracefully within the UI
+                    dashboard.
+                </p>
+            </article>
+        </Container>
+    );
 }
