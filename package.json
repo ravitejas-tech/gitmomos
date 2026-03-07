@@ -9,7 +9,12 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "supabase:link": "npx supabase link --project-ref $SUPABASE_PROJECT_ID",
+    "db:push": "npx supabase db push",
+    "db:reset": "npx supabase db reset",
+    "db:migrate": "npx supabase migration up",
+    "db:status": "npx supabase db status"
   },
   "packageManager": "yarn@4.0.0"
 }
