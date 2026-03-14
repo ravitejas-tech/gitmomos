@@ -11,7 +11,7 @@ export const loadEnv = () => {
 };
 
 export const config = {
-    supabaseUrl: process.env.SUPABASE_URL || '',
-    supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
-    supabaseProjectId: process.env.SUPABASE_PROJECT_ID || '',
+    get supabaseUrl() { return process.env.SUPABASE_URL || ''; },
+    get supabaseAnonKey() { return process.env.SUPABASE_ANON_KEY || ''; },
+    get supabaseProjectId() { return process.env.SUPABASE_PROJECT_ID || ''; },
 };
