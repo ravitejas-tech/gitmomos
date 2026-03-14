@@ -653,6 +653,43 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gitmomos/web@workspace:apps/web":
+  version: 0.0.0-use.local
+  resolution: "@gitmomos/web@workspace:apps/web"
+  dependencies:
+    "@react-router/dev": "npm:7.12.0"
+    "@react-router/node": "npm:7.12.0"
+    "@react-router/serve": "npm:7.12.0"
+    "@supabase/supabase-js": "npm:^2.98.0"
+    "@tailwindcss/vite": "npm:^4.1.13"
+    "@tanstack/react-query": "npm:^5.90.21"
+    "@types/node": "npm:^22"
+    "@types/react": "npm:^19.2.7"
+    "@types/react-dom": "npm:^19.2.3"
+    clsx: "npm:^2.1.1"
+    eslint: "npm:^10.0.3"
+    eslint-config-prettier: "npm:^10.1.8"
+    eslint-plugin-react: "npm:^7.37.5"
+    eslint-plugin-react-hooks: "npm:^7.0.1"
+    framer-motion: "npm:^12.35.0"
+    isbot: "npm:^5.1.31"
+    lucide-react: "npm:^0.577.0"
+    prettier: "npm:^3.8.1"
+    react: "npm:^19.2.4"
+    react-dom: "npm:^19.2.4"
+    react-is: "npm:^19.2.4"
+    react-query-kit: "npm:^3.3.2"
+    react-router: "npm:7.12.0"
+    recharts: "npm:^3.8.0"
+    tailwindcss: "npm:^4.2.1"
+    typescript: "npm:^5.9.2"
+    typescript-eslint: "npm:^8.56.1"
+    vite: "npm:^7.1.7"
+    vite-tsconfig-paths: "npm:^5.1.4"
+    zustand: "npm:^5.0.11"
+  languageName: unknown
+  linkType: soft
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -6289,43 +6326,6 @@ __metadata:
   checksum: 5c7548f5f43a23533e53324304db4ad85f1896b1bfd3ee32ae9b866bac2933782c77b350eb2b52a02c625c8ad1ddd4c000df077419410650c982cd97fde8d014
   languageName: node
   linkType: hard
-
-"web@workspace:apps/web":
-  version: 0.0.0-use.local
-  resolution: "web@workspace:apps/web"
-  dependencies:
-    "@react-router/dev": "npm:7.12.0"
-    "@react-router/node": "npm:7.12.0"
-    "@react-router/serve": "npm:7.12.0"
-    "@supabase/supabase-js": "npm:^2.98.0"
-    "@tailwindcss/vite": "npm:^4.1.13"
-    "@tanstack/react-query": "npm:^5.90.21"
-    "@types/node": "npm:^22"
-    "@types/react": "npm:^19.2.7"
-    "@types/react-dom": "npm:^19.2.3"
-    clsx: "npm:^2.1.1"
-    eslint: "npm:^10.0.3"
-    eslint-config-prettier: "npm:^10.1.8"
-    eslint-plugin-react: "npm:^7.37.5"
-    eslint-plugin-react-hooks: "npm:^7.0.1"
-    framer-motion: "npm:^12.35.0"
-    isbot: "npm:^5.1.31"
-    lucide-react: "npm:^0.577.0"
-    prettier: "npm:^3.8.1"
-    react: "npm:^19.2.4"
-    react-dom: "npm:^19.2.4"
-    react-is: "npm:^19.2.4"
-    react-query-kit: "npm:^3.3.2"
-    react-router: "npm:7.12.0"
-    recharts: "npm:^3.8.0"
-    tailwindcss: "npm:^4.2.1"
-    typescript: "npm:^5.9.2"
-    typescript-eslint: "npm:^8.56.1"
-    vite: "npm:^7.1.7"
-    vite-tsconfig-paths: "npm:^5.1.4"
-    zustand: "npm:^5.0.11"
-  languageName: unknown
-  linkType: soft
 
 "which-boxed-primitive@npm:^1.1.0, which-boxed-primitive@npm:^1.1.1":
   version: 1.1.1
