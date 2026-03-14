@@ -6,6 +6,7 @@ import { loginCommand } from './commands/login.cmd';
 import { syncCommand } from './commands/sync.cmd';
 import { statusCommand } from './commands/status.cmd';
 import { reportCommand } from './commands/report.cmd';
+import { logoutCommand } from './commands/logout.cmd';
 import { loadEnv } from './utils/config';
 
 // Load environment variables early
@@ -37,8 +38,8 @@ program
     .argument('<name>', 'Project name')
     .action(async (name) => {
         intro(pc.magenta(' gitmomos '));
-        await addCommand(name);
-        outro(pc.green('Project added successfully!'));
+        const success = await addCommand(name);
+        outro(success ? pc.green('Done!') : pc.red('Project registration failed.'));
     });
 
 program
@@ -66,6 +67,15 @@ program
         intro(pc.magenta(' gitmomos '));
         await reportCommand();
         outro(pc.green('Report fetch complete!'));
+    });
+
+program
+    .command('logout')
+    .description('Log out and clear your session')
+    .action(async () => {
+        intro(pc.magenta(' gitmomos '));
+        await logoutCommand();
+        outro(pc.green('Logout process complete!'));
     });
 
 program.parse();
