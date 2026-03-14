@@ -19,15 +19,18 @@ export class GitService {
 
     async getCommitsSince(hash?: string) {
         const email = await this.getUserEmail();
+        
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        
         const options: any = {
             '--author': email,
+            '--since': todayStart.toISOString(),
         };
 
         if (hash) {
             options.from = hash;
             options.to = 'HEAD';
-        } else {
-            options['--since'] = '7 days ago';
         }
 
         const logs = await this.git.log(options);
