@@ -1,4 +1,4 @@
-# Gitmomos 🚀
+# gitmomos 🚀
 
 **AI-powered developer productivity reports from your Git commits.**
 
