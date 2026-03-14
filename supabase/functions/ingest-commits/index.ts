@@ -22,13 +22,11 @@ interface IngestBody {
 }
 
 Deno.serve(async (req: Request) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
-    // 1. Initialize Supabase Client with User's JWT
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) throw new Error('Missing Authorization header');
 
@@ -42,18 +40,15 @@ Deno.serve(async (req: Request) => {
       }
     );
 
-    // 2. Parse and Validate Request Body
     const { projectId, commits }: IngestBody = await req.json();
 
     if (!projectId || !Array.isArray(commits)) {
       throw new Error('Invalid request body. Expected projectId and commits array.');
     }
 
-    // 3. Get User Identity
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
     if (userError || !user) throw new Error('Unauthorized');
 
-    // 4. Verify Project Ownership
     const { data: project, error: pError } = await supabaseClient
       .from('projects')
       .select('id')
@@ -65,8 +60,6 @@ Deno.serve(async (req: Request) => {
       throw new Error('Project not found or you do not have permission.');
     }
 
-    // 5. Batch Insert Commit Metadata
-    // We use upsert-like logic via constraint handling in DB or simple batch insert
     const { error: insertError } = await supabaseClient
       .from('commits_metadata')
       .insert(
@@ -81,13 +74,11 @@ Deno.serve(async (req: Request) => {
       );
 
     if (insertError) {
-      // Ignore unique constraint violations (already synced commits)
       if (insertError.code !== '23505') {
         throw insertError;
       }
     }
 
-    // 6. Update Sync State for the Project
     if (commits.length > 0) {
       const latestHash = commits[0].hash;
       await supabaseClient
@@ -97,6 +88,24 @@ Deno.serve(async (req: Request) => {
           last_synced_hash: latestHash,
           last_sync_at: new Date().toISOString(),
         });
+
+      const today = new Date().toISOString().split('T')[0];
+      const { data: existingReport } = await supabaseClient
+         .from('reports')
+         .select('id')
+         .eq('project_id', projectId)
+         .eq('date', today)
+         .maybeSingle();
+      
+      if (!existingReport) {
+        await supabaseClient.from('reports').insert({
+          user_id: user.id,
+          project_id: projectId,
+          date: today,
+          content: 'Pending AI context generation based on commits...',
+          status: 'pending'
+        });
+      }
     }
 
     return new Response(
