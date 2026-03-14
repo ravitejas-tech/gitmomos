@@ -4,6 +4,17 @@
 
 Gitmomos is a professional developer productivity tool designed to bridge the gap between your daily coding activity and structured progress reporting. By securely syncing your Git commit metadata, Gitmomos uses advanced AI (Gemini Pro) to translate technical commit messages into cohesive, high-level developer reports.
 
+## 🚧 Project Status
+
+> **Note**
+> Gitmomos is currently **under active development**.
+>
+> The **core user flow (golden path)** has been implemented and is functional. I am actively working on stabilizing the platform and preparing the first public release.
+>
+> A production release will be published once deployment and final polishing are completed.
+
+If you encounter issues or have suggestions, feel free to open an issue.
+
 ---
 
 ## ✨ Features
