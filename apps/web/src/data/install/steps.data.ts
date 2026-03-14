@@ -13,7 +13,7 @@ export const INSTALL_STEPS = [
         number: 3,
         title: 'Add a project',
         description: 'Navigate to your codebase directory and run:',
-        code: '> cd path/to/my-codebase\n> gitmomos project add'
+        code: '> cd path/to/my-codebase\n> gitmomos add "Project Name"'
     },
     {
         number: 4,
