@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { Button } from '../ui/Button';
 import { cn } from '../../lib/utils';
+import { authService } from '../../services/auth.service';
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = React.useState(false);
+    const [user, setUser] = React.useState<any>(null);
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -13,8 +16,25 @@ export function Navbar() {
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         handleScroll(); // Initial check
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        authService.getSession().then((session) => {
+            setUser(session?.user ?? null);
+        });
+
+        const { data: { subscription } } = authService.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            subscription.unsubscribe();
+        };
     }, []);
+
+    const handleLogout = async () => {
+        await authService.logout();
+        navigate('/');
+    };
 
     return (
         <header
@@ -33,6 +53,14 @@ export function Navbar() {
                         </span>
                     </NavLink>
                     <nav className="hidden md:flex gap-8">
+                        {user ? (
+                            <NavLink
+                                to="/dashboard"
+                                className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+                            >
+                                Dashboard
+                            </NavLink>
+                        ) : null}
                         <NavLink
                             to="/docs"
                             className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
@@ -49,17 +77,30 @@ export function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <NavLink
-                        to="/login"
-                        className="text-sm font-medium text-text-secondary hover:text-text-primary hidden sm:block"
-                    >
-                        Login
-                    </NavLink>
-                    <NavLink to="/signup">
-                        <Button size="sm" className="hidden sm:inline-flex">
-                            Sign Up
+                    {user ? (
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="hidden sm:inline-flex"
+                            onClick={handleLogout}
+                        >
+                            Logout
                         </Button>
-                    </NavLink>
+                    ) : (
+                        <>
+                            <NavLink
+                                to="/login"
+                                className="text-sm font-medium text-text-secondary hover:text-text-primary hidden sm:block"
+                            >
+                                Login
+                            </NavLink>
+                            <NavLink to="/signup">
+                                <Button size="sm" className="hidden sm:inline-flex">
+                                    Sign Up
+                                </Button>
+                            </NavLink>
+                        </>
+                    )}
                 </div>
             </div>
         </header>
