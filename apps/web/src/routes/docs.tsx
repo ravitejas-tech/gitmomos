@@ -1,4 +1,5 @@
 import { Container } from '../components/ui/Container';
+import { CodeBlock } from '../components/ui/CodeBlock';
 
 import { DOCS_STEPS } from '~/data/docs/steps.data';
 
@@ -34,10 +35,17 @@ export default function Docs() {
                                 </>
                             )}
                         </p>
+                        {step.image && (
+                            <div className="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                                <img 
+                                    src={step.image} 
+                                    alt={step.title} 
+                                    className="w-full h-auto object-cover"
+                                />
+                            </div>
+                        )}
                         {step.code && (
-                            <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 font-mono text-sm mb-6 text-gray-300">
-                                {step.code}
-                            </pre>
+                            <CodeBlock code={step.code} className="mb-6" />
                         )}
                     </div>
                 ))}
