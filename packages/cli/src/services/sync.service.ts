@@ -3,15 +3,20 @@ import { gitService } from './git.service';
 import { logger } from '../utils/logger';
 import { getSupabaseClient } from '@gitmomos/shared';
 import { config } from '../utils/config';
+import { getSession } from '../store/session';
 
 export class SyncService {
-    private _supabase: any;
+    private async getAuthenticatedClient() {
+        const sessionStr = await getSession();
+        if (!sessionStr) throw new Error('Session not found. Please run gitmomos login.');
 
-    private get supabase() {
-        if (!this._supabase) {
-            this._supabase = getSupabaseClient(config.supabaseUrl, config.supabaseAnonKey);
-        }
-        return this._supabase;
+        const session = JSON.parse(sessionStr);
+        const supabase = getSupabaseClient(config.supabaseUrl, config.supabaseAnonKey);
+        await supabase.auth.setSession({
+            access_token: session.access_token,
+            refresh_token: session.refresh_token,
+        });
+        return supabase;
     }
 
     async sync() {
@@ -21,19 +26,33 @@ export class SyncService {
         const remoteUrl = await gitService.getRemoteUrl();
         if (!remoteUrl) throw new Error('No git remote found.');
 
-        // 1. Get project
-        const { data: project, error: pError } = await this.supabase
+        const supabase = await this.getAuthenticatedClient();
+
+        const fs = await import('fs/promises');
+        const path = await import('path');
+        const configPath = path.join(process.cwd(), '.gitmomos');
+
+        let projectId: string;
+        try {
+            const configFile = await fs.readFile(configPath, 'utf-8');
+            const configData = JSON.parse(configFile);
+            projectId = configData.projectId;
+            if (!projectId) throw new Error('Invalid .gitmomos');
+        } catch (err) {
+            throw new Error('Project not found locally. Please run gitmomos add "ProjectName" first to link this directory.');
+        }
+
+        const { data: project, error: pError } = await supabase
             .from('projects')
             .select('id')
-            .eq('remote_url', remoteUrl.trim())
+            .eq('id', projectId)
             .single();
 
         if (pError || !project) {
-            throw new Error('Project not found. Please run gitmomos add "ProjectName" first.');
+            throw new Error('Project ID from .gitmomos not found in the database. Please re-run gitmomos add.');
         }
 
-        // 2. Get last sync state
-        const { data: syncState } = await this.supabase
+        const { data: syncState } = await supabase
             .from('sync_state')
             .select('last_synced_hash')
             .eq('project_id', project.id)
@@ -41,7 +60,6 @@ export class SyncService {
 
         const lastHash = syncState?.last_synced_hash;
 
-        // 3. Extract commits
         logger.info(lastHash ? `Finding commits since ${lastHash.slice(0, 7)}...` : 'Extracting last 7 days of commits...');
         const commits = await gitService.getCommitsSince(lastHash);
 
@@ -50,18 +68,32 @@ export class SyncService {
             return [];
         }
 
-        // 4. Batch push commits via Edge Function Ingestion Pipeline
         logger.info(`Syncing ${commits.length} commits via ingestion pipeline...`);
-        
-        const { data: response, error: ingestError } = await this.supabase.functions.invoke('ingest-commits', {
+
+        const sessionStr = await getSession();
+        const sessionData = JSON.parse(sessionStr!);
+
+        const { data: response, error: ingestError } = await supabase.functions.invoke('ingest-commits', {
             body: {
                 projectId: project.id,
                 commits: commits
-            }
+            },
+            headers: {
+                Authorization: `Bearer ${sessionData.access_token}`,
+            },
         });
 
-        if (ingestError || response?.error) {
-            throw new Error(ingestError?.message || response?.error || 'Sync failed.');
+        if (ingestError) {
+            let detail = ingestError.message;
+            try {
+                const body = await (ingestError as any).context?.json?.();
+                if (body?.error) detail = body.error;
+            } catch (_) {}
+            throw new Error(`Edge Function error: ${detail}`);
+        }
+
+        if (response?.error) {
+            throw new Error(`Ingest error: ${response.error}`);
         }
 
         logger.success(`Successfully synced ${commits.length} commits.`);
