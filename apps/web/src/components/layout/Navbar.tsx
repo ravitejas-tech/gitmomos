@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Button } from '../ui/Button';
+import { Logo } from '../ui/Logo';
 import { cn } from '../../lib/utils';
 import { authService } from '../../services/auth.service';
 
@@ -47,10 +48,8 @@ export function Navbar() {
         >
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-6 md:gap-8">
-                    <NavLink to="/" className="flex items-center space-x-2">
-                        <span className="font-bold inline-block text-xl tracking-tight text-primary-gradient">
-                            gitmomos
-                        </span>
+                    <NavLink to="/" className="flex items-center">
+                        <Logo />
                     </NavLink>
                     <nav className="hidden md:flex gap-8">
                         {user ? (
@@ -68,10 +67,10 @@ export function Navbar() {
                             Docs
                         </NavLink>
                         <NavLink
-                            to="/install"
+                            to="/features"
                             className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
                         >
-                            Install
+                            Features
                         </NavLink>
                     </nav>
                 </div>
