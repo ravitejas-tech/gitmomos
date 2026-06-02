@@ -1,7 +1,4 @@
-<h1>
-  <img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/apps/web/public/icon.png" width="32" alt="Gitmomos Icon" valign="middle" />
-  <img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/apps/web/public/logo.png" height="32" alt="Gitmomos" valign="middle" />
-</h1>
+<h1><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/apps/web/public/icon.png" width="32" alt="Gitmomos Icon" valign="middle" /><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/apps/web/public/logo.png" height="32" alt="Gitmomos" valign="middle" /></h1>
 
 
 [![npm version](https://img.shields.io/npm/v/gitmomos.svg?style=flat-flat)](https://www.npmjs.com/package/gitmomos)
