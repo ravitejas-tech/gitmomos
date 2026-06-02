@@ -1,21 +1,20 @@
 export const FOOTER_LINKS = {
     Product: [
-        { name: 'Features', href: '#' },
-        { name: 'CLI', href: '#' },
-        { name: 'Dashboard', href: '#' },
+        { name: 'Features', href: '/features' },
+        { name: 'Dashboard', href: '/dashboard' },
     ],
     Resources: [
         { name: 'Documentation', href: '/docs' },
-        { name: 'Installation', href: '/install' },
+        { name: 'Installation', href: '/docs/quick-start#installation-and-setup' },
         { name: 'API (Coming Soon)', href: '#' },
     ],
     Community: [
-        { name: 'GitHub', href: '#' },
-        { name: 'Issues', href: '#' },
+        { name: 'GitHub', href: 'https://github.com/ravitejas-tech/gitmomos.git' },
+        { name: 'NPM Package', href: 'https://www.npmjs.com/package/gitmomos' },
         { name: 'Discussions', href: '#' },
     ],
     Legal: [
-        { name: 'Privacy Policy', href: '#' },
-        { name: 'License', href: '#' },
+        { name: 'Privacy Policy', href: '/legal/privacy' },
+        { name: 'License', href: '/legal/license' },
     ],
 };
