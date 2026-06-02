@@ -1,45 +1,47 @@
 import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Container } from '../components/ui/Container';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { NavLink, useNavigate } from 'react-router';
 import { authService } from '../services/auth.service';
+import { useSignupMutation } from '../queries/auth.queries';
 import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 
+const signupSchema = z.object({
+    fullName: z.string().min(1, 'Full name is required'),
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type SignupFormData = z.infer<typeof signupSchema>;
+
 export default function Signup() {
-    const [fullName, setFullName] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const [showPassword, setShowPassword] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const [loading, setLoading] = React.useState(false);
     const navigate = useNavigate();
- 
+    const signupMutation = useSignupMutation();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignupFormData>({
+        resolver: zodResolver(signupSchema),
+    });
+
     React.useEffect(() => {
         authService.getSession().then((session) => {
             if (session) navigate('/dashboard');
         });
     }, [navigate]);
 
-    const handleSignup = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-        setLoading(true);
-
-        try {
-            await authService.signup(email, password, fullName);
-            
-            // Immediately attempt login to establish session
-            // If the migration is active, this will succeed instantly
-            await authService.login(email, password);
-            
-            navigate('/dashboard');
-        } catch (err: any) {
-            setError(err.message || 'Failed to create account');
-        } finally {
-            setLoading(false);
-        }
+    const onSubmit = (data: SignupFormData) => {
+        signupMutation.mutate(data, {
+            onSuccess: () => navigate('/dashboard'),
+        });
     };
 
     return (
@@ -52,43 +54,43 @@ export default function Signup() {
                     <p className="text-sm text-text-secondary mt-2">Start automating your work reports</p>
                 </CardHeader>
                 <CardContent className="pt-4">
-                    <form onSubmit={handleSignup} className="space-y-4">
-                        {error && (
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        {signupMutation.error && (
                             <div className="p-3 rounded-lg bg-red-400/10 border border-red-400/20 flex items-center gap-3 text-sm text-red-400">
                                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                                {error}
+                                {(signupMutation.error as Error).message || 'Failed to create account'}
                             </div>
                         )}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-text-primary">Full Name</label>
-                            <Input 
-                                type="text" 
-                                placeholder="John Doe" 
-                                value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
-                                required
+                            <Input
+                                type="text"
+                                placeholder="John Doe"
+                                {...register('fullName')}
                             />
+                            {errors.fullName && (
+                                <p className="text-xs text-red-400">{errors.fullName.message}</p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-text-primary">Email Address</label>
-                            <Input 
-                                type="email" 
-                                placeholder="dev@example.com" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
+                            <Input
+                                type="email"
+                                placeholder="dev@example.com"
+                                {...register('email')}
                             />
+                            {errors.email && (
+                                <p className="text-xs text-red-400">{errors.email.message}</p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-text-primary">Password</label>
                             <div className="relative">
-                                <Input 
-                                    type={showPassword ? 'text' : 'password'} 
-                                    placeholder="••••••••" 
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                <Input
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="••••••••"
                                     className="pr-10"
-                                    required
+                                    {...register('password')}
                                 />
                                 <button
                                     type="button"
@@ -102,14 +104,17 @@ export default function Signup() {
                                     )}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-xs text-red-400">{errors.password.message}</p>
+                            )}
                         </div>
 
-                        <Button 
-                            className="w-full mt-2 font-semibold" 
+                        <Button
+                            className="w-full mt-2 font-semibold"
                             size="lg"
-                            disabled={loading}
+                            disabled={signupMutation.isPending}
                         >
-                            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                            {signupMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                             Sign Up
                         </Button>
                     </form>

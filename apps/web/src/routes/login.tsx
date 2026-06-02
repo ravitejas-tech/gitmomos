@@ -1,19 +1,35 @@
 import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Container } from '../components/ui/Container';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { NavLink, useNavigate } from 'react-router';
 import { authService } from '../services/auth.service';
+import { useLoginMutation } from '../queries/auth.queries';
 import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 
+const loginSchema = z.object({
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
 export default function Login() {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const [showPassword, setShowPassword] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const [loading, setLoading] = React.useState(false);
     const navigate = useNavigate();
+    const loginMutation = useLoginMutation();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
+    });
 
     React.useEffect(() => {
         authService.getSession().then((session) => {
@@ -21,19 +37,10 @@ export default function Login() {
         });
     }, [navigate]);
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-        setLoading(true);
-
-        try {
-            await authService.login(email, password);
-            navigate('/dashboard');
-        } catch (err: any) {
-            setError(err.message || 'Failed to sign in');
-        } finally {
-            setLoading(false);
-        }
+    const onSubmit = (data: LoginFormData) => {
+        loginMutation.mutate(data, {
+            onSuccess: () => navigate('/dashboard'),
+        });
     };
 
     return (
@@ -46,22 +53,23 @@ export default function Login() {
                     <p className="text-sm text-text-secondary mt-2">Sign in to your gitmomos account</p>
                 </CardHeader>
                 <CardContent className="pt-4">
-                    <form onSubmit={handleLogin} className="space-y-4">
-                        {error && (
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        {loginMutation.error && (
                             <div className="p-3 rounded-lg bg-red-400/10 border border-red-400/20 flex items-center gap-3 text-sm text-red-400">
                                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                                {error}
+                                {(loginMutation.error as Error).message || 'Failed to sign in'}
                             </div>
                         )}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-text-primary">Email Address</label>
-                            <Input 
-                                type="email" 
-                                placeholder="dev@example.com" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
+                            <Input
+                                type="email"
+                                placeholder="dev@example.com"
+                                {...register('email')}
                             />
+                            {errors.email && (
+                                <p className="text-xs text-red-400">{errors.email.message}</p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -71,13 +79,11 @@ export default function Login() {
                                 </a>
                             </div>
                             <div className="relative">
-                                <Input 
-                                    type={showPassword ? 'text' : 'password'} 
-                                    placeholder="••••••••" 
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                <Input
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="••••••••"
                                     className="pr-10"
-                                    required
+                                    {...register('password')}
                                 />
                                 <button
                                     type="button"
@@ -91,14 +97,17 @@ export default function Login() {
                                     )}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-xs text-red-400">{errors.password.message}</p>
+                            )}
                         </div>
 
-                        <Button 
-                            className="w-full mt-2 font-semibold" 
+                        <Button
+                            className="w-full mt-2 font-semibold"
                             size="lg"
-                            disabled={loading}
+                            disabled={loginMutation.isPending}
                         >
-                            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                            {loginMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                             Sign In
                         </Button>
                     </form>
