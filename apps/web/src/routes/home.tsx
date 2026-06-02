@@ -3,6 +3,7 @@ import { FeaturesSection } from '../components/features/FeaturesSection';
 import { HowItWorksSection } from '../components/features/HowItWorksSection';
 import { DeveloperInsights } from '../components/charts/DeveloperInsights';
 import { CliPreviewSection } from '../components/cli-preview/CliPreviewSection';
+import { MeetTheCreatorSection } from '../components/about/MeetTheCreatorSection';
 
 export default function Home() {
     return (
@@ -12,6 +13,7 @@ export default function Home() {
             <DeveloperInsights />
             <HowItWorksSection />
             <CliPreviewSection />
+            <MeetTheCreatorSection />
         </div>
     );
 }
