@@ -3,8 +3,17 @@ import { type RouteConfig, index, route, layout } from '@react-router/dev/routes
 export default [
     layout('../layouts/MainLayout.tsx', [
         index('../routes/home.tsx'),
-        route('docs', '../routes/docs.tsx'),
-        route('install', '../routes/install.tsx'),
+        layout('../layouts/DocsLayout.tsx', [
+            route('docs', '../routes/docs/index.tsx'),
+            route('docs/architecture', '../routes/docs/architecture.tsx'),
+            route('docs/quick-start', '../routes/docs/quick-start.tsx'),
+        ]),
+        layout('../layouts/LegalLayout.tsx', [
+            route('legal', '../routes/legal/index.tsx'),
+            route('legal/privacy', '../routes/legal/privacy.tsx'),
+            route('legal/license', '../routes/legal/license.tsx'),
+        ]),
+        route('features', '../routes/features.tsx'),
     ]),
     layout('../layouts/DashboardLayout.tsx', [
         route('dashboard', '../routes/dashboard/home.tsx'),
