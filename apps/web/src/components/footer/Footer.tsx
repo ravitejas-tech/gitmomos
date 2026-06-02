@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router';
 import { Container } from '../ui/Container';
+import { Logo } from '../ui/Logo';
 
 import { FOOTER_LINKS } from '~/data/navigation/footer.data';
 
@@ -15,10 +16,9 @@ export function Footer() {
                     <div className="col-span-2 lg:col-span-1">
                         <NavLink
                             to="/"
-                            className="text-xl font-bold font-heading text-primary-gradient flex items-center gap-2 mb-4"
+                            className="flex items-center gap-2 mb-4"
                         >
-                            <span className="text-2xl">⚡</span>
-                            gitmomos
+                            <Logo iconClassName="h-8" textClassName="h-7" />
                         </NavLink>
                         <p className="text-text-secondary font-medium leading-relaxed">
                             Fresh daily work reports,
