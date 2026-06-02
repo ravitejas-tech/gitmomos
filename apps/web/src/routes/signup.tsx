@@ -104,8 +104,23 @@ export default function Signup() {
                             </div>
                         </div>
 
+                        <div className="flex items-center gap-2 mt-4">
+                            <input
+                                type="checkbox"
+                                id="privacy-policy"
+                                required
+                                className="w-4 h-4 rounded border-white/20 bg-black/20 text-primary-purple focus:ring-primary-purple focus:ring-offset-surface"
+                            />
+                            <label htmlFor="privacy-policy" className="text-sm text-text-secondary">
+                                I agree to the{' '}
+                                <NavLink to="/legal/privacy" className="text-primary-purple hover:underline" target="_blank">
+                                    Privacy Policy
+                                </NavLink>
+                            </label>
+                        </div>
+
                         <Button 
-                            className="w-full mt-2 font-semibold" 
+                            className="w-full mt-6 font-semibold" 
                             size="lg"
                             disabled={loading}
                         >
