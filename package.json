@@ -1,21 +1,32 @@
 {
-    "name": "gitmomos",
-    "private": true,
-    "workspaces": [
-        "apps/*",
-        "packages/*"
-    ],
-    "scripts": {
-        "build": "turbo run build",
-        "dev": "turbo run dev",
-        "lint": "turbo run lint",
-        "typecheck": "turbo run typecheck",
-        "supabase:link": "npx supabase link --project-ref $SUPABASE_PROJECT_ID",
-        "db:push": "npx supabase db push",
-        "db:reset": "npx supabase db reset",
-        "db:migrate": "npx supabase migration up",
-        "db:status": "npx supabase db status",
-        "functions:deploy": "bash -c 'set -a && source .env && set +a && npx supabase functions deploy'"
-    },
-    "packageManager": "yarn@4.0.0"
+  "name": "gitmomos",
+  "version": "1.0.2",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravitejas-tech/gitmomos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ravitejas-tech/gitmomos/issues"
+  },
+  "homepage": "https://github.com/ravitejas-tech/gitmomos#readme",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "bump": "node scripts/bump-version.js",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "supabase:link": "npx supabase link --project-ref $SUPABASE_PROJECT_ID",
+    "db:push": "npx supabase db push",
+    "db:reset": "npx supabase db reset",
+    "db:migrate": "npx supabase migration up",
+    "db:status": "npx supabase db status",
+    "functions:deploy": "bash -c 'set -a && source .env && set +a && npx supabase functions deploy'"
+  },
+  "packageManager": "yarn@4.0.0"
 }

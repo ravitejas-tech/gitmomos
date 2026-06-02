@@ -1,6 +1,17 @@
 {
   "name": "@gitmomos/web",
+  "version": "1.0.2",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravitejas-tech/gitmomos.git",
+    "directory": "apps/web"
+  },
+  "bugs": {
+    "url": "https://github.com/ravitejas-tech/gitmomos/issues"
+  },
+  "homepage": "https://github.com/ravitejas-tech/gitmomos/tree/main/apps/web#readme",
   "type": "module",
   "scripts": {
     "build": "react-router build",

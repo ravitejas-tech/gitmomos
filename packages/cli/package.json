@@ -1,10 +1,22 @@
 {
   "name": "@gitmomos/cli",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravitejas-tech/gitmomos.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/ravitejas-tech/gitmomos/issues"
+  },
+  "homepage": "https://github.com/ravitejas-tech/gitmomos/tree/main/packages/cli#readme",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "gitmomos": "./dist/index.js"
+    "gitmomos": "dist/index.js"
   },
   "scripts": {
     "dev": "tsup src/index.ts --watch --format esm",
@@ -13,7 +25,6 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@gitmomos/shared": "workspace:*",
     "@supabase/supabase-js": "^2.98.0",
     "commander": "^12.1.0",
     "dotenv": "^17.3.1",
@@ -22,6 +33,7 @@
     "simple-git": "^3.27.0"
   },
   "devDependencies": {
+    "@gitmomos/shared": "*",
     "@types/node": "^25.3.5",
     "tsup": "^8.3.5",
     "typescript": "^5.9.2"
