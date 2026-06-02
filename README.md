@@ -1,5 +1,8 @@
 # gitmomos 🚀
 
+[![npm version](https://img.shields.io/npm/v/gitmomos.svg?style=flat-flat)](https://www.npmjs.com/package/gitmomos)
+[![npm downloads](https://img.shields.io/npm/dm/gitmomos.svg?style=flat-flat)](https://www.npmjs.com/package/gitmomos)
+
 **AI-powered developer productivity reports from your Git commits.**
 
 Gitmomos is a professional developer productivity tool designed to bridge the gap between your daily coding activity and structured progress reporting. By securely syncing your Git commit metadata, Gitmomos uses advanced AI (Gemini Pro) to translate technical commit messages into cohesive, high-level developer reports.
