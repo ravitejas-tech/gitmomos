@@ -1,10 +1,29 @@
 import { Button } from '../ui/Button';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router';
+import pkg from '../../../package.json';
 
 export function HeroSection() {
+    const navigate = useNavigate();
+
     return (
         <section className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24">
             <div className="mx-auto w-full max-w-7xl px-4 flex flex-col items-center text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-6"
+                >
+                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-purple/10 border border-primary-purple/20 text-primary-purple text-sm font-medium">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-purple opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-purple"></span>
+                        </span>
+                        v{pkg.version} is live
+                    </span>
+                </motion.div>
+
                 <motion.h1
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -34,10 +53,19 @@ export function HeroSection() {
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto sm:max-w-none"
                 >
-                    <Button size="lg" className="w-full sm:w-auto font-semibold">
+                    <Button 
+                        size="lg" 
+                        className="w-full sm:w-auto font-semibold"
+                        onClick={() => navigate('/signup')}
+                    >
                         Get Started
                     </Button>
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto font-semibold">
+                    <Button 
+                        variant="outline" 
+                        size="lg" 
+                        className="w-full sm:w-auto font-semibold"
+                        onClick={() => navigate('/docs')}
+                    >
                         View Documentation
                     </Button>
                 </motion.div>
