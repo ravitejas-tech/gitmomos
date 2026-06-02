@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router';
-import { LayoutDashboard, FileText, FolderGit2, BarChart3, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, FileText, FolderGit2, BarChart3, Settings, LogOut, BookOpen } from 'lucide-react';
+import { Logo } from '../ui/Logo';
 import { cn } from '../../lib/utils';
 import { authService } from '../../services/auth.service';
 
@@ -25,10 +26,8 @@ export function Sidebar() {
     return (
         <aside className="w-64 border-r border-primary-purple/10 bg-surface/40 backdrop-blur-xl flex flex-col h-screen sticky top-0">
             <div className="p-6">
-                <NavLink to="/" className="flex items-center space-x-2">
-                    <span className="font-bold inline-block text-xl tracking-tight text-primary-gradient">
-                        gitmomos
-                    </span>
+                <NavLink to="/" className="flex items-center">
+                    <Logo />
                 </NavLink>
             </div>
 
@@ -53,7 +52,14 @@ export function Sidebar() {
                 ))}
             </nav>
 
-            <div className="p-4 border-t border-primary-purple/10">
+            <div className="p-4 border-t border-primary-purple/10 space-y-1">
+                <NavLink
+                    to="/docs"
+                    className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all duration-200"
+                >
+                    <BookOpen className="w-4 h-4" />
+                    Documentation
+                </NavLink>
                 <button
                     onClick={handleLogout}
                     className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-sm font-medium text-text-secondary hover:text-red-400 hover:bg-red-400/5 transition-all duration-200"
