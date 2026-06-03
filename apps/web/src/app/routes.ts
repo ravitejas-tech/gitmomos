@@ -14,6 +14,8 @@ export default [
             route('legal/license', '../routes/legal/license.tsx'),
         ]),
         route('features', '../routes/features.tsx'),
+        route('releases', '../routes/releases-index.tsx'),
+        route('releases/:version', '../routes/releases.tsx'),
     ]),
     layout('../layouts/DashboardLayout.tsx', [
         route('dashboard', '../routes/dashboard/home.tsx'),

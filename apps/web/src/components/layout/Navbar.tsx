@@ -72,6 +72,12 @@ export function Navbar() {
                         >
                             Features
                         </NavLink>
+                        <NavLink
+                            to="/releases"
+                            className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+                        >
+                            Releases
+                        </NavLink>
                     </nav>
                 </div>
 
