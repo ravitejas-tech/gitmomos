@@ -1,41 +1,41 @@
 {
-  "name": "@gitmomos/cli",
-  "version": "1.1.0",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ravitejas-tech/gitmomos.git",
-    "directory": "packages/cli"
-  },
-  "bugs": {
-    "url": "https://github.com/ravitejas-tech/gitmomos/issues"
-  },
-  "homepage": "https://github.com/ravitejas-tech/gitmomos/tree/main/packages/cli#readme",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "bin": {
-    "gitmomos": "dist/index.js"
-  },
-  "scripts": {
-    "dev": "tsup src/index.ts --watch --format esm",
-    "build": "tsup src/index.ts --format esm --clean --minify",
-    "start": "node dist/index.js"
-  },
-  "dependencies": {
-    "@clack/prompts": "^0.7.0",
-    "@supabase/supabase-js": "^2.98.0",
-    "commander": "^12.1.0",
-    "dotenv": "^17.3.1",
-    "keytar": "^7.9.0",
-    "picocolors": "^1.1.0",
-    "simple-git": "^3.27.0"
-  },
-  "devDependencies": {
-    "@gitmomos/shared": "*",
-    "@types/node": "^25.3.5",
-    "tsup": "^8.3.5",
-    "typescript": "^5.9.2"
-  }
+    "name": "@gitmomos/cli",
+    "version": "1.1.1",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ravitejas-tech/gitmomos.git",
+        "directory": "packages/cli"
+    },
+    "bugs": {
+        "url": "https://github.com/ravitejas-tech/gitmomos/issues"
+    },
+    "homepage": "https://github.com/ravitejas-tech/gitmomos/tree/main/packages/cli#readme",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "bin": {
+        "gitmomos": "dist/index.js"
+    },
+    "scripts": {
+        "dev": "tsup src/index.ts --watch --format esm",
+        "build": "tsup src/index.ts --format esm --clean --minify",
+        "start": "node dist/index.js"
+    },
+    "dependencies": {
+        "@clack/prompts": "^0.7.0",
+        "@supabase/supabase-js": "^2.98.0",
+        "commander": "^12.1.0",
+        "dotenv": "^17.3.1",
+        "keytar": "^7.9.0",
+        "picocolors": "^1.1.0",
+        "simple-git": "^3.27.0"
+    },
+    "devDependencies": {
+        "@gitmomos/shared": "*",
+        "@types/node": "^25.3.5",
+        "tsup": "^8.3.5",
+        "typescript": "^5.9.2"
+    }
 }
