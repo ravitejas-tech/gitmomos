@@ -1,7 +1,8 @@
 node_modules
 build
-dist
-.turbo
-.next
+.react-router
+.yarn
 .DS_Store
 coverage
+app/types/database.ts
+supabase/functions/_shared/database.types.ts
