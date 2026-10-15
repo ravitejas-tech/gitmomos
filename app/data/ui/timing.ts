@@ -1,0 +1,1 @@
+export const COPIED_FEEDBACK_MS = 1500

@@ -1,0 +1,2 @@
+# SPA fallback for static hosts that read _redirects (Netlify, Cloudflare Pages).
+/*  /__spa-fallback.html  200

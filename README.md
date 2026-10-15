@@ -1,22 +1,19 @@
-<h1><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/apps/web/public/icon.png" width="32" alt="Gitmomos Icon" valign="middle" /><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/apps/web/public/logo.png" height="32" alt="Gitmomos" valign="middle" /></h1>
+<h1><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/public/icon.png" width="32" alt="Gitmomos Icon" valign="middle" /><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/public/logo.png" height="32" alt="Gitmomos" valign="middle" /></h1>
 
-[![npm version](https://img.shields.io/npm/v/gitmomos.svg?style=flat-flat)](https://www.npmjs.com/package/gitmomos)
-[![npm downloads](https://img.shields.io/npm/dm/gitmomos.svg?style=flat-flat)](https://www.npmjs.com/package/gitmomos)
+**Daily work reports, written from your Git commits.**
 
-**AI-powered developer productivity reports from your Git commits.**
-
-Gitmomos is a professional developer productivity tool designed to bridge the gap between your daily coding activity and structured progress reporting. By securely syncing your Git commit metadata, Gitmomos uses advanced AI (Gemini Pro) to translate technical commit messages into cohesive, high-level developer reports.
+Sign up on the website, connect GitHub or Gitea, and pick your repositories. Every night a background worker collects the commits you authored that day and writes a stand-up ready report with Gemini. There's nothing to install and nothing to remember.
 
 ---
 
 ## ✨ Features
 
-- **🤖 AI-Powered Reports**: Automatically generate daily and weekly summaries from your Git activity.
-- **📟 Terminal Native**: A powerful CLI to sync your workflow without leaving the terminal.
-- **📊 Professional Dashboard**: Visualize your productivity trends, commit frequency, and key achievements.
-- **🔒 Secure & Private**: Only commit metadata (messages, hashes, dates) is synced. Your source code never leaves your machine.
-- **🛠 Easy Project Management**: Link multiple repositories and track them all in one place.
-- **📝 Manual Overrides**: Edit AI-generated reports or add manual updates for non-coding tasks.
+- **🔌 Connect once**: GitHub via OAuth, or any Gitea instance with an access token.
+- **🌙 Nightly reports**: one report per day across all your repositories, generated just after midnight in your timezone.
+- **🌿 Every branch**: commits are collected from all branches, not just the default one.
+- **✏️ Editable**: tweak a report and it is never overwritten by the worker. Copy any report as Markdown.
+- **🔄 Sync now**: regenerate today (or any of the last 30 days) on demand.
+- **🔒 Metadata only**: commit messages and timestamps are read; source code never is. Tokens live encrypted in Supabase Vault.
 
 ---
 
@@ -24,135 +21,145 @@ Gitmomos is a professional developer productivity tool designed to bridge the ga
 
 ### Dashboard Overview
 
-![Overview Dashboard](apps/web/public/images/screenshots/overview.png)
+![Overview Dashboard](public/images/screenshots/overview.png)
 
-### AI Reports
+### Reports
 
-![AI Reports](apps/web/public/images/screenshots/reports.png)
-
-### Project Analytics
-
-![Analytics](apps/web/public/images/screenshots/analytics.png)
+![Reports](public/images/screenshots/reports.png)
 
 ---
 
-## 🏗 Architecture Overview
+## 🏗 Architecture
 
-Gitmomos is built as a modern monorepo with a decoupled architecture:
-
-```mermaid
-graph TD
-    A[Local Git Repo] -- gitmomos sync --> B[CLI - Node.js]
-    B -- Metadata --> C[Supabase - Cloud Backend]
-    C -- Ingestion Hook --> D[AI Engine - Gemini Pro]
-    D -- Structured Report --> C
-    C -- Real-time Data --> E[Web Dashboard - React Router v7]
+```
+React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
+      │                                     ▲   │ pg_cron (hourly)
+      │ functions.invoke                    │   ▼ pg_net
+      ▼                                     │
+ Edge function `connections` ───────────────┤  Edge function `sync`
+   GitHub OAuth / Gitea token → Vault       │    fetch commits (GitHub/Gitea API)
+   import repository list                   └─── write commits + report (Gemini)
 ```
 
-- **CLI (`packages/cli`)**: A TypeScript-based terminal tool that extracts commit metadata and securely dispatches it to the cloud.
-- **Cloud Backend (`supabase/`)**: Leverages Supabase for secure Auth, Postgres database, and Edge Functions for processing.
-- **AI Engine**: A dedicated pipeline using Google's Gemini Pro to analyze technical activity and generate human-readable reports.
-- **Web Dashboard (`apps/web`)**: A high-performance React application built with React Router v7, featuring Framer Motion animations and Recharts visualizations.
+- **Frontend** (`app/`): React Router 7 in SPA mode (`ssr: false`), Tailwind, TanStack Query. Public pages are prerendered at build time. The browser only reads its own rows (RLS) and can change just a few columns: name/timezone, which repos are tracked, and report edits.
+- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits`, `reports`. Provider tokens are stored in **Supabase Vault** and are readable only by the service role.
+- **`connections` function**: GitHub OAuth start/callback, Gitea connect, refresh repository list.
+- **`sync` function**: for one user and one local day, pulls commits from every enabled repository and (re)generates that day's report. It is called by the user ("Sync now") or by the worker.
+- **Worker**: `pg_cron` runs `enqueue_daily_syncs()` every hour at :05. Each user whose local time just passed midnight gets one async `pg_net` call to `sync` for the day that ended.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Setup
 
-### Installation (CLI)
+### 1. Prerequisites
 
-Install the Gitmomos CLI globally using npm:
+- Node.js 20+ (Yarn 4 is vendored in `.yarn/releases`; the global `yarn` command picks it up)
+- A [Supabase](https://supabase.com) project
+- A [Gemini API key](https://aistudio.google.com/apikey)
+- Docker (only for running Supabase locally)
+
+### 2. Install
 
 ```bash
-npm install -g gitmomos
+yarn install
+cp .env.example .env                                  # VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, SUPABASE_PROJECT_ID
+cp supabase/functions/.env.example supabase/functions/.env
 ```
 
-### Initial Setup
+### 3. Database
 
-1. **Login**: Authenticate your CLI with your Gitmomos account.
+```bash
+npx supabase login
+yarn supabase:link
+yarn db:push
+```
 
-    ```bash
-    gitmomos login
-    ```
+> **Upgrading from v1:** v2 replaces the old schema with a single fresh migration. On an existing project, run `npx supabase db reset --linked` first. **This deletes all v1 data.**
 
-2. **Add Project**: Link your current Git repository to the Gitmomos cloud.
+### 4. GitHub OAuth App
 
-    ```bash
-    gitmomos add "My Awesome Project"
-    ```
+Create one at **GitHub → Settings → Developer settings → OAuth Apps**:
 
-3. **Sync Work**: At the end of your session, sync your commits.
-    ```bash
-    gitmomos sync
-    ```
+- **Homepage URL:** your site, e.g. `https://gitmomos.example.com`
+- **Authorization callback URL:** `https://gitmomos.example.com/dashboard/connections/github`
+
+Put the client ID and secret in `supabase/functions/.env`. GitHub allows one callback URL per app, so use a second OAuth App (callback `http://localhost:5173/dashboard/connections/github`) for local development.
+
+> OAuth Apps can only read private repositories with the `repo` scope, so that's what gitmomos requests. It only ever calls read endpoints.
+
+### 5. Worker secret
+
+Generate a shared secret and put it in `supabase/functions/.env` as `WORKER_SECRET`:
+
+```bash
+openssl rand -hex 32
+```
+
+Then store the same value plus your project URL in Vault (SQL editor), so `pg_cron` can call the `sync` function:
+
+```sql
+select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
+select vault.create_secret('<the same WORKER_SECRET>', 'worker_secret');
+```
+
+### 6. Deploy edge functions
+
+```bash
+yarn secrets:set        # uploads supabase/functions/.env
+yarn functions:deploy
+```
+
+### 7. Auth settings
+
+In **Supabase → Authentication → URL Configuration**, set the Site URL to your site and add `https://<your site>/dashboard` and `https://<your site>/dashboard/settings` as redirect URLs. These are used by the confirmation and password-reset emails. Signup works with **Confirm email** on or off.
+
+### 8. Deploy the frontend
+
+```bash
+yarn build
+```
+
+Upload `build/client/` to any static host. Unknown paths must fall back to `/__spa-fallback.html`. `public/_redirects` already does this for Netlify and Cloudflare Pages. On Vercel, add a rewrite of `/(.*)` to `/__spa-fallback.html`.
 
 ---
 
-## 📟 CLI Usage
+## 🛠 Local development
 
-| Command               | Description                                          |
-| :-------------------- | :--------------------------------------------------- |
-| `gitmomos login`      | Authenticate the CLI with your credentials.          |
-| `gitmomos add [name]` | Link the current directory as a Gitmomos project.    |
-| `gitmomos sync`       | Extract and push commit metadata to the cloud.       |
-| `gitmomos logout`     | Securely clear your session from the local keychain. |
-| `gitmomos --help`     | View all available commands and options.             |
+```bash
+yarn db:start           # local Supabase in Docker; applies migrations
+yarn functions:serve    # edge functions with supabase/functions/.env
+yarn dev                # http://localhost:5173
+```
 
----
+Point `.env` at the local API (`http://127.0.0.1:54321` plus the anon key printed by `npx supabase status`). To test the nightly worker locally, add the Vault secrets with `project_url = 'http://supabase_kong_gitmomos:8000'`, then run `select public.enqueue_daily_syncs();`. To connect a Gitea running on localhost, set `ALLOW_LOCAL_GITEA=true` in `supabase/functions/.env`.
 
-## 🧠 How Reports Work
+| Script                                                         | What it does             |
+| -------------------------------------------------------------- | ------------------------ |
+| `yarn dev` / `build` / `preview`                              | Frontend                           |
+| `yarn ts:check` / `lint` / `format`                           | Code quality                       |
+| `yarn db:push` / `db:reset` / `db:diff` / `db:types`          | Migrations and generated DB types  |
+| `yarn functions:serve` / `functions:check` / `functions:deploy` / `secrets:set` | Edge functions   |
 
-Gitmomos follows an asynchronous processing workflow to ensure maximum performance:
+### Project structure
 
-1. **Sync**: `gitmomos sync` extracts commit message, hash, and author date.
-2. **Push**: Metadata is securely stored in the Supabase database.
-3. **Analyze**: The AI Engine processes the metadata in the background (triggered by scheduled jobs).
-4. **Visualize**: Reports appear on your dashboard once processing is complete.
+```
+app/
+  root.tsx, routes.ts, global.css
+  routes/         URL-mirroring route modules (landing, legal, releases, auth, dashboard/*)
+  components/     ui/ primitives + one folder per feature
+  hooks/          TanStack Query hooks and stateful logic, by feature
+  services/       Supabase client, data access and edge-function calls
+  data/ lib/ schemas/ types/
+supabase/
+  migrations/     v2 schema, RLS, Vault helpers, cron
+  functions/
+    connections/  connect forges, import repositories
+    sync/         collect commits + write a day's report
+    _shared/      handlers, provider clients, schemas, constants, helpers
+docs/rulebooks/   coding, backend, frontend and git rules (start with CLAUDE.md)
+```
 
----
-
-## 🛠 Local Development
-
-### Prerequisites
-
-- Node.js (v18+)
-- Yarn (v4.0.0+)
-- Supabase CLI
-
-### Setup
-
-1. **Clone the repository**:
-
-    ```bash
-    git clone https://github.com/ravitejas-tech/gitmomos.git
-    cd gitmomos
-    ```
-
-2. **Install dependencies**:
-
-    ```bash
-    yarn install
-    ```
-
-3. **Environment Setup**:
-   Create a `.env` file in the root and in `apps/web/`:
-
-    ```env
-    SUPABASE_URL=your_supabase_url
-    SUPABASE_ANON_KEY=your_supabase_anon_key
-    GEMINI_API_KEY=your_gemini_api_key
-    ```
-
-4. **Run Development Mode**:
-    ```bash
-    yarn dev
-    ```
-
-### Project Structure
-
-- `apps/web`: The React Router v7 dashboard.
-- `packages/cli`: The Node.js CLI source code.
-- `packages/shared`: Common TypeScript types and utilities.
-- `supabase/`: Database schemas, migrations, and edge functions.
+Contributors: read [CLAUDE.md](CLAUDE.md) and the rulebook for the area you touch before opening a PR.
 
 ---
 
@@ -160,11 +167,10 @@ Gitmomos follows an asynchronous processing workflow to ensure maximum performan
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork the project and branch from `main` (`git checkout -b feat/short-slug`)
+2. Follow the rulebooks in [`docs/rulebooks/`](docs/rulebooks/) — `yarn build` and `yarn functions:check` must pass
+3. Commit with Conventional Commits, one file per commit (`feat(web): add report export`)
+4. Open a Pull Request against `main`
 
 ---
 
@@ -175,5 +181,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 <p align="center">
-  Built with ❤️ by the Raviteja Salva
+  Built with ❤️ by Raviteja Salva
 </p>

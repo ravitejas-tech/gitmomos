@@ -1,32 +1,80 @@
 {
-  "name": "gitmomos",
-  "version": "1.1.1",
-  "private": true,
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ravitejas-tech/gitmomos.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ravitejas-tech/gitmomos/issues"
-  },
-  "homepage": "https://github.com/ravitejas-tech/gitmomos#readme",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "bump": "node scripts/bump-version.js",
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "supabase:link": "npx supabase link --project-ref $SUPABASE_PROJECT_ID",
-    "db:push": "npx supabase db push",
-    "db:reset": "npx supabase db reset",
-    "db:migrate": "npx supabase migration up",
-    "db:status": "npx supabase db status",
-    "functions:deploy": "bash -c 'set -a && source .env && set +a && npx supabase functions deploy'"
-  },
-  "packageManager": "yarn@4.0.0"
+    "name": "gitmomos",
+    "version": "2.0.0",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ravitejas-tech/gitmomos.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ravitejas-tech/gitmomos/issues"
+    },
+    "homepage": "https://github.com/ravitejas-tech/gitmomos#readme",
+    "scripts": {
+        "dev": "react-router dev",
+        "build": "yarn ts:check && react-router build",
+        "preview": "vite preview --outDir build/client",
+        "ts:check": "react-router typegen && tsc",
+        "lint": "eslint app/",
+        "lint:fix": "eslint app/ --fix",
+        "format": "prettier --write \"app/**/*.{ts,tsx,css}\" \"supabase/functions/**/*.ts\"",
+        "supabase:link": "supabase link --project-ref $SUPABASE_PROJECT_ID",
+        "db:start": "supabase start",
+        "db:push": "supabase db push",
+        "db:reset": "supabase db reset",
+        "db:diff": "supabase db diff",
+        "db:types": "supabase gen types typescript --local > app/types/database.ts && cp app/types/database.ts supabase/functions/_shared/database.types.ts",
+        "functions:serve": "supabase functions serve --env-file supabase/functions/.env",
+        "functions:check": "cd supabase/functions && deno check connections/index.ts sync/index.ts && deno lint",
+        "functions:deploy": "supabase functions deploy connections sync",
+        "secrets:set": "supabase secrets set --env-file supabase/functions/.env"
+    },
+    "dependencies": {
+        "@hookform/resolvers": "^5.9.1",
+        "@radix-ui/react-slot": "^1.5.0",
+        "@react-router/node": "^7.12.0",
+        "@supabase/supabase-js": "^2.98.0",
+        "@tanstack/react-query": "^5.90.21",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "framer-motion": "^12.35.0",
+        "highlight.js": "^11.11.1",
+        "isbot": "^5.2.2",
+        "lucide-react": "^0.577.0",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4",
+        "react-hook-form": "^7.90.0",
+        "react-hot-toast": "^2.6.1",
+        "react-is": "^19.2.4",
+        "react-markdown": "^10.1.0",
+        "react-query-kit": "^3.3.2",
+        "react-router": "7.12.0",
+        "recharts": "^3.10.1",
+        "rehype-highlight": "^7.0.2",
+        "remark-gfm": "^4.0.1",
+        "tailwind-merge": "^3.7.0",
+        "zod": "^4.6.7"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.39.0",
+        "@react-router/dev": "7.12.0",
+        "@tailwindcss/vite": "^4.1.13",
+        "@types/node": "^22",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "eslint": "^9.39.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "prettier": "^3.8.1",
+        "supabase": "^2.40.0",
+        "tailwindcss": "^4.2.1",
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.56.1",
+        "vite": "^7.1.7",
+        "vite-tsconfig-paths": "^5.1.4"
+    },
+    "packageManager": "yarn@4.18.0"
 }
