@@ -1,6 +1,6 @@
 import { DASHBOARD_PATH, HOME_PATH, LICENSE_PATH, PRIVACY_PATH, RELEASES_PATH, ROADMAP_PATH } from '~/data/navigation'
 
-export const SITE_URL = 'https://gitmomos-web.vercel.app'
+export const SITE_URL = 'https://gitmomos.spheo.online'
 export const SITE_NAME = 'gitmomos'
 export const SITE_LOCALE = 'en_US'
 export const SITE_DESCRIPTION =
