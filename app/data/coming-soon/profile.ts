@@ -1,5 +1,5 @@
 export const PROFILE = {
-    url: 'gitmomos.dev/@alexmorgan',
+    url: 'gitmomos.spheo.online/@alexmorgan',
     name: 'Alex Morgan',
     role: 'Full-stack developer · Northwind',
 } as const
