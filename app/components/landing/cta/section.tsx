@@ -1,14 +1,22 @@
-import { Github } from 'lucide-react'
+import { LandingActionLink } from '~/components/landing/action-link'
 import { Backdrop } from '~/components/landing/backdrop'
 import { GetStartedButton } from '~/components/landing/get-started-button'
 import { LandingSection } from '~/components/landing/section'
 import { SectionHeading } from '~/components/landing/section-heading'
-import { Button } from '~/components/ui/button'
 import { LogoMark } from '~/components/ui/logo-mark'
+import { CTA_STAR } from '~/data/landing/cta'
 import { LANDING_SECTIONS } from '~/data/landing/sections'
-import { REPO_URL } from '~/data/navigation'
+import type { LandingAction, LandingHeading } from '~/types/landing'
 
-export function CallToActionSection() {
+export interface CallToActionSectionProps {
+    heading?: LandingHeading
+    secondary?: LandingAction
+}
+
+export function CallToActionSection({
+    heading = LANDING_SECTIONS.cta,
+    secondary = CTA_STAR,
+}: CallToActionSectionProps) {
     return (
         <LandingSection className='overflow-hidden border-t border-border md:py-36'>
             <Backdrop />
@@ -17,24 +25,13 @@ export function CallToActionSection() {
                     <LogoMark className='size-8' />
                 </span>
                 <SectionHeading
-                    {...LANDING_SECTIONS.cta}
+                    {...heading}
                     align='center'
                     className='mb-10 md:mb-10'
                 />
                 <div className='flex flex-wrap items-center justify-center gap-3'>
                     <GetStartedButton />
-                    <Button
-                        asChild
-                        variant='ghost'
-                        size='pill'>
-                        <a
-                            href={REPO_URL}
-                            target='_blank'
-                            rel='noreferrer'>
-                            <Github />
-                            Star on GitHub
-                        </a>
-                    </Button>
+                    <LandingActionLink {...secondary} />
                 </div>
             </div>
         </LandingSection>
