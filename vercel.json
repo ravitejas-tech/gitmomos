@@ -1,0 +1,8 @@
+{
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "framework": null,
+    "installCommand": "yarn install",
+    "buildCommand": "yarn build",
+    "outputDirectory": "build/client",
+    "rewrites": [{ "source": "/(.*)", "destination": "/__spa-fallback.html" }]
+}
