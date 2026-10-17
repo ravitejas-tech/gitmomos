@@ -1,8 +1,8 @@
 import { REPO_CONCURRENCY } from '../constants/sync.constants.ts'
+import { connectionProvider } from '../connections/connection-provider.ts'
 import { markConnectionError } from '../connections/mark-connection-error.ts'
 import { errorMessage } from '../lib/error-message.ts'
 import { mapLimit } from '../lib/map-limit.ts'
-import { createProvider } from '../providers/create-provider.ts'
 import { ProviderAuthError } from '../providers/provider-auth-error.ts'
 import { adminClient } from '../supabase/admin-client.ts'
 import { unwrap } from '../supabase/unwrap.ts'
@@ -54,12 +54,6 @@ async function collectConnection(connection: SyncConnection, window: CommitWindo
         if (err instanceof ProviderAuthError) await markConnectionError(connection.id, message)
     }
     return errors
-}
-
-async function connectionProvider({ id, provider, base_url }: SyncConnection): Promise<Provider> {
-    const token = unwrap(await adminClient().rpc('get_connection_token', { p_connection_id: id }))
-    if (!token) throw new ProviderAuthError('No stored token')
-    return createProvider(provider, base_url, token)
 }
 
 async function recordRepository(provider: Provider, repo: SyncRepository, query: CommitQuery) {
