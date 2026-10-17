@@ -75,12 +75,15 @@ Before writing a `className` with more than a couple of visual classes, search f
 | `/dashboard` (layout) | `routes/dashboard/layout.tsx` |
 | `/dashboard` | `routes/dashboard/index.tsx` |
 | `/dashboard/connections/github` | `routes/dashboard/connections.github.tsx` |
+| `/sitemap.xml` | `routes/sitemap[.]xml.ts` (`[.]` is a literal dot) |
 
 **Routes are assembled explicitly in `app/routes.ts`.** A file's name has no effect on the URL it serves, so the convention is a discipline: rename the file and its `routes.ts` entry together. A file under `app/routes` that no `routes.ts` entry points at is dead code.
 
 **Route files hold composition, not implementation.** A route wires params, data and state to components; the markup lives in `components/<feature>/`.
 
-**Prerendered routes** (`/`, `/roadmap` and `/legal/*`, listed in `react-router.config.ts`) render at build time in Node. Nothing they import may touch `window`, `document` or `localStorage` outside an effect or event handler.
+**Prerendered routes** (`/`, `/roadmap`, `/legal/*`, `/robots.txt` and `/sitemap.xml`, listed in `react-router.config.ts`) render at build time in Node. Nothing they import may touch `window`, `document` or `localStorage` outside an effect or event handler.
+
+**Every public page's `meta` is `pageMeta(PAGE_SEO.<page>)`** (`~/lib/seo/page-meta`, `~/data/seo/pages`), which emits the title, description, canonical link, Open Graph and Twitter tags together. Never hand-write a title or description in a route. Keep `~/data/seo/` free of component imports: `root.tsx` and every public route load it.
 
 ## UI primitives
 
