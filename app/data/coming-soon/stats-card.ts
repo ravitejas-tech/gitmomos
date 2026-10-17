@@ -24,6 +24,6 @@ export const STATS_CARD_KINDS: Activity['kinds'] = [
 
 export const STATS_CARD_FOCUS = 'Focus: Payments · Reliability'
 
-export const STATS_CARD_EMBED = '![My week on gitmomos](https://gitmomos.dev/card/alexmorgan.svg)'
+export const STATS_CARD_EMBED = '![My week on gitmomos](https://gitmomos.spheo.online/card/alexmorgan.svg)'
 
 export const STATS_CARD_THEMES = ['Auto', 'Light', 'Dark'] as const
