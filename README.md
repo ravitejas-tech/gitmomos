@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-<h3 align="center">Daily work reports, written from your Git commits.</h3>
+<h3 align="center">Work report automation for developers, written from your Git commits.</h3>
 
 <p align="center">
   <a href="https://gitmomos-web.vercel.app">Website</a> ·
@@ -19,7 +19,7 @@
   <img src="docs/images/overview-light.png" alt="The gitmomos overview: commits, active days, commit activity by type of work and a breakdown of the work">
 </picture>
 
-gitmomos turns the commits you author each day into a short report that your manager or client can follow. Connect GitHub or Gitea, add the repositories you work in, and every morning yesterday's report is waiting, with charts of where your time went.
+gitmomos automates your daily work report: it turns the commits you author each day into a short report that your manager or client can follow. Connect GitHub or Gitea, add the repositories you work in, and every morning yesterday's report is waiting, with charts of where your time went.
 
 There is nothing to install. Sign up at **[gitmomos-web.vercel.app](https://gitmomos-web.vercel.app)**, or [host your own copy](docs/self-hosting.md).
 
