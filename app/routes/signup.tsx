@@ -33,7 +33,7 @@ export default function Signup() {
     return (
         <AuthCard
             title='Create your account'
-            subtitle='Daily work reports, written from your commits'
+            subtitle='Automated work reports from your git commits'
             footer={
                 <>
                     Already have an account? <AuthLink to={LOGIN_PATH}>Sign in</AuthLink>
