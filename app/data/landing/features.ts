@@ -7,7 +7,7 @@ import { ScheduleVignette } from '~/components/landing/features/vignettes/schedu
 export const FEATURES = [
     {
         title: 'Every branch, every repo',
-        description: 'Commits you authored on any branch of the repositories you pick, gathered into one day.',
+        description: 'Commits you authored on any branch of the repositories you add, gathered into one day.',
         span: 'md:col-span-3',
         vignette: CommitStreamVignette,
     },
