@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.4 0.775 19.2 19.2" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <style>
+    .ink { stroke: #12141a }
+    .body { fill: #efedfe }
+    .hole { fill: #ffffff }
+    .accent { stroke: #5b4de8 }
+    .dot { fill: #5b4de8 }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #f3f4f7 }
+      .body { fill: #1f1c40 }
+      .hole { fill: #101116 }
+      .accent { stroke: #7466f4 }
+      .dot { fill: #7466f4 }
+    }
+  </style>
+  <path class="accent" d="M9.75 1.75c-.8.75-.8 1.55 0 2.3s.8 1.55 0 2.3M14.25 1.75c-.8.75-.8 1.55 0 2.3s.8 1.55 0 2.3"/>
+  <path class="body ink" d="M12 8.5c4.28 0 7.75 2.95 7.75 6.75 0 2.2-1.7 3.75-3.9 3.75h-7.7c-2.2 0-3.9-1.55-3.9-3.75 0-3.8 3.47-6.75 7.75-6.75Z"/>
+  <path class="ink" d="M10.6 8.65 12 7.25l1.4 1.4M8.25 15h7.5"/>
+  <circle class="hole ink" cx="8.25" cy="15" r="1.1"/>
+  <circle class="dot accent" cx="12" cy="15" r="1.1"/>
+  <circle class="hole ink" cx="15.75" cy="15" r="1.1"/>
+</svg>
