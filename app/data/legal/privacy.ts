@@ -15,7 +15,7 @@ export const PRIVACY_HIGHLIGHTS = [
 export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
     {
         heading: { id: 'information-collected', title: 'Information Collected', level: 2 },
-        body: 'To provide you with our AI-powered productivity reports, Gitmomos reads only the following metadata, and only from the repositories you explicitly select after connecting GitHub or Gitea:',
+        body: 'To provide you with our AI-powered productivity reports, Gitmomos reads only the following metadata, and only from the repositories you explicitly add after connecting GitHub or Gitea:',
         terms: [
             {
                 term: 'Commit Messages',
@@ -28,7 +28,8 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
             },
             {
                 term: 'Repository Metadata',
-                description: 'Repository names, links and visibility, so you can choose which ones to track.',
+                description:
+                    'The name, link and visibility of each repository you add, so you can see what is tracked.',
             },
             {
                 term: 'Account Information',
