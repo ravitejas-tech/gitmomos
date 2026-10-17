@@ -1,8 +1,9 @@
 import { ReleasesPage } from '~/components/releases/releases-page'
-import { RELEASES_DESCRIPTION } from '~/data/releases/constants'
+import { PAGE_SEO } from '~/data/seo/pages'
+import { pageMeta } from '~/lib/seo/page-meta'
 
 export function meta() {
-    return [{ title: 'Releases | Gitmomos' }, { name: 'description', content: RELEASES_DESCRIPTION }]
+    return pageMeta(PAGE_SEO.releases)
 }
 
 export default function ReleasesIndex() {

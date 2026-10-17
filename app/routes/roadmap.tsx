@@ -2,10 +2,12 @@ import { CallToActionSection } from '~/components/landing/cta/section'
 import { RoadmapHero } from '~/components/landing/roadmap/hero'
 import { RoadmapMoreSection } from '~/components/landing/roadmap/more-section'
 import { RoadmapSpotlightSection } from '~/components/landing/roadmap/spotlight-section'
-import { ROADMAP_HERO, ROADMAP_SECTIONS, ROADMAP_SUGGEST } from '~/data/landing/roadmap'
+import { ROADMAP_SECTIONS, ROADMAP_SUGGEST } from '~/data/landing/roadmap'
+import { PAGE_SEO } from '~/data/seo/pages'
+import { pageMeta } from '~/lib/seo/page-meta'
 
 export function meta() {
-    return [{ title: 'Roadmap | Gitmomos' }, { name: 'description', content: ROADMAP_HERO.lead }]
+    return pageMeta(PAGE_SEO.roadmap)
 }
 
 export default function Roadmap() {

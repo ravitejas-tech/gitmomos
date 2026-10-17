@@ -9,9 +9,9 @@ export const HERO_ANNOUNCEMENT = {
     href: RELEASES_PATH,
 }
 
-export const HERO_TITLE = ['Your commits,', 'in words anyone can read'] as const
+export const HERO_TITLE = ['Work report automation', 'from your git commits'] as const
 
 export const HERO_LEAD =
-    'Connect GitHub or Gitea once. Every night, gitmomos turns your commits into a plain-language report your manager or client can follow, with charts of where your time went.'
+    'Built for developers. Connect GitHub or Gitea once, and every night your commits become a plain-language report your manager or client can follow, with charts of where your time went.'
 
-export const HERO_FOOTNOTE = 'Free and open source · GitHub & Gitea'
+export const HERO_FOOTNOTE = 'Free and open source · Fully automated · GitHub & Gitea'

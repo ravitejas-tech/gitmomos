@@ -98,7 +98,8 @@ Both are gitignored; the `.example` files beside them list every key.
 - **GitHub allows one OAuth callback URL per app.** Local development needs its own OAuth App pointing at `http://localhost:5173/dashboard/connections/github`.
 - **OAuth Apps can only read private repositories with the `repo` scope.** The functions only call read endpoints.
 - **`verify_jwt` is off for both functions** (`supabase/config.toml`); each authenticates itself, with the user's JWT or the worker secret.
-- **Unknown paths must fall back to `/__spa-fallback.html`** on the static host. `/`, `/roadmap` and `/legal/*` are prerendered at build time, so nothing they import may touch browser globals at module scope.
+- **Unknown paths must fall back to `/__spa-fallback.html`** on the static host. `/`, `/roadmap`, `/legal/*`, `/robots.txt` and `/sitemap.xml` are prerendered at build time, so nothing they import may touch browser globals at module scope.
+- **Canonical links, Open Graph tags, `robots.txt` and `sitemap.xml` use `SITE_URL`** (`app/data/seo/site.ts`). Change it when the production domain changes; a public page added to the site goes in `SITEMAP_PATHS`.
 - **`yarn build` needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`** (from `.env` or the CI environment): prerendering imports `services/supabase.ts`, and `createClient` throws on an empty URL.
 - **`@react-router/node` and `isbot` are runtime dependencies** even though nothing runs on a server: React Router only finds them in `dependencies` and needs them to prerender.
 - **ESLint stays on 9** until `eslint-plugin-react` supports 10.
