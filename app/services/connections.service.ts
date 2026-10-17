@@ -1,7 +1,7 @@
 import { invokeFunction } from '~/services/functions'
 import { supabase } from '~/services/supabase'
 import type { GiteaConnectionData } from '~/schemas/connection.schema'
-import type { ConnectResult } from '~/types/connections'
+import type { AddRepositoryResult, ConnectResult } from '~/types/connections'
 
 export const connectionsService = {
     async getConnections() {
@@ -18,14 +18,19 @@ export const connectionsService = {
     async getRepositories() {
         const { data, error } = await supabase
             .from('repositories')
-            .select('id, connection_id, full_name, html_url, is_private, enabled, pushed_at, last_synced_at')
-            .order('pushed_at', { ascending: false, nullsFirst: false })
+            .select('id, full_name, html_url, is_private, last_synced_at, connection:connections(provider)')
+            .eq('enabled', true)
+            .order('full_name')
         if (error) throw error
         return data
     },
 
-    async setRepositoryEnabled({ id, enabled }: { id: string; enabled: boolean }) {
-        const { error } = await supabase.from('repositories').update({ enabled }).eq('id', id)
+    addRepository(url: string) {
+        return invokeFunction<AddRepositoryResult>('connections', { action: 'add_repository', url })
+    },
+
+    async untrackRepository(id: string) {
+        const { error } = await supabase.from('repositories').update({ enabled: false }).eq('id', id)
         if (error) throw error
     },
 
@@ -40,10 +45,6 @@ export const connectionsService = {
 
     connectGitea({ baseUrl, token }: GiteaConnectionData) {
         return invokeFunction<ConnectResult>('connections', { action: 'gitea_connect', baseUrl, token })
-    },
-
-    refreshRepositories(connectionId: string) {
-        return invokeFunction<{ repositories: number }>('connections', { action: 'refresh_repos', connectionId })
     },
 
     async disconnect(connectionId: string) {
