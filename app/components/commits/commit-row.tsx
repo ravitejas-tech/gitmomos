@@ -1,4 +1,5 @@
 import { KindDot } from '~/components/activity/kind-dot'
+import { ListRow } from '~/components/ui/list-row'
 import { Text } from '~/components/ui/text'
 import { WORK_KINDS } from '~/data/activity/kinds'
 import { commitTitle, repositoryName } from '~/lib/commits/message'
@@ -12,7 +13,7 @@ export interface CommitRowProps {
 
 export function CommitRow({ commit, relative }: CommitRowProps) {
     return (
-        <li className='flex items-start gap-3 px-5 py-3 transition-colors hover:bg-surface-muted/50'>
+        <ListRow align='start'>
             <KindDot
                 kind={commit.kind}
                 className='mt-1.5'
@@ -53,6 +54,6 @@ export function CommitRow({ commit, relative }: CommitRowProps) {
                     </Text>
                 )}
             </div>
-        </li>
+        </ListRow>
     )
 }

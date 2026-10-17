@@ -1,13 +1,13 @@
 import {
     GITHUB_API_URL,
     GITHUB_API_VERSION,
-    GITHUB_MAX_REPO_PAGES,
     GITHUB_PAGE_SIZE,
     MAX_BRANCHES,
     MAX_COMMIT_PAGES,
 } from '../constants/providers.constants.ts'
 import type { GitHubBranch, GitHubCommit, GitHubEmail, GitHubRepo, GitHubUser } from '../types/github.types.ts'
 import type { CommitQuery, Provider, ProviderAccount, ProviderCommit, ProviderRepo } from '../types/provider.types.ts'
+import { nullIfNotFound } from './null-if-not-found.ts'
 import { request } from './request.ts'
 
 export class GitHubProvider implements Provider {
@@ -36,29 +36,18 @@ export class GitHubProvider implements Provider {
         }
     }
 
-    async listRepos(): Promise<ProviderRepo[]> {
-        const repos: ProviderRepo[] = []
-        for (let page = 1; page <= GITHUB_MAX_REPO_PAGES; page++) {
-            const params = new URLSearchParams({
-                per_page: String(GITHUB_PAGE_SIZE),
-                page: String(page),
-                sort: 'pushed',
-                affiliation: 'owner,collaborator,organization_member',
-            })
-            const batch = await this.get<GitHubRepo[]>(`/user/repos?${params}`)
-            repos.push(
-                ...batch.map((r) => ({
-                    externalId: String(r.id),
-                    fullName: r.full_name,
-                    htmlUrl: r.html_url,
-                    defaultBranch: r.default_branch ?? null,
-                    isPrivate: Boolean(r.private),
-                    pushedAt: r.pushed_at ?? null,
-                })),
-            )
-            if (batch.length < GITHUB_PAGE_SIZE) break
-        }
-        return repos
+    async getRepo(fullName: string): Promise<ProviderRepo | null> {
+        const repo = await nullIfNotFound(this.get<GitHubRepo>(`/repos/${fullName}`))
+        return (
+            repo && {
+                externalId: String(repo.id),
+                fullName: repo.full_name,
+                htmlUrl: repo.html_url,
+                defaultBranch: repo.default_branch ?? null,
+                isPrivate: Boolean(repo.private),
+                pushedAt: repo.pushed_at ?? null,
+            }
+        )
     }
 
     async listCommits(repo: string, { since, until, account }: CommitQuery): Promise<ProviderCommit[]> {

@@ -5,5 +5,8 @@ export type Repository = Awaited<ReturnType<typeof connectionsService.getReposit
 
 export interface ConnectResult {
     connectionId: string
-    repositories: number
+}
+
+export interface AddRepositoryResult {
+    fullName: string
 }

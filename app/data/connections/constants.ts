@@ -1,6 +1,6 @@
 import { Github, Server } from 'lucide-react'
 
-export const REPOSITORY_SEARCH_THRESHOLD = 8
+export const REPOSITORY_URL_PLACEHOLDER = 'https://github.com/owner/repository'
 
 export const PROVIDER_ICONS = {
     github: Github,

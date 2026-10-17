@@ -13,8 +13,8 @@ export const HOW_IT_WORKS_STEPS = [
     },
     {
         step: '03',
-        title: 'Pick repositories',
-        description: 'Tick the repos to track. Recently active ones are selected for you.',
+        title: 'Add repositories',
+        description: 'Paste the URL of each repo your reports should cover.',
     },
     {
         step: '04',

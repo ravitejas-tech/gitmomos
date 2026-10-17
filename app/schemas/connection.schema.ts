@@ -6,3 +6,9 @@ export const giteaConnectionSchema = z.object({
 })
 
 export type GiteaConnectionData = z.infer<typeof giteaConnectionSchema>
+
+export const repositoryUrlSchema = z.object({
+    url: z.string().trim().min(1, 'Paste a repository URL'),
+})
+
+export type RepositoryUrlData = z.infer<typeof repositoryUrlSchema>

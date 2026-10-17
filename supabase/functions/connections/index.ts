@@ -1,6 +1,6 @@
+import { addRepository } from '../_shared/connections/add-repository.ts'
 import { completeGitHub } from '../_shared/connections/complete-github.ts'
 import { connectGitea } from '../_shared/connections/connect-gitea.ts'
-import { refreshRepositories } from '../_shared/connections/refresh-repositories.ts'
 import { startGitHub } from '../_shared/connections/start-github.ts'
 import { json } from '../_shared/http/json.ts'
 import { parseBody } from '../_shared/http/parse-body.ts'
@@ -18,7 +18,7 @@ const ACTIONS: ConnectionsHandlers = {
     github_start: startGitHub,
     github_callback: completeGitHub,
     gitea_connect: connectGitea,
-    refresh_repos: refreshRepositories,
+    add_repository: addRepository,
 }
 
 function dispatch<A extends ConnectionsAction>(userId: string, action: A, body: ConnectionsRequestOf<A>) {

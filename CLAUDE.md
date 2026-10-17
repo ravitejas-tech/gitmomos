@@ -1,6 +1,6 @@
 # gitmomos
 
-Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), picks repositories, and a nightly worker collects the commits they authored and writes one report per day with Gemini.
+Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, and a nightly worker collects the commits they authored and writes one report per day with Gemini.
 
 There is no CLI and no server of our own: a static React Router SPA talks to Supabase, and two edge functions do the work that needs secrets.
 
@@ -54,7 +54,10 @@ app/
 supabase/
   migrations/    schema, RLS, Vault helpers, cron
   functions/     connections/, sync/, _shared/
-docs/rulebooks/  the rules
+docs/
+  self-hosting.md  deployment guide, kept in step with the setup it describes
+  rulebooks/       the rules
+  images/          README screenshots and logo
 ```
 
 ## Commands

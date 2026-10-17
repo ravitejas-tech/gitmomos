@@ -1,35 +1,77 @@
-<h1><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/public/icon.png" width="32" alt="Gitmomos Icon" valign="middle" /><img src="https://raw.githubusercontent.com/ravitejas-tech/gitmomos/main/public/logo.png" height="32" alt="Gitmomos" valign="middle" /></h1>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo-dark.png">
+    <img src="docs/images/logo-light.png" alt="gitmomos" height="56">
+  </picture>
+</p>
 
-**Daily work reports, written from your Git commits.**
+<h3 align="center">Daily work reports, written from your Git commits.</h3>
 
-Sign up on the website, connect GitHub or Gitea, and pick your repositories. Every night a background worker collects the commits you authored that day and writes a stand-up ready report with Gemini. There's nothing to install and nothing to remember.
+<p align="center">
+  <a href="https://gitmomos-web.vercel.app">Website</a> ·
+  <a href="docs/self-hosting.md">Self-hosting</a> ·
+  <a href="https://github.com/ravitejas-tech/gitmomos/releases">Releases</a> ·
+  <a href="LICENSE">MIT License</a>
+</p>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/overview-dark.png">
+  <img src="docs/images/overview-light.png" alt="The gitmomos overview: commits, active days, commit activity by type of work and a breakdown of the work">
+</picture>
+
+gitmomos turns the commits you author each day into a short report that your manager or client can follow. Connect GitHub or Gitea, add the repositories you work in, and every morning yesterday's report is waiting, with charts of where your time went.
+
+There is nothing to install. Sign up at **[gitmomos-web.vercel.app](https://gitmomos-web.vercel.app)**, or [host your own copy](docs/self-hosting.md).
 
 ---
 
 ## ✨ Features
 
-- **🔌 Connect once**: GitHub via OAuth, or any Gitea instance with an access token.
-- **🌙 Nightly reports**: one report per day across all your repositories, generated just after midnight in your timezone.
-- **🌿 Every branch**: commits are collected from all branches, not just the default one.
-- **✏️ Editable**: tweak a report and it is never overwritten by the worker. Copy any report as Markdown.
-- **🔄 Sync now**: regenerate today (or any of the last 30 days) on demand.
-- **🔒 Metadata only**: commit messages and timestamps are read; source code never is. Tokens live encrypted in Supabase Vault.
+**Reports anyone can read**
+
+- One report per day across all your repositories, written just after midnight in your timezone.
+- A headline, a plain-language summary, focus areas, type of work, highlights, a note per project and next steps. No commit hashes, no jargon.
+- Copy a report as Markdown, save it as a PDF, or edit any line. Edited reports are never overwritten.
+- Jump to any day with the date picker. **Sync now** and **Regenerate** rewrite today or any of the last 30 days on demand.
+
+**Analytics for you**
+
+- Commits, active days, projects and reports for the last 7, 30 or 90 days, compared with the period before.
+- Commit activity by type of work, a breakdown by project, the hours you usually work, and a six-month consistency heatmap with your streak.
+
+**Your repositories, your choice**
+
+- GitHub through OAuth, any Gitea instance with an access token, and several accounts at once.
+- Add a repository by pasting its URL (HTTPS or SSH). Only the repositories you add are ever read.
+- Commits from every branch, matched to you by your login, and on Gitea by your email too.
+
+**Private by design**
+
+- Only commit metadata is read: messages, timestamps and authors. Source code never is.
+- Access tokens are encrypted in Supabase Vault, and Row Level Security keeps every user to their own data.
+- Light and dark themes.
 
 ---
 
 ## 📸 Screenshots
 
-### Dashboard Overview
-
-![Overview Dashboard](public/images/screenshots/overview.png)
-
 ### Reports
 
-![Reports](public/images/screenshots/reports.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reports-dark.png">
+  <img src="docs/images/reports-light.png" alt="A daily report with its headline, summary, focus areas and type of work, next to the list of earlier days">
+</picture>
+
+### Repositories
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/repositories-dark.png">
+  <img src="docs/images/repositories-light.png" alt="Tracked repositories with a field to add one by URL, next to the connected GitHub and Gitea accounts">
+</picture>
 
 ---
 
-## 🏗 Architecture
+## 🏗 How it works
 
 ```
 React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
@@ -38,148 +80,106 @@ React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
       ▼                                     │
  Edge function `connections` ───────────────┤  Edge function `sync`
    GitHub OAuth / Gitea token → Vault       │    fetch commits (GitHub/Gitea API)
-   import repository list                   └─── write commits + report (Gemini)
+   add a repository by URL                  └─── write commits + report (Gemini)
 ```
 
-- **Frontend** (`app/`): React Router 7 in SPA mode (`ssr: false`), Tailwind, TanStack Query. Public pages are prerendered at build time. The browser only reads its own rows (RLS) and can change just a few columns: name/timezone, which repos are tracked, and report edits.
-- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits`, `reports`. Provider tokens are stored in **Supabase Vault** and are readable only by the service role.
-- **`connections` function**: GitHub OAuth start/callback, Gitea connect, refresh repository list.
-- **`sync` function**: for one user and one local day, pulls commits from every enabled repository and (re)generates that day's report. It is called by the user ("Sync now") or by the worker.
-- **Worker**: `pg_cron` runs `enqueue_daily_syncs()` every hour at :05. Each user whose local time just passed midnight gets one async `pg_net` call to `sync` for the day that ended.
+- **Website** (`app/`): React Router 7 in SPA mode, served as static files. The landing and legal pages are prerendered at build time. The browser reads only its own rows (RLS) and can change just a few columns: name and timezone, whether a repository is tracked, and report edits.
+- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits` and `reports`. Provider tokens live in Supabase Vault and only the service role can read them.
+- **`connections` function**: GitHub OAuth, connecting Gitea, and adding a repository by URL after checking that the account can read it.
+- **`sync` function**: for one user and one local day, collects commits from every tracked repository and writes that day's report. "Sync now" and the nightly worker both call it.
+- **Nightly worker**: `pg_cron` runs `enqueue_daily_syncs()` every hour at :05 and makes one `pg_net` call to `sync` for each user whose local clock has just passed midnight.
+
+| Layer | Choice |
+|---|---|
+| Website | React 19, React Router 7, Tailwind 4, TanStack Query, Recharts |
+| Database | Supabase Postgres with RLS, Vault, `pg_cron` and `pg_net` |
+| Functions | Supabase Edge Functions (Deno 2) |
+| Reports | Gemini over REST (`gemini-flash-latest` by default) |
 
 ---
 
-## 🚀 Setup
+## 🚀 Self-hosting
 
-### 1. Prerequisites
-
-- Node.js 20+ (Yarn 4 is vendored in `.yarn/releases`; the global `yarn` command picks it up)
-- A [Supabase](https://supabase.com) project
-- A [Gemini API key](https://aistudio.google.com/apikey)
-- Docker (only for running Supabase locally)
-
-### 2. Install
+You need a Supabase project, a Gemini API key, a GitHub OAuth App and a static host. The short version:
 
 ```bash
 yarn install
-cp .env.example .env                                  # VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, SUPABASE_PROJECT_ID
-cp supabase/functions/.env.example supabase/functions/.env
-```
-
-### 3. Database
-
-```bash
-npx supabase login
-yarn supabase:link
+cp supabase/functions/.env.example supabase/functions/.env   # fill in the secrets
+yarn supabase login && yarn supabase link --project-ref <project-ref>
 yarn db:push
+yarn secrets:set && yarn functions:deploy
 ```
 
-> **Upgrading from v1:** v2 replaces the old schema with a single fresh migration. On an existing project, run `npx supabase db reset --linked` first. **This deletes all v1 data.**
+Then add two Vault secrets so the nightly worker can run, set the sign-in URLs in Supabase, and deploy the website. `vercel.json` covers Vercel, and `public/_redirects` covers Netlify and Cloudflare Pages.
 
-### 4. GitHub OAuth App
-
-Create one at **GitHub → Settings → Developer settings → OAuth Apps**:
-
-- **Homepage URL:** your site, e.g. `https://gitmomos.example.com`
-- **Authorization callback URL:** `https://gitmomos.example.com/dashboard/connections/github`
-
-Put the client ID and secret in `supabase/functions/.env`. GitHub allows one callback URL per app, so use a second OAuth App (callback `http://localhost:5173/dashboard/connections/github`) for local development.
-
-> OAuth Apps can only read private repositories with the `repo` scope, so that's what gitmomos requests. It only ever calls read endpoints.
-
-### 5. Worker secret
-
-Generate a shared secret and put it in `supabase/functions/.env` as `WORKER_SECRET`:
-
-```bash
-openssl rand -hex 32
-```
-
-Then store the same value plus your project URL in Vault (SQL editor), so `pg_cron` can call the `sync` function:
-
-```sql
-select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
-select vault.create_secret('<the same WORKER_SECRET>', 'worker_secret');
-```
-
-### 6. Deploy edge functions
-
-```bash
-yarn secrets:set        # uploads supabase/functions/.env
-yarn functions:deploy
-```
-
-### 7. Auth settings
-
-In **Supabase → Authentication → URL Configuration**, set the Site URL to your site and add `https://<your site>/dashboard` and `https://<your site>/dashboard/settings` as redirect URLs. These are used by the confirmation and password-reset emails. Signup works with **Confirm email** on or off.
-
-### 8. Deploy the frontend
-
-```bash
-yarn build
-```
-
-Upload `build/client/` to any static host. Unknown paths must fall back to `/__spa-fallback.html`. `public/_redirects` already does this for Netlify and Cloudflare Pages. On Vercel, add a rewrite of `/(.*)` to `/__spa-fallback.html`.
+**[docs/self-hosting.md](docs/self-hosting.md)** walks through every step, says which dashboard each one happens in, and ends with troubleshooting.
 
 ---
 
 ## 🛠 Local development
 
+Needs Docker for the local Supabase stack.
+
 ```bash
+yarn install
+cp .env.example .env                                         # VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
+cp supabase/functions/.env.example supabase/functions/.env
 yarn db:start           # local Supabase in Docker; applies migrations
 yarn functions:serve    # edge functions with supabase/functions/.env
 yarn dev                # http://localhost:5173
 ```
 
-Point `.env` at the local API (`http://127.0.0.1:54321` plus the anon key printed by `npx supabase status`). To test the nightly worker locally, add the Vault secrets with `project_url = 'http://supabase_kong_gitmomos:8000'`, then run `select public.enqueue_daily_syncs();`. To connect a Gitea running on localhost, set `ALLOW_LOCAL_GITEA=true` in `supabase/functions/.env`.
+- Point `.env` at `http://127.0.0.1:54321` with the anon key that `yarn supabase status` prints.
+- GitHub needs its own OAuth App for local development, with the callback `http://localhost:5173/dashboard/connections/github`.
+- To try the nightly worker, add the Vault secrets with `project_url = 'http://supabase_kong_gitmomos:8000'`, then run `select public.enqueue_daily_syncs();`.
+- To connect a Gitea running on localhost, set `ALLOW_LOCAL_GITEA=true` in `supabase/functions/.env`.
 
-| Script                                                         | What it does             |
-| -------------------------------------------------------------- | ------------------------ |
-| `yarn dev` / `build` / `preview`                              | Frontend                           |
-| `yarn ts:check` / `lint` / `format`                           | Code quality                       |
-| `yarn db:push` / `db:reset` / `db:diff` / `db:types`          | Migrations and generated DB types  |
-| `yarn functions:serve` / `functions:check` / `functions:deploy` / `secrets:set` | Edge functions   |
+| Scripts | What they do |
+|---|---|
+| `yarn dev` · `build` · `preview` | Run, build and preview the website |
+| `yarn ts:check` · `lint` · `format` | Type-check, lint and format |
+| `yarn db:start` · `db:reset` · `db:diff` · `db:types` · `db:push` | Local database, migrations and generated types |
+| `yarn functions:serve` · `functions:check` · `functions:deploy` · `secrets:set` | Edge functions |
 
 ### Project structure
 
 ```
 app/
   root.tsx, routes.ts, global.css
-  routes/         URL-mirroring route modules (landing, legal, releases, auth, dashboard/*)
-  components/     ui/ primitives + one folder per feature
+  routes/         one module per URL: landing, legal, releases, auth, dashboard/*
+  components/     ui/ primitives and one folder per feature
   hooks/          TanStack Query hooks and stateful logic, by feature
   services/       Supabase client, data access and edge-function calls
   data/ lib/ schemas/ types/
 supabase/
-  migrations/     v2 schema, RLS, Vault helpers, cron
+  migrations/     schema, RLS, Vault helpers, cron
   functions/
-    connections/  connect forges, import repositories
-    sync/         collect commits + write a day's report
+    connections/  connect GitHub or Gitea, add repositories
+    sync/         collect commits and write a day's report
     _shared/      handlers, provider clients, schemas, constants, helpers
-docs/rulebooks/   coding, backend, frontend and git rules (start with CLAUDE.md)
+docs/
+  self-hosting.md
+  rulebooks/      coding, frontend, backend and git rules
+  images/         README screenshots and logo
 ```
-
-Contributors: read [CLAUDE.md](CLAUDE.md) and the rulebook for the area you touch before opening a PR.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome.
 
-1. Fork the project and branch from `main` (`git checkout -b feat/short-slug`)
-2. Follow the rulebooks in [`docs/rulebooks/`](docs/rulebooks/) — `yarn build` and `yarn functions:check` must pass
-3. Commit with Conventional Commits, one file per commit (`feat(web): add report export`)
-4. Open a Pull Request against `main`
+1. Fork the repository and branch from `main` (`git checkout -b feat/short-slug`).
+2. Read [CLAUDE.md](CLAUDE.md) and the [rulebook](docs/rulebooks/) for the area you touch. `yarn build` and `yarn functions:check` must pass.
+3. Commit with Conventional Commits, one file per commit (`feat(web): add report export`).
+4. Open a pull request against `main`.
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
+MIT. See [LICENSE](LICENSE).
 
 <p align="center">
-  Built with ❤️ by Raviteja Salva
+  Built with ❤️ by <a href="https://github.com/ravitejas-tech">Raviteja Salva</a>
 </p>

@@ -60,7 +60,7 @@ Results go through `unwrap`, which returns `data` or throws an `HttpError` — n
 
 **Whenever an operation writes more than once, the writes live in one Postgres function called with `rpc`.** supabase-js has no transactions; two sequential `.insert()`s from a function are a defect, because a failure on the second leaves inconsistent data. A function body runs in one transaction.
 
-`save_connection` (connection row + Vault token), `import_repositories` (insert new, refresh existing without touching `enabled`) and `record_repository_commits` (commits + `last_synced_at`) are the reference.
+`save_connection` (connection row + Vault token) and `record_repository_commits` (commits + `last_synced_at`) are the reference.
 
 Such functions are `security definer`, `set search_path = ''`, and executable only by `service_role` (`revoke all ... from public, anon, authenticated`).
 

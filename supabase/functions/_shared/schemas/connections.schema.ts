@@ -18,8 +18,8 @@ export const connectionsRequestSchema = z.discriminatedUnion(
                 .min(1, 'Gitea URL and access token are required'),
         }),
         z.object({
-            action: z.literal('refresh_repos'),
-            connectionId: z.guid({ error: 'connectionId is required' }),
+            action: z.literal('add_repository'),
+            url: z.string({ error: 'Paste a repository URL' }).trim().min(1, 'Paste a repository URL'),
         }),
     ],
     { error: 'Unknown action' },
