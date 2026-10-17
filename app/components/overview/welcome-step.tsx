@@ -1,3 +1,4 @@
+import { DetailItem } from '~/components/ui/detail-item'
 import { Text } from '~/components/ui/text'
 
 export interface WelcomeStepProps {
@@ -6,24 +7,19 @@ export interface WelcomeStepProps {
     description: string
 }
 
-export function WelcomeStep({ step, title, description }: WelcomeStepProps) {
+export function WelcomeStep({ step, ...props }: WelcomeStepProps) {
     return (
-        <li className='flex gap-3'>
-            <Text
-                as='span'
-                variant='caption-strong'
-                tone='accent'
-                className='flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-subtle'>
-                {step}
-            </Text>
-            <div className='space-y-0.5'>
-                <Text variant='strong'>{title}</Text>
+        <DetailItem
+            leading={
                 <Text
-                    variant='caption'
-                    tone='secondary'>
-                    {description}
+                    as='span'
+                    variant='caption-strong'
+                    tone='accent'
+                    className='flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-subtle'>
+                    {step}
                 </Text>
-            </div>
-        </li>
+            }
+            {...props}
+        />
     )
 }

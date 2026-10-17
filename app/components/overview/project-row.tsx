@@ -1,3 +1,4 @@
+import { ProgressBar } from '~/components/ui/progress-bar'
 import { Text } from '~/components/ui/text'
 import { repositoryName } from '~/lib/commits/message'
 
@@ -28,12 +29,7 @@ export function ProjectRow({ name, commits, percent, width }: ProjectRowProps) {
                     {commits} · {percent}%
                 </Text>
             </div>
-            <div className='h-2 overflow-hidden rounded-full bg-surface-muted'>
-                <div
-                    className='h-full rounded-full bg-accent'
-                    style={{ width: `${width}%` }}
-                />
-            </div>
+            <ProgressBar value={width} />
         </li>
     )
 }
