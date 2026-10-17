@@ -18,7 +18,7 @@ export const HOW_IT_WORKS_STEPS = [
     },
     {
         step: '04',
-        title: 'Read your report',
-        description: "Every night we collect your commits and write the day's report for you.",
+        title: 'Reports on autopilot',
+        description: 'Every night your commits become the day’s work report, automatically.',
     },
 ] as const
