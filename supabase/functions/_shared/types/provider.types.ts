@@ -34,6 +34,6 @@ export interface CommitQuery extends CommitWindow {
 
 export interface Provider {
     getAccount(): Promise<ProviderAccount>
-    listRepos(): Promise<ProviderRepo[]>
+    getRepo(fullName: string): Promise<ProviderRepo | null>
     listCommits(repoFullName: string, query: CommitQuery): Promise<ProviderCommit[]>
 }
