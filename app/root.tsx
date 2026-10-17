@@ -3,6 +3,7 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration }
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { ErrorPage } from '~/components/layout/error-page'
+import { SITE_DESCRIPTION, SITE_NAME } from '~/data/seo/site'
 import { FONT_STYLESHEET } from '~/data/ui/fonts'
 import { THEME_INIT_SCRIPT } from '~/data/ui/theme'
 import { TOASTER_OPTIONS } from '~/data/ui/toaster'
@@ -18,6 +19,10 @@ export const links: Route.LinksFunction = () => [
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
     { rel: 'stylesheet', href: FONT_STYLESHEET },
 ]
+
+export function meta() {
+    return [{ title: SITE_NAME }, { name: 'description', content: SITE_DESCRIPTION }]
+}
 
 export function Layout({ children }: { children: ReactNode }) {
     return (
