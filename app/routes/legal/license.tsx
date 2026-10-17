@@ -3,12 +3,14 @@ import { LegalPage } from '~/components/legal/legal-page'
 import { LicenseSummaryCard } from '~/components/legal/license/summary-card'
 import { LicenseText } from '~/components/legal/license/text'
 import { LICENSE_HEADINGS, LICENSE_INTRO, LICENSE_SUMMARY, LICENSE_TOC } from '~/data/legal/license'
+import { PAGE_SEO } from '~/data/seo/pages'
+import { pageMeta } from '~/lib/seo/page-meta'
 import type { LegalHandle } from '~/types/legal'
 
 export const handle: LegalHandle = { toc: LICENSE_TOC }
 
 export function meta() {
-    return [{ title: 'License | Gitmomos' }]
+    return pageMeta(PAGE_SEO.license)
 }
 
 export default function License() {
