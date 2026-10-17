@@ -1,11 +1,7 @@
-import {
-    GITEA_MAX_REPO_PAGES,
-    GITEA_PAGE_SIZE,
-    MAX_BRANCHES,
-    MAX_COMMIT_PAGES,
-} from '../constants/providers.constants.ts'
+import { GITEA_PAGE_SIZE, MAX_BRANCHES, MAX_COMMIT_PAGES } from '../constants/providers.constants.ts'
 import type { GiteaBranch, GiteaCommit, GiteaEmail, GiteaRepo, GiteaUser } from '../types/gitea.types.ts'
 import type { CommitQuery, Provider, ProviderAccount, ProviderCommit, ProviderRepo } from '../types/provider.types.ts'
+import { nullIfNotFound } from './null-if-not-found.ts'
 import { request } from './request.ts'
 
 export class GiteaProvider implements Provider {
@@ -34,23 +30,18 @@ export class GiteaProvider implements Provider {
         }
     }
 
-    async listRepos(): Promise<ProviderRepo[]> {
-        const repos: ProviderRepo[] = []
-        for (let page = 1; page <= GITEA_MAX_REPO_PAGES; page++) {
-            const batch = await this.get<GiteaRepo[]>(`/user/repos?limit=${GITEA_PAGE_SIZE}&page=${page}`)
-            repos.push(
-                ...batch.map((r) => ({
-                    externalId: String(r.id),
-                    fullName: r.full_name,
-                    htmlUrl: r.html_url,
-                    defaultBranch: r.default_branch ?? null,
-                    isPrivate: Boolean(r.private),
-                    pushedAt: r.updated_at ?? null,
-                })),
-            )
-            if (batch.length < GITEA_PAGE_SIZE) break
-        }
-        return repos
+    async getRepo(fullName: string): Promise<ProviderRepo | null> {
+        const repo = await nullIfNotFound(this.get<GiteaRepo>(`/repos/${fullName}`))
+        return (
+            repo && {
+                externalId: String(repo.id),
+                fullName: repo.full_name,
+                htmlUrl: repo.html_url,
+                defaultBranch: repo.default_branch ?? null,
+                isPrivate: Boolean(repo.private),
+                pushedAt: repo.updated_at ?? null,
+            }
+        )
     }
 
     async listCommits(repo: string, { since, until, account }: CommitQuery): Promise<ProviderCommit[]> {
