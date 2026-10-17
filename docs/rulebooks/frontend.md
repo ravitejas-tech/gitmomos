@@ -80,7 +80,7 @@ Before writing a `className` with more than a couple of visual classes, search f
 
 **Route files hold composition, not implementation.** A route wires params, data and state to components; the markup lives in `components/<feature>/`.
 
-**Prerendered routes** (`/` and `/legal/*`, listed in `react-router.config.ts`) render at build time in Node. Nothing they import may touch `window`, `document` or `localStorage` outside an effect or event handler.
+**Prerendered routes** (`/`, `/roadmap` and `/legal/*`, listed in `react-router.config.ts`) render at build time in Node. Nothing they import may touch `window`, `document` or `localStorage` outside an effect or event handler.
 
 ## UI primitives
 
