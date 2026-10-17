@@ -4,7 +4,6 @@ import { createProvider } from '../providers/create-provider.ts'
 import { ProviderAuthError } from '../providers/provider-auth-error.ts'
 import { adminClient } from '../supabase/admin-client.ts'
 import { unwrap } from '../supabase/unwrap.ts'
-import { importRepositories } from './import-repositories.ts'
 
 export async function saveConnection(
     userId: string,
@@ -29,7 +28,5 @@ export async function saveConnection(
             p_avatar_url: account.avatarUrl ?? undefined,
         }),
     )
-
-    const repositories = await importRepositories(connectionId, provider)
-    return { connectionId, repositories }
+    return { connectionId }
 }
