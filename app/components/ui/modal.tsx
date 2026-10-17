@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { Button } from '~/components/ui/button'
+import { PanelHeader } from '~/components/ui/panel-header'
 import { Text } from '~/components/ui/text'
 
 export interface ModalProps {
@@ -20,7 +21,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
                 aria-label={title}
                 onClick={(event) => event.stopPropagation()}
                 className='w-full max-w-2xl overflow-hidden rounded-xl border border-border bg-surface shadow-overlay'>
-                <div className='flex items-center justify-between border-b border-border px-5 py-3'>
+                <PanelHeader>
                     <Text
                         as='h2'
                         variant='title'>
@@ -33,7 +34,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
                         aria-label='Close'>
                         <X />
                     </Button>
-                </div>
+                </PanelHeader>
                 {children}
             </div>
         </div>
