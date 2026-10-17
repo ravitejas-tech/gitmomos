@@ -1,8 +1,9 @@
 import type { Enums, Tables } from '../database.types.ts'
+import type { ProviderConnection } from './connections.types.ts'
 
 export type SyncRepository = Pick<Tables<'repositories'>, 'id' | 'full_name'>
 
-export type SyncConnection = Pick<Tables<'connections'>, 'id' | 'provider' | 'base_url'> & {
+export type SyncConnection = ProviderConnection & {
     repositories: SyncRepository[]
 }
 
