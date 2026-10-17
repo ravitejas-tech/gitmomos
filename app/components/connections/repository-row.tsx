@@ -1,18 +1,22 @@
-import { BookMarked, ExternalLink, Lock } from 'lucide-react'
+import { ExternalLink, X } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
-import { Switch } from '~/components/ui/switch'
+import { Button } from '~/components/ui/button'
+import { IconChip } from '~/components/ui/icon-chip'
+import { ListRow } from '~/components/ui/list-row'
 import { Text } from '~/components/ui/text'
-import { useSetRepositoryEnabled } from '~/hooks/connections/mutations'
+import { PROVIDER_ICONS } from '~/data/connections/constants'
+import { useUntrackRepository } from '~/hooks/connections/mutations'
 import { timeAgo } from '~/lib/format'
+import { hostOf } from '~/lib/url'
 import type { Repository } from '~/types/connections'
 
 export function RepositoryRow({ repository }: { repository: Repository }) {
-    const { mutate: setEnabled } = useSetRepositoryEnabled()
-    const Icon = repository.is_private ? Lock : BookMarked
+    const { mutate: untrack, isPending } = useUntrackRepository()
+    const synced = repository.last_synced_at ? `Synced ${timeAgo(repository.last_synced_at)}` : 'Not synced yet'
 
     return (
-        <li className='group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-surface-muted/40'>
-            <Icon className='size-4 shrink-0 text-text-muted' />
+        <ListRow className='group'>
+            <IconChip icon={PROVIDER_ICONS[repository.connection.provider]} />
             <div className='min-w-0 flex-1'>
                 <a
                     href={repository.html_url}
@@ -22,13 +26,16 @@ export function RepositoryRow({ repository }: { repository: Repository }) {
                     <Text
                         as='span'
                         variant='strong'
-                        tone={repository.enabled ? 'primary' : 'secondary'}
                         truncate>
                         {repository.full_name}
                     </Text>
                     <ExternalLink className='size-3.5 shrink-0 text-text-muted opacity-0 transition-opacity group-hover:opacity-100' />
                 </a>
-                <Text variant='caption'>Last push {timeAgo(repository.pushed_at)}</Text>
+                <Text
+                    variant='caption'
+                    truncate>
+                    {hostOf(repository.html_url)} · {synced}
+                </Text>
             </div>
             {repository.is_private && (
                 <Badge
@@ -37,11 +44,15 @@ export function RepositoryRow({ repository }: { repository: Repository }) {
                     Private
                 </Badge>
             )}
-            <Switch
-                checked={repository.enabled}
-                onChange={(enabled) => setEnabled({ id: repository.id, enabled })}
-                label={`Track ${repository.full_name}`}
-            />
-        </li>
+            <Button
+                variant='danger'
+                size='icon'
+                onClick={() => untrack(repository)}
+                disabled={isPending}
+                aria-label={`Remove ${repository.full_name}`}
+                title='Remove'>
+                <X />
+            </Button>
+        </ListRow>
     )
 }
