@@ -1,5 +1,5 @@
 import { UserPlus } from 'lucide-react'
-import { MiniStat } from '~/components/coming-soon/mini-stat'
+import { MiniStat } from '~/components/ui/mini-stat'
 import { TeamMemberRow } from '~/components/coming-soon/team/member-row'
 import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'

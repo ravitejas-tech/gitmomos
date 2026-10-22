@@ -1,7 +1,7 @@
 import { Globe } from 'lucide-react'
 import { HeatmapGrid } from '~/components/activity/heatmap-grid'
 import { AddressBar } from '~/components/coming-soon/address-bar'
-import { MiniStat } from '~/components/coming-soon/mini-stat'
+import { MiniStat } from '~/components/ui/mini-stat'
 import { ReportSection } from '~/components/reports/document/section'
 import { Avatar } from '~/components/ui/avatar'
 import { Badge } from '~/components/ui/badge'

@@ -1,4 +1,4 @@
-import { BotAvatar } from '~/components/coming-soon/bot-avatar'
+import { BotAvatar } from '~/components/ui/bot-avatar'
 import { Badge } from '~/components/ui/badge'
 import { BulletItem } from '~/components/ui/bullet-item'
 import { Text } from '~/components/ui/text'

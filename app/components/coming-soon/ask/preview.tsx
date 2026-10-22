@@ -1,6 +1,6 @@
 import { Send } from 'lucide-react'
 import { AskAnswer } from '~/components/coming-soon/ask/answer'
-import { AskQuestion } from '~/components/coming-soon/ask/question'
+import { ChatQuestion } from '~/components/ui/chat-question'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
@@ -14,7 +14,7 @@ export function AskPreview() {
             <div className='space-y-6 p-5'>
                 {ASK_THREAD.map((message) =>
                     message.role === 'user' ? (
-                        <AskQuestion
+                        <ChatQuestion
                             key={message.text}
                             text={message.text}
                         />
