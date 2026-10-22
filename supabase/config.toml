@@ -398,3 +398,8 @@ entrypoint = "./functions/connections/index.ts"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/sync/index.ts"
+
+[functions.profile-chat]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/profile-chat/index.ts"
