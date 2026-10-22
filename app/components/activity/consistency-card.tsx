@@ -7,16 +7,13 @@ import { CardContent } from '~/components/ui/card-content'
 import { CardHeader } from '~/components/ui/card-header'
 import { Skeleton } from '~/components/ui/skeleton'
 import { Text } from '~/components/ui/text'
-import { CONSISTENCY_WEEKS } from '~/data/activity/ranges'
-import { useActivity } from '~/hooks/activity/queries'
 import { heatmapCells } from '~/lib/activity/heatmap'
-import { lastWeeks } from '~/lib/activity/range'
 import { activeDays, currentStreak } from '~/lib/activity/stats'
 import { pluralize } from '~/lib/format'
+import type { DayCount } from '~/types/activity'
 
-export function ConsistencyCard() {
-    const { data: activity } = useActivity({ variables: lastWeeks(CONSISTENCY_WEEKS) })
-    const streak = activity ? currentStreak(activity.daily) : 0
+export function ConsistencyCard({ daily }: { daily: DayCount[] | undefined }) {
+    const streak = daily ? currentStreak(daily) : 0
 
     return (
         <Card>
@@ -33,12 +30,12 @@ export function ConsistencyCard() {
                 }
             />
             <CardContent className='space-y-4'>
-                {!activity && <Skeleton className='h-48' />}
-                {activity && (
+                {!daily && <Skeleton className='h-48' />}
+                {daily && (
                     <>
-                        <HeatmapGrid cells={heatmapCells(activity.daily)} />
+                        <HeatmapGrid cells={heatmapCells(daily)} />
                         <div className='flex flex-wrap items-center justify-between gap-2'>
-                            <Text variant='caption'>{pluralize(activeDays(activity.daily), 'active day')}</Text>
+                            <Text variant='caption'>{pluralize(activeDays(daily), 'active day')}</Text>
                             <HeatmapLegend />
                         </div>
                     </>
