@@ -5,6 +5,7 @@ import type { Enums } from '~/types/database'
 
 export type Activity = z.infer<typeof activitySchema>
 export type ActivityDay = Activity['daily'][number]
+export type DayCount = Pick<ActivityDay, 'date' | 'commits'>
 export type WorkKind = Enums<'work_kind'>
 export type ActivityRange = (typeof ACTIVITY_RANGES)[number]['value']
 
