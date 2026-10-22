@@ -1,8 +1,8 @@
 # gitmomos
 
-Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, and a nightly worker collects the commits they authored and writes one report per day with Gemini.
+Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, and a nightly worker collects the commits they authored and writes one report per day with Gemini. An optional public profile (`/@handle`) shows their highlights and a chatbot that answers visitors from their reports.
 
-There is no CLI and no server of our own: a static React Router SPA talks to Supabase, and two edge functions do the work that needs secrets.
+There is no CLI and no server of our own: a static React Router SPA talks to Supabase, and three edge functions do the work that needs secrets.
 
 ## Rulebooks
 
@@ -41,7 +41,7 @@ Read the one that covers what you are touching. Do not read them all.
 | Toasts | `react-hot-toast` |
 | Database | Supabase Postgres + RLS, Vault, `pg_cron`, `pg_net` |
 | Functions | Supabase Edge Functions (Deno 2) |
-| AI | Gemini (`GEMINI_MODEL`, default `gemini-flash-latest`) over REST |
+| AI | Gemini over REST: `GEMINI_MODEL` (default `gemini-flash-latest`) for reports, `GEMINI_CHAT_MODEL` (default `gemini-flash-lite-latest`) for the chatbot, `gemini-embedding-2` for search |
 
 ## Layout
 
@@ -53,7 +53,7 @@ app/
   hooks/ data/ lib/ schemas/ services/ types/
 supabase/
   migrations/    schema, RLS, Vault helpers, cron
-  functions/     connections/, sync/, _shared/
+  functions/     connections/, sync/, profile-chat/, _shared/
 docs/
   self-hosting.md  deployment guide, kept in step with the setup it describes
   rulebooks/       the rules
@@ -84,7 +84,7 @@ yarn secrets:set          # upload supabase/functions/.env
 | File | Holds |
 |---|---|
 | `.env` | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_PROJECT_ID` |
-| `supabase/functions/.env` | `GEMINI_API_KEY`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `WORKER_SECRET`, optional `GEMINI_MODEL`, `ALLOW_LOCAL_GITEA` |
+| `supabase/functions/.env` | `GEMINI_API_KEY`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `WORKER_SECRET`, optional `GEMINI_MODEL`, `GEMINI_CHAT_MODEL`, `ALLOW_LOCAL_GITEA` |
 
 Both are gitignored; the `.example` files beside them list every key.
 
@@ -97,8 +97,12 @@ Both are gitignored; the `.example` files beside them list every key.
 - **Commits are windowed by committer date**, because that is what GitHub's `since`/`until` filter on. A rebase moves a commit into the day it was rebased.
 - **GitHub allows one OAuth callback URL per app.** Local development needs its own OAuth App pointing at `http://localhost:5173/dashboard/connections/github`.
 - **OAuth Apps can only read private repositories with the `repo` scope.** The functions only call read endpoints.
-- **`verify_jwt` is off for both functions** (`supabase/config.toml`); each authenticates itself, with the user's JWT or the worker secret.
+- **`verify_jwt` is off for every function** (`supabase/config.toml`); `connections` and `sync` authenticate with the user's JWT or the worker secret, and `profile-chat` is anonymous, rate-limited per visitor and per profile by `claim_profile_question()`.
+- **A report is public only when every repository in it has `on_profile` on** (`is_profile_report()`). Repository names never leave the server; visitors see the headline, summary, highlights and work areas.
+- **Report embeddings are written lazily** by `profile-chat` before it answers, up to `MAX_INDEX_BATCHES` × `EMBEDDING_BATCH_SIZE` per question. Editing a report's content deletes its embedding (`reports_forget_embedding`), so it is re-embedded on the next question. `EMBEDDING_DIMENSIONS` must match `vector(768)` in the migration.
+- **The chatbot uses Flash-Lite** because `gemini-flash-latest` took 40–90 s per call on the free tier when it was built: fine overnight, not in a chat.
 - **Unknown paths must fall back to `/__spa-fallback.html`** on the static host. `/`, `/roadmap`, `/legal/*`, `/robots.txt` and `/sitemap.xml` are prerendered at build time, so nothing they import may touch browser globals at module scope.
+- **`/:handle` matches every top-level path** that no static route claims. Its `clientLoader` throws a 404 unless the segment is `@` plus a valid handle, which keeps unknown URLs on the normal 404 page.
 - **Canonical links, Open Graph tags, `robots.txt` and `sitemap.xml` use `SITE_URL`** (`app/data/seo/site.ts`). Change it when the production domain changes; a public page added to the site goes in `SITEMAP_PATHS`.
 - **`yarn build` needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`** (from `.env` or the CI environment): prerendering imports `services/supabase.ts`, and `createClient` throws on an empty URL.
 - **`@react-router/node` and `isbot` are runtime dependencies** even though nothing runs on a server: React Router only finds them in `dependencies` and needs them to prerender.
