@@ -10,13 +10,16 @@ supabase/
   functions/
     connections/index.ts      entry point: auth, parse, dispatch
     sync/index.ts             entry point: auth, parse, dispatch
+    profile-chat/index.ts     entry point: anonymous, parse, answer
     _shared/
       http/                   serve, HttpError, json, cors
       supabase/               admin client, requireUser, unwrap
       schemas/                Zod request bodies, <feature>.schema.ts
       connections/            one handler per operation
       sync/                   collect commits, write a day's report
-      reports/                Gemini prompt and generation
+      reports/                report prompt and generation
+      profile-chat/           embed reports, match a question, answer it
+      gemini/                 generateContent and batchEmbedContents over REST
       providers/              GitHub and Gitea clients
       constants/              <topic>.constants.ts
       types/                  <topic>.types.ts
@@ -137,7 +140,7 @@ Messages are written for the user who will read them in a toast.
 
 - `sync` is idempotent: commits upsert on `(repository_id, sha)` and the report upserts on `(user_id, date)`, so a rerun is always safe.
 - **An edited report is never regenerated.** `edited_at` set means the worker leaves it alone.
-- **The report prompt writes for non-engineers** (`_shared/reports/build-prompt.ts`): outcomes in plain language, no jargon, nothing the commits don't show. `RESPONSE_SCHEMA`, `ReportContent` and `reportContentSchema` in the app change together.
+- **The report prompt writes for non-engineers** (`_shared/reports/build-prompt.ts`): outcomes in plain language, no jargon, nothing the commits don't show. `RESPONSE_SCHEMA`, `ReportContent`, and `reportContentSchema` in both the app and `_shared/schemas/report.schema.ts` change together.
 - **`commits.kind` is generated** from the message by `commit_kind()` (conventional prefix first, then keywords). Change the classification in a new migration that replaces the function; the stored column recomputes only for rows that are rewritten, so a backfill is an `update commits set message = message`.
 - Long work fans out from Postgres (one `pg_net` call per user), never as a loop inside one function invocation.
 
