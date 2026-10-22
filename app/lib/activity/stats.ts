@@ -1,4 +1,4 @@
-import type { Activity, ActivityDay } from '~/types/activity'
+import type { Activity, DayCount } from '~/types/activity'
 
 export function percentChange(current: number, previous: number): number | null {
     if (!previous) return null
@@ -9,15 +9,15 @@ export function share(part: number, total: number): number {
     return total ? Math.round((part / total) * 100) : 0
 }
 
-export function totalCommits(daily: ActivityDay[]): number {
+export function totalCommits(daily: DayCount[]): number {
     return daily.reduce((sum, day) => sum + day.commits, 0)
 }
 
-export function activeDays(daily: ActivityDay[]): number {
+export function activeDays(daily: DayCount[]): number {
     return daily.filter((day) => day.commits > 0).length
 }
 
-export function currentStreak(daily: ActivityDay[]): number {
+export function currentStreak(daily: DayCount[]): number {
     const days = [...daily].reverse()
     const counted = days[0]?.commits === 0 ? days.slice(1) : days
     const gap = counted.findIndex((day) => day.commits === 0)
