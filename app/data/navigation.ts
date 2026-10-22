@@ -1,4 +1,4 @@
-import { FileText, FolderGit2, LayoutDashboard, Settings } from 'lucide-react'
+import { FileText, FolderGit2, Globe, LayoutDashboard, Settings } from 'lucide-react'
 import { COMING_SOON } from '~/data/coming-soon/features'
 import { FAQ_ID } from '~/data/landing/faq'
 import { HOW_IT_WORKS_ID } from '~/data/landing/how-it-works'
@@ -12,6 +12,7 @@ export const DASHBOARD_PATH = '/dashboard'
 export const REPORTS_PATH = '/dashboard/reports'
 export const CONNECTIONS_PATH = '/dashboard/connections'
 export const SETTINGS_PATH = '/dashboard/settings'
+export const PUBLIC_PROFILE_SETTINGS_PATH = '/dashboard/profile'
 export const ROADMAP_PATH = '/roadmap'
 export const PRIVACY_PATH = '/legal/privacy'
 
@@ -23,6 +24,7 @@ export const DASHBOARD_NAV = [
     { label: 'Overview', to: DASHBOARD_PATH, icon: LayoutDashboard, end: true },
     { label: 'Reports', to: REPORTS_PATH, icon: FileText, end: false },
     { label: 'Repositories', to: CONNECTIONS_PATH, icon: FolderGit2, end: false },
+    { label: 'Public profile', to: PUBLIC_PROFILE_SETTINGS_PATH, icon: Globe, end: false },
 ] as const
 
 export const COMING_SOON_NAV = COMING_SOON.map(({ slug, label, icon }) => ({
