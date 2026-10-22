@@ -89,19 +89,65 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
-                },"profiles": {
+                },"profile_questions": {
                   Row: {
-                    "created_at": string,"email": string,"full_name": string | null,"id": string,"timezone": string,"updated_at": string
+                    "client_hash": string,"created_at": string,"id": string,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"email": string,"full_name"?: string | null,"id": string,"timezone"?: string,"updated_at"?: string
+                    "client_hash": string,"created_at"?: string,"id"?: string,"user_id": string
                   }
                   Update: {
-                    "created_at"?: string,"email"?: string,"full_name"?: string | null,"id"?: string,"timezone"?: string,"updated_at"?: string
+                    "client_hash"?: string,"created_at"?: string,"id"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "profile_questions_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"profiles": {
+                  Row: {
+                    "created_at": string,"email": string,"full_name": string | null,"handle": string | null,"id": string,"is_public": boolean,"tagline": string | null,"timezone": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"email": string,"full_name"?: string | null,"handle"?: string | null,"id": string,"is_public"?: boolean,"tagline"?: string | null,"timezone"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"email"?: string,"full_name"?: string | null,"handle"?: string | null,"id"?: string,"is_public"?: boolean,"tagline"?: string | null,"timezone"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     
+                  ]
+                },"report_embeddings": {
+                  Row: {
+                    "created_at": string,"embedding": string,"id": string,"report_id": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"embedding": string,"id"?: string,"report_id": string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"embedding"?: string,"id"?: string,"report_id"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "report_embeddings_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: true
+      referencedRelation: "reports"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "report_embeddings_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"reports": {
                   Row: {
@@ -125,14 +171,14 @@ isOneToOne: false
                   ]
                 },"repositories": {
                   Row: {
-                    "connection_id": string,"created_at": string,"default_branch": string | null,"enabled": boolean,"external_id": string,"full_name": string,"html_url": string,"id": string,"is_private": boolean,"last_synced_at": string | null,"pushed_at": string | null,"user_id": string
+                    "connection_id": string,"created_at": string,"default_branch": string | null,"enabled": boolean,"external_id": string,"full_name": string,"html_url": string,"id": string,"is_private": boolean,"last_synced_at": string | null,"on_profile": boolean,"pushed_at": string | null,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "connection_id": string,"created_at"?: string,"default_branch"?: string | null,"enabled"?: boolean,"external_id": string,"full_name": string,"html_url": string,"id"?: string,"is_private"?: boolean,"last_synced_at"?: string | null,"pushed_at"?: string | null,"user_id": string
+                    "connection_id": string,"created_at"?: string,"default_branch"?: string | null,"enabled"?: boolean,"external_id": string,"full_name": string,"html_url": string,"id"?: string,"is_private"?: boolean,"last_synced_at"?: string | null,"on_profile"?: boolean,"pushed_at"?: string | null,"user_id": string
                   }
                   Update: {
-                    "connection_id"?: string,"created_at"?: string,"default_branch"?: string | null,"enabled"?: boolean,"external_id"?: string,"full_name"?: string,"html_url"?: string,"id"?: string,"is_private"?: boolean,"last_synced_at"?: string | null,"pushed_at"?: string | null,"user_id"?: string
+                    "connection_id"?: string,"created_at"?: string,"default_branch"?: string | null,"enabled"?: boolean,"external_id"?: string,"full_name"?: string,"html_url"?: string,"id"?: string,"is_private"?: boolean,"last_synced_at"?: string | null,"on_profile"?: boolean,"pushed_at"?: string | null,"user_id"?: string
                   }
                   Relationships: [
                     {
@@ -155,7 +201,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "commit_kind":
+            "claim_profile_question":
+{ Args: { "p_client_hash": string,"p_daily_limit": number,"p_hourly_limit": number,"p_user_id": string }; Returns: boolean
+                           },
+"commit_kind":
 { Args: { "message": string }; Returns: Database["public"]['Enums']["work_kind"]
                            },
 "enqueue_daily_syncs":
@@ -167,11 +216,22 @@ isOneToOne: false
 "get_connection_token":
 { Args: { "p_connection_id": string }; Returns: string
                            },
+"get_public_profile":
+{ Args: { "p_handle": string }; Returns: Json
+                           },
 "import_repositories":
 { Args: { "p_connection_id": string,"p_repositories": Json }; Returns: number
                            },
+"is_profile_report":
+{ Args: { "p_content": Json,"p_user_id": string }; Returns: boolean
+                           },
 "is_valid_timezone":
 { Args: { "tz": string }; Returns: boolean
+                           },
+"match_profile_reports":
+{ Args: { "p_embedding": string,"p_recent": number,"p_similar": number,"p_user_id": string }; Returns: {
+              "content": Json,"date": string
+            }[]
                            },
 "record_repository_commits":
 { Args: { "p_commits": Json,"p_repository_id": string }; Returns: undefined
