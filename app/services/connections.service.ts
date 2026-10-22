@@ -18,7 +18,7 @@ export const connectionsService = {
     async getRepositories() {
         const { data, error } = await supabase
             .from('repositories')
-            .select('id, full_name, html_url, is_private, last_synced_at, connection:connections(provider)')
+            .select('id, full_name, html_url, is_private, on_profile, last_synced_at, connection:connections(provider)')
             .eq('enabled', true)
             .order('full_name')
         if (error) throw error
