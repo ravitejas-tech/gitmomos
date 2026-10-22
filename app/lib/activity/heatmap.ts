@@ -1,7 +1,7 @@
 import { HEATMAP_LEVELS } from '~/data/activity/ranges'
-import type { ActivityDay, HeatmapCell } from '~/types/activity'
+import type { DayCount, HeatmapCell } from '~/types/activity'
 
-export function heatmapCells(daily: ActivityDay[]): HeatmapCell[] {
+export function heatmapCells(daily: DayCount[]): HeatmapCell[] {
     const max = Math.max(1, ...daily.map((day) => day.commits))
     return daily.map(({ date, commits }) => ({
         date,
