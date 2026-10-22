@@ -47,6 +47,10 @@ export function formatShortDay(date: string): string {
     return dateFromDay(date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
 }
 
+export function formatDate(date: string): string {
+    return dateFromDay(date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
 export function formatMonth(month: string): string {
     return dateFromDay(month).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
 }
