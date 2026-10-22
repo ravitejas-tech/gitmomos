@@ -4,7 +4,7 @@ import type { LegalSectionContent } from '~/types/legal'
 export const PRIVACY_INTRO =
     'At Gitmomos, we believe that your code is your business. This Privacy Policy outlines our strict data handling practices, emphasizing our absolute commitment to the privacy of your intellectual property.'
 
-export const PRIVACY_UPDATED = 'Last Updated: June 2026'
+export const PRIVACY_UPDATED = 'Last Updated: October 2026'
 
 export const PRIVACY_HIGHLIGHTS = [
     { icon: EyeOff, title: 'No Source Code', description: 'Your source code is never read or stored.' },
@@ -65,6 +65,11 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
                 description: 'Generating high-level statistical graphs regarding commit frequency and timing.',
             },
             { term: 'Account Management', description: 'Authenticating you on the web dashboard.' },
+            {
+                term: 'Public Profile (optional)',
+                description:
+                    'Only if you turn it on. Visitors see your name, tagline, commit counts and the reports from repositories you switch on, without repository names, and can ask a chatbot about that work. Turning it off hides everything at once.',
+            },
         ],
     },
     {
@@ -83,7 +88,7 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
             {
                 term: 'Google Gemini AI',
                 description:
-                    'Processes the commit message text to generate natural language reports. We only transmit commit messages and repository names to this API.',
+                    "Processes the commit message text to generate natural language reports. We only transmit commit messages and repository names to this API. If you publish a profile, your reports are also sent to it to build a search index, and visitors' questions are sent to it together with the matching public reports to write an answer.",
             },
             {
                 term: 'GitHub and Gitea',
@@ -94,7 +99,7 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
     },
     {
         heading: { id: 'data-retention', title: 'Data Retention', level: 2 },
-        body: 'Commit metadata is retained as long as your account remains active, ensuring you have historical access to your productivity trends. You may delete a linked project at any time, which will permanently remove all associated commit metadata from our servers.',
+        body: "Commit metadata is retained as long as your account remains active, ensuring you have historical access to your productivity trends. You may delete a linked project at any time, which will permanently remove all associated commit metadata from our servers. Questions asked on a public profile are not stored; a one-way hash of the visitor's IP address is kept for one day to limit how many questions can be asked.",
     },
     {
         heading: { id: 'user-rights', title: 'Your Rights', level: 2 },

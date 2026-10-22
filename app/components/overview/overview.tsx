@@ -1,5 +1,5 @@
+import { ConsistencyCard } from '~/components/activity/consistency-card'
 import { ActivityCard } from '~/components/overview/activity-card'
-import { ConsistencyCard } from '~/components/overview/consistency-card'
 import { HoursCard } from '~/components/overview/hours-card'
 import { LatestReportCard } from '~/components/overview/latest-report-card'
 import { ProjectsCard } from '~/components/overview/projects-card'
@@ -9,11 +9,13 @@ import { WorkMixCard } from '~/components/overview/work-mix-card'
 import { ErrorState } from '~/components/ui/error-state'
 import { useActivity } from '~/hooks/activity/queries'
 import { useReports } from '~/hooks/reports/queries'
-import { lastDays } from '~/lib/activity/range'
+import { CONSISTENCY_WEEKS } from '~/data/activity/ranges'
+import { lastDays, lastWeeks } from '~/lib/activity/range'
 
 export function Overview({ days }: { days: number }) {
     const range = lastDays(days)
     const { data: activity, isError, refetch } = useActivity({ variables: range })
+    const { data: consistency } = useActivity({ variables: lastWeeks(CONSISTENCY_WEEKS) })
     const { data: reports, isLoading: reportsLoading } = useReports({ variables: undefined })
     const written = reports?.filter((report) => report.status === 'generated')
 
@@ -36,7 +38,7 @@ export function Overview({ days }: { days: number }) {
             <div className='grid gap-6 lg:grid-cols-2 xl:grid-cols-3'>
                 <ProjectsCard repositories={activity?.repositories} />
                 <HoursCard hours={activity?.hours} />
-                <ConsistencyCard />
+                <ConsistencyCard daily={consistency?.daily} />
             </div>
             <div className='grid gap-6 xl:grid-cols-5'>
                 <LatestReportCard

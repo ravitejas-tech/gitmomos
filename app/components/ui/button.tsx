@@ -22,6 +22,7 @@ const buttonVariants = cva(
                 lg: 'h-10 px-4 text-sm',
                 pill: 'h-10 rounded-full px-5 text-sm',
                 'pill-sm': 'h-8 rounded-full px-3.5 text-caption',
+                chip: 'min-h-8 rounded-2xl px-3.5 py-1.5 text-left text-caption whitespace-normal',
                 icon: 'size-8',
                 inline: 'h-auto p-0 text-caption',
             },

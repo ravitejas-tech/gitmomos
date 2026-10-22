@@ -1,14 +1,16 @@
 import type { ReactNode } from 'react'
 import { Card } from '~/components/ui/card'
+import { Skeleton } from '~/components/ui/skeleton'
 import { Text } from '~/components/ui/text'
 
 export interface SettingsSectionProps {
     title: string
     description?: string
+    isLoading?: boolean
     children: ReactNode
 }
 
-export function SettingsSection({ title, description, children }: SettingsSectionProps) {
+export function SettingsSection({ title, description, isLoading, children }: SettingsSectionProps) {
     return (
         <section className='grid gap-3 border-b border-border pb-8 last:border-b-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10'>
             <div className='space-y-1'>
@@ -19,7 +21,7 @@ export function SettingsSection({ title, description, children }: SettingsSectio
                 </Text>
                 {description && <Text variant='caption'>{description}</Text>}
             </div>
-            <Card>{children}</Card>
+            <Card>{isLoading ? <Skeleton className='m-4 h-24' /> : children}</Card>
         </section>
     )
 }

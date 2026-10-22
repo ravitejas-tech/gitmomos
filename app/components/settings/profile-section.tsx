@@ -1,6 +1,5 @@
 import { ProfileForm } from '~/components/settings/profile-form'
 import { SettingsSection } from '~/components/settings/settings-section'
-import { Skeleton } from '~/components/ui/skeleton'
 import { useProfile } from '~/hooks/profile/queries'
 
 export function ProfileSection() {
@@ -9,14 +8,13 @@ export function ProfileSection() {
     return (
         <SettingsSection
             title='Profile'
-            description={profile?.email}>
-            {profile ? (
+            description={profile?.email}
+            isLoading={!profile}>
+            {profile && (
                 <ProfileForm
                     key={profile.id}
                     profile={profile}
                 />
-            ) : (
-                <Skeleton className='m-4 h-24' />
             )}
         </SettingsSection>
     )

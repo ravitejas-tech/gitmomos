@@ -4,7 +4,6 @@ import { AskPreview } from '~/components/coming-soon/ask/preview'
 import { BragDocPreview } from '~/components/coming-soon/brag-doc/preview'
 import { DigestsPreview } from '~/components/coming-soon/digests/preview'
 import { FocusPreview } from '~/components/coming-soon/focus/preview'
-import { ProfilePreview } from '~/components/coming-soon/profile/preview'
 import { StandupPreview } from '~/components/coming-soon/standup/preview'
 import { StatsCardPreview } from '~/components/coming-soon/stats-card/preview'
 import { TeamPreview } from '~/components/coming-soon/team/preview'
@@ -22,6 +21,5 @@ export const COMING_SOON_PREVIEWS: Record<ComingSoonSlug, ComponentType> = {
     achievements: AchievementsPreview,
     timesheets: TimesheetsPreview,
     'stats-card': StatsCardPreview,
-    profile: ProfilePreview,
     team: TeamPreview,
 }

@@ -1,6 +1,6 @@
 import { WorkMixBar } from '~/components/activity/work-mix-bar'
 import { DigestDayRow } from '~/components/coming-soon/digests/day-row'
-import { MiniStat } from '~/components/coming-soon/mini-stat'
+import { MiniStat } from '~/components/ui/mini-stat'
 import { Badge } from '~/components/ui/badge'
 import { Card } from '~/components/ui/card'
 import { Text } from '~/components/ui/text'

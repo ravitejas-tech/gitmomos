@@ -1,5 +1,5 @@
 import { WorkMixBar } from '~/components/activity/work-mix-bar'
-import { MiniStat } from '~/components/coming-soon/mini-stat'
+import { MiniStat } from '~/components/ui/mini-stat'
 import { Card } from '~/components/ui/card'
 import { Logo } from '~/components/ui/logo'
 import { Text } from '~/components/ui/text'

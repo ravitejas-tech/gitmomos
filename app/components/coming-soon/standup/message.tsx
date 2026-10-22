@@ -1,4 +1,4 @@
-import { BotAvatar } from '~/components/coming-soon/bot-avatar'
+import { BotAvatar } from '~/components/ui/bot-avatar'
 import { MessageList } from '~/components/coming-soon/standup/message-list'
 import { Badge } from '~/components/ui/badge'
 import { Card } from '~/components/ui/card'

@@ -1,5 +1,5 @@
 import { Copy } from 'lucide-react'
-import { MiniStat } from '~/components/coming-soon/mini-stat'
+import { MiniStat } from '~/components/ui/mini-stat'
 import { ReportSection } from '~/components/reports/document/section'
 import { Badge } from '~/components/ui/badge'
 import { BulletItem } from '~/components/ui/bullet-item'

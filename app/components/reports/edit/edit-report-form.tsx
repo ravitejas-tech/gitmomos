@@ -4,6 +4,7 @@ import { HighlightFields } from '~/components/reports/edit/highlight-fields'
 import { FormActions } from '~/components/ui/form-actions'
 import { FormField } from '~/components/ui/form-field'
 import { Input } from '~/components/ui/input'
+import { ModalBody } from '~/components/ui/modal-body'
 import { PanelFooter } from '~/components/ui/panel-footer'
 import { Textarea } from '~/components/ui/textarea'
 import { REPORT_LIST_FIELDS } from '~/data/reports/edit-fields'
@@ -53,7 +54,7 @@ export function EditReportForm({ reportId, content, onDone }: EditReportFormProp
 
     return (
         <form onSubmit={handleSubmit(save)}>
-            <div className='max-h-[70vh] space-y-6 overflow-y-auto p-5'>
+            <ModalBody>
                 <FormField
                     id='headline'
                     label='Headline'
@@ -93,7 +94,7 @@ export function EditReportForm({ reportId, content, onDone }: EditReportFormProp
                         </FormField>
                     ))}
                 </div>
-            </div>
+            </ModalBody>
             <PanelFooter>
                 <FormActions
                     submitLabel='Save changes'
