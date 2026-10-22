@@ -11,6 +11,7 @@ export default [
         route('roadmap', 'routes/roadmap.tsx'),
         route('releases', 'routes/releases/index.tsx'),
         route('releases/:version', 'routes/releases/$version.tsx'),
+        route(':handle', 'routes/$handle.tsx'),
     ]),
     layout('routes/dashboard/layout.tsx', [
         route('dashboard', 'routes/dashboard/index.tsx'),
@@ -18,6 +19,7 @@ export default [
         route('dashboard/connections', 'routes/dashboard/connections.tsx'),
         route('dashboard/connections/github', 'routes/dashboard/connections.github.tsx'),
         route('dashboard/settings', 'routes/dashboard/settings.tsx'),
+        route('dashboard/profile', 'routes/dashboard/profile.tsx'),
         route('dashboard/:feature', 'routes/dashboard/$feature.tsx'),
     ]),
     route('login', 'routes/login.tsx'),
