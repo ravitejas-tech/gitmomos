@@ -82,7 +82,7 @@ GITHUB_CLIENT_SECRET=<client secret from 1.2>
 WORKER_SECRET=<the string from 2.1>
 ```
 
-Leave `ALLOW_LOCAL_GITEA` commented out in production. Set `GEMINI_MODEL` only to override the default `gemini-flash-latest`. The file is gitignored.
+Leave `ALLOW_LOCAL_GITEA` commented out in production. Set `GEMINI_MODEL` only to override the default `gemini-flash-latest` for reports, and `GEMINI_CHAT_MODEL` only to override `gemini-flash-lite-latest` for the public profile chatbot. The file is gitignored.
 
 ### 2.3 Create the tables and deploy the functions
 
@@ -98,9 +98,9 @@ yarn functions:deploy
 
 - `link` asks for the database password from 1.3. Nothing shows while you paste it.
 - `db:push` lists the migrations and asks to apply them. Answer `y`.
-- If `functions:deploy` complains about Docker, run `yarn supabase functions deploy connections sync --use-api` instead.
+- If `functions:deploy` complains about Docker, run `yarn supabase functions deploy connections sync profile-chat --use-api` instead.
 
-**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits` and `reports`, and **Edge Functions** lists `connections` and `sync`.
+**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings` and `profile_questions`, and **Edge Functions** lists `connections`, `sync` and `profile-chat`.
 
 ---
 
@@ -176,8 +176,9 @@ Build with the same two variables set, then upload `build/client/`. Unknown path
 3. Paste a repository URL into **Tracked repositories** and click **Add**.
 4. On **Overview**, click **Sync now**. Today's report appears under **Reports**.
 5. In **Settings**, check your timezone. The nightly report is written just after midnight in it.
+6. In **Public profile**, pick a handle, switch on the repositories to show, and turn the profile on. Open `https://<site>/@<handle>` and ask the chatbot a question.
 
-If a step fails, open Supabase → **Edge Functions →** `connections` or `sync` **→ Logs**.
+If a step fails, open Supabase → **Edge Functions →** `connections`, `sync` or `profile-chat` **→ Logs**.
 
 The next day, confirm the worker ran:
 
