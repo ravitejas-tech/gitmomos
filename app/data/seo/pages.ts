@@ -26,6 +26,12 @@ export const PAGE_SEO = {
             'How gitmomos handles your data: it reads commit metadata only, never your source code, and keeps your access tokens encrypted.',
         path: PRIVACY_PATH,
     },
+    profile: {
+        title: `Public profile | ${SITE_NAME}`,
+        description:
+            'A developer’s shipped work at a glance, with an assistant that answers questions from their daily work reports.',
+        path: HOME_PATH,
+    },
     license: {
         title: `License | ${SITE_NAME}`,
         description: 'gitmomos is free and open source under the MIT License.',
