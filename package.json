@@ -27,8 +27,8 @@
         "db:diff": "supabase db diff",
         "db:types": "supabase gen types typescript --local > app/types/database.ts && cp app/types/database.ts supabase/functions/_shared/database.types.ts",
         "functions:serve": "supabase functions serve --env-file supabase/functions/.env",
-        "functions:check": "cd supabase/functions && deno check connections/index.ts sync/index.ts && deno lint",
-        "functions:deploy": "supabase functions deploy connections sync",
+        "functions:check": "cd supabase/functions && deno check connections/index.ts sync/index.ts profile-chat/index.ts && deno lint",
+        "functions:deploy": "supabase functions deploy connections sync profile-chat",
         "secrets:set": "supabase secrets set --env-file supabase/functions/.env"
     },
     "dependencies": {
