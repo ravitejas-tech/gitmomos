@@ -1,10 +1,8 @@
-import { Send } from 'lucide-react'
 import { AskAnswer } from '~/components/coming-soon/ask/answer'
-import { ChatQuestion } from '~/components/ui/chat-question'
 import { Badge } from '~/components/ui/badge'
-import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
-import { Input } from '~/components/ui/input'
+import { ChatComposer } from '~/components/ui/chat-composer'
+import { ChatQuestion } from '~/components/ui/chat-question'
 import { PanelFooter } from '~/components/ui/panel-footer'
 import { ASK_SUGGESTIONS, ASK_THREAD } from '~/data/coming-soon/ask'
 
@@ -32,17 +30,11 @@ export function AskPreview() {
                         <Badge key={suggestion}>{suggestion}</Badge>
                     ))}
                 </div>
-                <div className='flex gap-2'>
-                    <Input
-                        aria-label='Ask about your work'
-                        placeholder='Ask about your work…'
-                        readOnly
-                    />
-                    <Button>
-                        <Send />
-                        Ask
-                    </Button>
-                </div>
+                <ChatComposer
+                    aria-label='Ask about your work'
+                    placeholder='Ask about your work…'
+                    readOnly
+                />
             </PanelFooter>
         </Card>
     )
