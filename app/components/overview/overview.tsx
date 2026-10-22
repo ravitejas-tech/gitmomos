@@ -1,5 +1,5 @@
+import { ConsistencyCard } from '~/components/activity/consistency-card'
 import { ActivityCard } from '~/components/overview/activity-card'
-import { ConsistencyCard } from '~/components/overview/consistency-card'
 import { HoursCard } from '~/components/overview/hours-card'
 import { LatestReportCard } from '~/components/overview/latest-report-card'
 import { ProjectsCard } from '~/components/overview/projects-card'

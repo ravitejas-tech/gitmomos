@@ -1,6 +1,6 @@
 import { Flame } from 'lucide-react'
 import { HeatmapGrid } from '~/components/activity/heatmap-grid'
-import { HeatmapLegend } from '~/components/overview/heatmap-legend'
+import { HeatmapLegend } from '~/components/activity/heatmap-legend'
 import { Badge } from '~/components/ui/badge'
 import { Card } from '~/components/ui/card'
 import { CardContent } from '~/components/ui/card-content'
