@@ -1,9 +1,6 @@
 export const MAX_COMMITS = 300
 export const MAX_MESSAGE_CHARS = 500
 
-export const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta'
-export const DEFAULT_GEMINI_MODEL = 'gemini-flash-latest'
-
 export const RESPONSE_SCHEMA = {
     type: 'OBJECT',
     properties: {
