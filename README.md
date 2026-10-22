@@ -80,13 +80,18 @@ React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
       ▼                                     │
  Edge function `connections` ───────────────┤  Edge function `sync`
    GitHub OAuth / Gitea token → Vault       │    fetch commits (GitHub/Gitea API)
-   add a repository by URL                  └─── write commits + report (Gemini)
+   add a repository by URL                  ├─── write commits + report (Gemini)
+                                            │
+ Edge function `profile-chat` ──────────────┘
+   answer a visitor's question from the
+   owner's public reports (Gemini embeddings)
 ```
 
-- **Website** (`app/`): React Router 7 in SPA mode, served as static files. The landing and legal pages are prerendered at build time. The browser reads only its own rows (RLS) and can change just a few columns: name and timezone, whether a repository is tracked, and report edits.
-- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits` and `reports`. Provider tokens live in Supabase Vault and only the service role can read them.
+- **Website** (`app/`): React Router 7 in SPA mode, served as static files. The landing and legal pages are prerendered at build time. The browser reads only its own rows (RLS) and can change just a few columns: name, timezone and public profile settings, whether a repository is tracked or shown on the public profile, and report edits. Visitors read a public profile through `get_public_profile()`, which returns only what its owner chose to show.
+- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits` and `reports`, plus `report_embeddings` (pgvector) and `profile_questions` for the public profile chatbot. Provider tokens live in Supabase Vault and only the service role can read them.
 - **`connections` function**: GitHub OAuth, connecting Gitea, and adding a repository by URL after checking that the account can read it.
 - **`sync` function**: for one user and one local day, collects commits from every tracked repository and writes that day's report. "Sync now" and the nightly worker both call it.
+- **`profile-chat` function**: answers a visitor's question on a public profile. It embeds the owner's reports with Gemini, finds the closest public ones in Postgres, and has Gemini answer from those alone, citing the days it used.
 - **Nightly worker**: `pg_cron` runs `enqueue_daily_syncs()` every hour at :05 and makes one `pg_net` call to `sync` for each user whose local clock has just passed midnight.
 
 | Layer | Choice |
@@ -94,7 +99,7 @@ React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
 | Website | React 19, React Router 7, Tailwind 4, TanStack Query, Recharts |
 | Database | Supabase Postgres with RLS, Vault, `pg_cron` and `pg_net` |
 | Functions | Supabase Edge Functions (Deno 2) |
-| Reports | Gemini over REST (`gemini-flash-latest` by default) |
+| AI | Gemini over REST: `gemini-flash-latest` for reports, `gemini-flash-lite-latest` for the profile chatbot, `gemini-embedding-2` for search |
 
 ---
 
