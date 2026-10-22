@@ -9,11 +9,8 @@ import {
     Eye,
     Flame,
     Gift,
-    Globe,
     Hash,
     LayoutTemplate,
-    Link,
-    Lock,
     Mail,
     MessagesSquare,
     Moon,
@@ -225,30 +222,6 @@ export const COMING_SOON = [
                 description: 'Your streak, this week’s focus and type of work, refreshed daily.',
             },
             { icon: Eye, title: 'Light and dark', description: 'Matches whichever theme your visitors use.' },
-        ],
-    },
-    {
-        slug: 'profile',
-        label: 'Public profile',
-        title: 'Public profile',
-        description: 'A proof-of-work page that shows what you have shipped.',
-        icon: Globe,
-        points: [
-            {
-                icon: Link,
-                title: 'Your own link',
-                description: 'Share it on your CV, LinkedIn or a freelance proposal.',
-            },
-            {
-                icon: Trophy,
-                title: 'Highlights, not code',
-                description: 'Your heatmap and recent wins, in plain language.',
-            },
-            {
-                icon: Lock,
-                title: 'You decide what shows',
-                description: 'Pick the repositories and the period. Private stays private.',
-            },
         ],
     },
     {
