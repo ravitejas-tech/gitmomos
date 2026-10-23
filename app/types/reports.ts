@@ -7,4 +7,5 @@ export interface SyncResult {
     commitCount: number
     report: 'generated' | 'failed' | 'skipped' | 'kept_edited'
     errors: string[]
+    reportError?: string
 }
