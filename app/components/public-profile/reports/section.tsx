@@ -20,7 +20,7 @@ import { groupByWeek } from '~/lib/public-profile/periods'
 import { digestTitle } from '~/lib/public-profile/report'
 
 export function SharedReportsSection({ handle }: { handle: string }) {
-    const { query, period, filter, setQuery, setPeriod, clear } = useReportFilters()
+    const { query, date, period, filter, setQuery, setDate, setPeriod, clear } = useReportFilters()
     const { data, isPending, isError, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useSharedReports({
         variables: { handle, ...filter },
         placeholderData: keepPreviousData,
@@ -49,10 +49,14 @@ export function SharedReportsSection({ handle }: { handle: string }) {
                 }
             />
             <ReportFilters
+                handle={handle}
                 query={query}
+                search={filter.query}
                 period={period}
+                date={date}
                 onQueryChange={setQuery}
                 onPeriodChange={setPeriod}
+                onDateChange={setDate}
             />
             {isPending && (
                 <div className='space-y-3 border-t border-border p-5'>
@@ -75,7 +79,13 @@ export function SharedReportsSection({ handle }: { handle: string }) {
                         tone='plain'
                         icon={filtered ? SearchX : FileText}
                         title={filtered ? 'No reports match' : 'No shared reports yet'}
-                        description={filtered ? 'Try another word, or a longer period.' : undefined}
+                        description={
+                            filtered
+                                ? date
+                                    ? 'Try another day. Days with a dot have a report.'
+                                    : 'Try another word, or a longer period.'
+                                : undefined
+                        }
                         action={
                             filtered && (
                                 <Button
