@@ -22,12 +22,13 @@ export const useUpdateReport = createMutation({
 
 export const useSync = createMutation({
     mutationFn: (date: string | undefined) => reportsService.sync(date),
-    onSuccess: ({ report, errors }) => {
+    onSuccess: ({ report, errors, reportError }) => {
         const { message, tone } = SYNC_MESSAGES[report]
+        const reason = reportError ? ` ${reportError}` : ''
         const unreadable = errors.length
             ? ` ${pluralize(errors.length, 'repository', 'repositories')} could not be read.`
             : ''
-        notify(errors.length ? 'error' : tone, message + unreadable)
+        notify(errors.length ? 'error' : tone, message + reason + unreadable)
         for (const key of [
             useReports.getKey(),
             useReportDays.getKey(),
