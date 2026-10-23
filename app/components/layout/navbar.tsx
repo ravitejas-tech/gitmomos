@@ -12,7 +12,7 @@ export function Navbar() {
     const { session } = useSession()
 
     return (
-        <header className='sticky top-0 z-40 border-b border-border bg-bg/75 backdrop-blur-md'>
+        <header className='sticky top-0 z-40 border-b border-border bg-bg/75 backdrop-blur-md print:hidden'>
             <Container className='flex h-14 items-center justify-between gap-4'>
                 <div className='flex items-center gap-10'>
                     <NavLink
