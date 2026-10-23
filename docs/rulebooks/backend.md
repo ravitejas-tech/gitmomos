@@ -111,7 +111,9 @@ Regenerate the types in the same change as the migration. They are committed tog
 
 **A provider token is never a table column.** It lives in Supabase Vault, written and read only through `set_connection_token` / `get_connection_token` (service role only). Deleting a connection deletes its secret through a trigger.
 
-Edge function secrets (`GEMINI_API_KEY`, `GITHUB_CLIENT_*`, `WORKER_SECRET`) are read through `requireEnv`, which fails loudly when one is missing.
+**A user's Gemini API key is a Vault secret too**, saved through `save_gemini_key` and read through `get_gemini_key` (service role only). Every Gemini call takes the key of the user it works for; there is no shared key. Deleting the `gemini_keys` row deletes the secret through a trigger.
+
+Edge function secrets (`GITHUB_CLIENT_*`, `WORKER_SECRET`) are read through `requireEnv`, which fails loudly when one is missing.
 
 ## Errors
 
