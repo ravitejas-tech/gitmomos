@@ -29,7 +29,18 @@ export const PAGE_SEO = {
     profile: {
         title: `Public profile | ${SITE_NAME}`,
         description:
-            'A developer’s shipped work at a glance, with an assistant that answers questions from their daily work reports.',
+            'A developer’s shipped work at a glance, with Momi, a friendly assistant that answers questions from their daily work reports.',
+        path: HOME_PATH,
+    },
+    workSummary: {
+        title: `Work summary | ${SITE_NAME}`,
+        description:
+            'A developer’s daily work reports for a week, a month or a search, ready to read or save as a PDF.',
+        path: HOME_PATH,
+    },
+    sharedReport: {
+        title: `Daily report | ${SITE_NAME}`,
+        description: 'A daily work report written from a developer’s commits, ready to read or save as a PDF.',
         path: HOME_PATH,
     },
     license: {
