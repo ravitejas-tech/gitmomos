@@ -69,6 +69,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"gemini_keys": {
+                  Row: {
+                    "created_at": string,"hint": string,"secret_id": string,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"hint": string,"secret_id": string,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"hint"?: string,"secret_id"?: string,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "gemini_keys_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"oauth_states": {
                   Row: {
                     "created_at": string,"provider": Database["public"]['Enums']["provider_name"],"state": string,"user_id": string
@@ -111,14 +131,14 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "created_at": string,"email": string,"full_name": string | null,"handle": string | null,"id": string,"is_public": boolean,"tagline": string | null,"timezone": string,"updated_at": string
+                    "avatar_path": string | null,"banner_path": string | null,"created_at": string,"email": string,"full_name": string | null,"handle": string | null,"id": string,"is_public": boolean,"tagline": string | null,"timezone": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"email": string,"full_name"?: string | null,"handle"?: string | null,"id": string,"is_public"?: boolean,"tagline"?: string | null,"timezone"?: string,"updated_at"?: string
+                    "avatar_path"?: string | null,"banner_path"?: string | null,"created_at"?: string,"email": string,"full_name"?: string | null,"handle"?: string | null,"id": string,"is_public"?: boolean,"tagline"?: string | null,"timezone"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"email"?: string,"full_name"?: string | null,"handle"?: string | null,"id"?: string,"is_public"?: boolean,"tagline"?: string | null,"timezone"?: string,"updated_at"?: string
+                    "avatar_path"?: string | null,"banner_path"?: string | null,"created_at"?: string,"email"?: string,"full_name"?: string | null,"handle"?: string | null,"id"?: string,"is_public"?: boolean,"tagline"?: string | null,"timezone"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -201,7 +221,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "claim_profile_question":
+            "array_or_empty":
+{ Args: { "p_value": Json }; Returns: Json
+                           },
+"claim_profile_question":
 { Args: { "p_client_hash": string,"p_daily_limit": number,"p_hourly_limit": number,"p_user_id": string }; Returns: boolean
                            },
 "commit_kind":
@@ -216,8 +239,14 @@ isOneToOne: false
 "get_connection_token":
 { Args: { "p_connection_id": string }; Returns: string
                            },
+"get_gemini_key":
+{ Args: { "p_user_id": string }; Returns: string
+                           },
 "get_public_profile":
 { Args: { "p_handle": string }; Returns: Json
+                           },
+"get_public_report":
+{ Args: { "p_date": string,"p_handle": string }; Returns: Json
                            },
 "import_repositories":
 { Args: { "p_connection_id": string,"p_repositories": Json }; Returns: number
@@ -238,6 +267,17 @@ isOneToOne: false
                            },
 "save_connection":
 { Args: { "p_account_login": string,"p_account_name"?: string,"p_avatar_url"?: string,"p_base_url": string,"p_provider": Database["public"]['Enums']["provider_name"],"p_token": string,"p_user_id": string }; Returns: string
+                           },
+"save_gemini_key":
+{ Args: { "p_key": string,"p_user_id": string }; Returns: undefined
+                           },
+"search_public_reports":
+{ Args: { "p_from"?: string,"p_handle": string,"p_limit"?: number,"p_offset"?: number,"p_query"?: string,"p_to"?: string }; Returns: Json
+                           },
+"shared_reports":
+{ Args: { "p_handle": string }; Returns: {
+              "content": Json,"date": string
+            }[]
                            }
           }
           Enums: {
