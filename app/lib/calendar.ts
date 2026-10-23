@@ -29,6 +29,12 @@ export function monthRange(month: string): DayRange {
     return { from: grid[0]?.date ?? month, to: grid.at(-1)?.date ?? month }
 }
 
+export function shiftDay(date: string, days: number): string {
+    const day = dateFromDay(date)
+    day.setDate(day.getDate() + days)
+    return dayKey(day)
+}
+
 export function daysAgo(date: string): number {
     return Math.round((dateFromDay(todayLocal()).getTime() - dateFromDay(date).getTime()) / DAY_MS)
 }

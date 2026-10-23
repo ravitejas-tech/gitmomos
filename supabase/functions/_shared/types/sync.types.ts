@@ -10,11 +10,11 @@ export type SyncConnection = ProviderConnection & {
 export interface SyncOutcome {
     report: Enums<'report_status'> | 'kept_edited'
     errors: string[]
+    reportError?: string
 }
 
-export interface SyncResult {
+export interface SyncResult extends Omit<SyncOutcome, 'report'> {
     date: string
     commitCount: number
     report: SyncOutcome['report'] | 'skipped'
-    errors: string[]
 }

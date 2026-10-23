@@ -1,19 +1,9 @@
 import { useState } from 'react'
-import { ProfileChatForm } from '~/components/public-profile/chat/form'
-import { ProfileChatThread } from '~/components/public-profile/chat/thread'
-import { Card } from '~/components/ui/card'
-import { CardHeader } from '~/components/ui/card-header'
-import { PanelFooter } from '~/components/ui/panel-footer'
 import { CHAT_HISTORY_MESSAGES } from '~/data/public-profile/constants'
 import { useAskProfile } from '~/hooks/public-profile/mutations'
 import type { ChatMessage } from '~/types/public-profile'
 
-export interface ProfileChatProps {
-    handle: string
-    name: string
-}
-
-export function ProfileChat({ handle, name }: ProfileChatProps) {
+export function useProfileChat(handle: string) {
     const [messages, setMessages] = useState<ChatMessage[]>([])
     const { mutate: ask, isPending } = useAskProfile()
 
@@ -36,24 +26,5 @@ export function ProfileChat({ handle, name }: ProfileChatProps) {
         )
     }
 
-    return (
-        <Card>
-            <CardHeader
-                title={`Ask about ${name}`}
-                description='Answers come from their daily work reports.'
-            />
-            <ProfileChatThread
-                name={name}
-                messages={messages}
-                isPending={isPending}
-                onAsk={send}
-            />
-            <PanelFooter>
-                <ProfileChatForm
-                    isPending={isPending}
-                    onAsk={send}
-                />
-            </PanelFooter>
-        </Card>
-    )
+    return { messages, isPending, send, reset: () => setMessages([]) }
 }

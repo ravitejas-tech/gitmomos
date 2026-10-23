@@ -1,5 +1,5 @@
 import { LandingActionLink } from '~/components/landing/action-link'
-import { LandingBadgePill } from '~/components/landing/badge-pill'
+import { BadgePill } from '~/components/ui/badge-pill'
 import { GetStartedButton } from '~/components/landing/get-started-button'
 import { HeroIntro } from '~/components/landing/hero/intro'
 import { HeroShell } from '~/components/landing/hero/shell'
@@ -11,7 +11,7 @@ export function RoadmapHero() {
         <HeroShell className='pb-8 md:pb-12'>
             <HeroIntro
                 badge={
-                    <LandingBadgePill
+                    <BadgePill
                         badge={ROADMAP_HERO.badge}
                         label={ROADMAP_HERO.note}
                     />

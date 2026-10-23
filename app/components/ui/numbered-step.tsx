@@ -1,13 +1,13 @@
 import { DetailItem } from '~/components/ui/detail-item'
 import { Text } from '~/components/ui/text'
 
-export interface WelcomeStepProps {
+export interface NumberedStepProps {
     step: number
     title: string
     description: string
 }
 
-export function WelcomeStep({ step, ...props }: WelcomeStepProps) {
+export function NumberedStep({ step, ...props }: NumberedStepProps) {
     return (
         <DetailItem
             leading={

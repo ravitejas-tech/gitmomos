@@ -12,6 +12,78 @@
     --text-md--line-height: 1.5rem;
     --text-code: 0.75rem;
     --text-code--line-height: 1.125rem;
+
+    --animate-momi-bob: momi-bob 3.2s ease-in-out infinite;
+    --animate-momi-steam: momi-steam 2.4s ease-in-out infinite;
+    --animate-momi-blink: momi-blink 5s ease-in-out infinite;
+    --animate-momi-think: momi-think 1.2s ease-in-out infinite;
+    --animate-drawer-in: drawer-in 220ms ease-out;
+    --animate-fade-in: fade-in 220ms ease-out;
+
+    @keyframes drawer-in {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes momi-bob {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-1.5px);
+        }
+    }
+
+    @keyframes momi-steam {
+        0% {
+            opacity: 0;
+            transform: translateY(2px);
+        }
+        40% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-3px);
+        }
+    }
+
+    @keyframes momi-blink {
+        0%,
+        92%,
+        100% {
+            transform: scaleY(1);
+        }
+        95% {
+            transform: scaleY(0.1);
+        }
+    }
+
+    @keyframes momi-think {
+        0%,
+        100% {
+            opacity: 0.3;
+            transform: translateY(0);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+    }
 }
 
 @theme inline {
@@ -50,6 +122,13 @@
     --color-kind-docs: var(--kind-docs);
     --color-kind-tests: var(--kind-tests);
     --color-kind-other: var(--kind-other);
+
+    --color-momi-body: var(--momi-body);
+    --color-momi-shade: var(--momi-shade);
+    --color-momi-line: var(--momi-line);
+    --color-momi-blush: var(--momi-blush);
+    --color-momi-shine: var(--momi-shine);
+    --color-momi-shadow: var(--momi-shadow);
 
     --shadow-card: var(--card-shadow);
     --shadow-overlay: var(--overlay-shadow);
@@ -98,6 +177,13 @@
     --kind-tests: #df5297;
     --kind-other: #c5cad4;
 
+    --momi-body: #f4f1ff;
+    --momi-shade: #e2dcff;
+    --momi-line: #2b2550;
+    --momi-blush: #ff9fb8;
+    --momi-shine: #ffffff;
+    --momi-shadow: rgb(43 37 80 / 0.12);
+
     --card-shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.03);
     --overlay-shadow: 0 0 0 1px rgb(15 15 20 / 0.06), 0 16px 40px rgb(15 15 20 / 0.12);
 }
@@ -143,6 +229,13 @@
     --kind-docs: #36c6a3;
     --kind-tests: #ea6fab;
     --kind-other: #3e4350;
+
+    --momi-body: #f4f1ff;
+    --momi-shade: #ddd6ff;
+    --momi-line: #2b2550;
+    --momi-blush: #ff9fb8;
+    --momi-shine: #ffffff;
+    --momi-shadow: rgb(0 0 0 / 0.45);
 
     --card-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.03);
     --overlay-shadow: 0 0 0 1px rgb(255 255 255 / 0.06), 0 24px 64px rgb(0 0 0 / 0.6);

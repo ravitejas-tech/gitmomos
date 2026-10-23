@@ -1,5 +1,5 @@
 import { LandingActionLink } from '~/components/landing/action-link'
-import { Backdrop } from '~/components/landing/backdrop'
+import { Backdrop } from '~/components/ui/backdrop'
 import { GetStartedButton } from '~/components/landing/get-started-button'
 import { LandingSection } from '~/components/landing/section'
 import { SectionHeading } from '~/components/landing/section-heading'

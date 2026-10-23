@@ -46,10 +46,13 @@ export function subscribeTheme(listener: () => void) {
     }
 }
 
-export function printInLightTheme() {
+export function printInLightTheme(title?: string) {
     const root = document.documentElement
     const theme = root.dataset.theme
+    const pageTitle = document.title
     root.dataset.theme = 'light'
+    if (title) document.title = title
     window.print()
+    document.title = pageTitle
     if (theme) root.dataset.theme = theme
 }

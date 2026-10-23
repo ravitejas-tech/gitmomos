@@ -11,7 +11,11 @@ export default [
         route('roadmap', 'routes/roadmap.tsx'),
         route('releases', 'routes/releases/index.tsx'),
         route('releases/:version', 'routes/releases/$version.tsx'),
-        route(':handle', 'routes/$handle.tsx'),
+    ]),
+    layout('routes/$handle/layout.tsx', [
+        route(':handle', 'routes/$handle/index.tsx'),
+        route(':handle/reports', 'routes/$handle/reports.tsx'),
+        route(':handle/reports/:date', 'routes/$handle/reports.$date.tsx'),
     ]),
     layout('routes/dashboard/layout.tsx', [
         route('dashboard', 'routes/dashboard/index.tsx'),

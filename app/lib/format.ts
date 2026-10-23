@@ -39,6 +39,13 @@ export function formatDay(date: string, options: Intl.DateTimeFormatOptions = {}
     })
 }
 
+export function formatDayRange(from: string, to: string): string {
+    return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', year: 'numeric' }).formatRange(
+        dateFromDay(from),
+        dateFromDay(to),
+    )
+}
+
 export function pluralize(count: number, singular: string, plural = `${singular}s`): string {
     return `${count} ${count === 1 ? singular : plural}`
 }

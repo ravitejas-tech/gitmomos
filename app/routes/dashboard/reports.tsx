@@ -1,11 +1,13 @@
 import { useSearchParams } from 'react-router'
 import { FileText } from 'lucide-react'
+import { MissingGeminiKeyAlert } from '~/components/gemini-key/missing-key-alert'
 import { DashboardPage } from '~/components/layout/dashboard-page'
 import { ReportDatePicker } from '~/components/reports/date-picker/report-date-picker'
 import { ReportsSplit } from '~/components/reports/split/reports-split'
 import { EmptyState } from '~/components/ui/empty-state'
 import { ErrorState } from '~/components/ui/error-state'
 import { LoadingState } from '~/components/ui/loading-state'
+import { MISSING_GEMINI_KEY } from '~/data/gemini-key/constants'
 import { useReports } from '~/hooks/reports/queries'
 import { pluralize } from '~/lib/format'
 
@@ -32,6 +34,7 @@ export default function Reports() {
                     onSelect={select}
                 />
             }>
+            <MissingGeminiKeyAlert className='mb-6'>{MISSING_GEMINI_KEY.reports}</MissingGeminiKeyAlert>
             {isLoading && <LoadingState />}
             {isError && <ErrorState onRetry={() => refetch()} />}
             {reports?.length === 0 && !dateParam && (

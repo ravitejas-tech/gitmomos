@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ReportDocument } from '~/components/reports/document/report-document'
 import { ReportToolbar } from '~/components/reports/document/toolbar'
 import { EditReportModal } from '~/components/reports/edit/edit-report-modal'
-import { Card } from '~/components/ui/card'
+import { DocumentCard } from '~/components/ui/document-card'
 import type { Report } from '~/types/reports'
 
 export function ReportView({ report }: { report: Report }) {
@@ -14,11 +14,9 @@ export function ReportView({ report }: { report: Report }) {
                 report={report}
                 onEdit={() => setIsEditing(true)}
             />
-            <Card className='px-5 py-8 sm:px-10 sm:py-12 xl:px-14 print:border-0 print:p-0 print:shadow-none'>
-                <div className='mx-auto max-w-3xl'>
-                    <ReportDocument report={report} />
-                </div>
-            </Card>
+            <DocumentCard>
+                <ReportDocument report={report} />
+            </DocumentCard>
             {report.content && isEditing && (
                 <EditReportModal
                     reportId={report.id}

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const highlightSchema = z.object({ title: z.string(), detail: z.string() })
+export const highlightSchema = z.object({ title: z.string(), detail: z.string() })
 
 export const reportContentSchema = z.object({
     headline: z.string().default(''),

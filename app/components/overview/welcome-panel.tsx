@@ -1,5 +1,5 @@
 import { ConnectActions } from '~/components/connections/connect-actions'
-import { WelcomeStep } from '~/components/overview/welcome-step'
+import { NumberedStep } from '~/components/ui/numbered-step'
 import { Card } from '~/components/ui/card'
 import { LogoMark } from '~/components/ui/logo-mark'
 import { Text } from '~/components/ui/text'
@@ -28,7 +28,7 @@ export function WelcomePanel() {
             </div>
             <ol className='space-y-5 self-center rounded-xl border border-border bg-surface-muted/50 p-6'>
                 {WELCOME_STEPS.map((step, index) => (
-                    <WelcomeStep
+                    <NumberedStep
                         key={step.title}
                         step={index + 1}
                         {...step}

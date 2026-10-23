@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChatComposer } from '~/components/ui/chat-composer'
 import { QUESTION_MAX_LENGTH } from '~/data/public-profile/constants'
+import { MOMI_PLACEHOLDER } from '~/data/public-profile/momi'
 import { questionSchema, type QuestionData } from '~/schemas/public-profile.schema'
 
 export interface ProfileChatFormProps {
@@ -18,8 +19,8 @@ export function ProfileChatForm({ isPending, onAsk }: ProfileChatFormProps) {
     return (
         <form onSubmit={handleSubmit(({ question }) => onAsk(question, () => reset()))}>
             <ChatComposer
-                aria-label='Ask a question'
-                placeholder='Ask about their work…'
+                aria-label={MOMI_PLACEHOLDER}
+                placeholder={MOMI_PLACEHOLDER}
                 maxLength={QUESTION_MAX_LENGTH}
                 readOnly={isPending}
                 isPending={isPending}

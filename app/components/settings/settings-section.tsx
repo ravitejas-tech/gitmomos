@@ -4,15 +4,18 @@ import { Skeleton } from '~/components/ui/skeleton'
 import { Text } from '~/components/ui/text'
 
 export interface SettingsSectionProps {
+    id?: string
     title: string
     description?: string
     isLoading?: boolean
     children: ReactNode
 }
 
-export function SettingsSection({ title, description, isLoading, children }: SettingsSectionProps) {
+export function SettingsSection({ id, title, description, isLoading, children }: SettingsSectionProps) {
     return (
-        <section className='grid gap-3 border-b border-border pb-8 last:border-b-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10'>
+        <section
+            id={id}
+            className='grid scroll-mt-8 gap-3 border-b border-border pb-8 last:border-b-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10'>
             <div className='space-y-1'>
                 <Text
                     as='h2'

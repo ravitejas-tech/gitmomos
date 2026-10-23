@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router'
 import { ChevronRight } from 'lucide-react'
-import { LandingBadgePill } from '~/components/landing/badge-pill'
+import { BadgePill } from '~/components/ui/badge-pill'
 import { HERO_ANNOUNCEMENT } from '~/data/landing/hero'
 
 export function HeroAnnouncement() {
@@ -10,11 +10,11 @@ export function HeroAnnouncement() {
         <NavLink
             to={href}
             className='group rounded-full'>
-            <LandingBadgePill
+            <BadgePill
                 badge={badge}
                 label={label}>
                 <ChevronRight className='size-3 text-text-muted transition-transform group-hover:translate-x-0.5' />
-            </LandingBadgePill>
+            </BadgePill>
         </NavLink>
     )
 }

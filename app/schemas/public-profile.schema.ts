@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { highlightSchema } from '~/schemas/report.schema'
 import {
     HANDLE_PATTERN,
     HANDLE_REQUIRED,
@@ -7,10 +8,27 @@ import {
     TAGLINE_MAX_LENGTH,
 } from '~/data/public-profile/constants'
 
+const text = z
+    .string()
+    .nullish()
+    .transform((value) => value ?? '')
+
+const reportListingSchema = z.object({
+    date: z.string(),
+    headline: text,
+    summary: text,
+    highlights: z.array(highlightSchema),
+    key_work_areas: z.array(z.string()),
+})
+
 export const publicProfileSchema = z.object({
     handle: z.string(),
     name: z.string(),
     tagline: z.string().nullable(),
+    avatar_path: z.string().nullable(),
+    banner_path: z.string().nullable(),
+    can_ask: z.boolean(),
+    since: z.string().nullable(),
     stats: z.object({
         commits: z.number(),
         active_days: z.number(),
@@ -18,8 +36,23 @@ export const publicProfileSchema = z.object({
         projects: z.number(),
         reports: z.number(),
     }),
+    shipped: z.array(z.object({ date: z.string(), title: text, detail: text, area: z.string().nullable() })),
+    areas: z.array(z.object({ name: z.string(), reports: z.number() })),
     daily: z.array(z.object({ date: z.string(), commits: z.number() })),
-    recent: z.array(z.object({ date: z.string(), headline: z.string().nullable() })),
+    recent: z.array(z.object({ date: z.string(), headline: text })),
+})
+
+export const reportSearchSchema = z.object({
+    name: z.string(),
+    total: z.number(),
+    reports: z.array(reportListingSchema),
+})
+
+export const publicReportSchema = reportListingSchema.extend({
+    handle: z.string(),
+    name: z.string(),
+    previous: z.string().nullable(),
+    next: z.string().nullable(),
 })
 
 export const publicProfileSettingsSchema = z

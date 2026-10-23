@@ -8,7 +8,7 @@ import { FOOTER_LINKS, HOME_PATH } from '~/data/navigation'
 
 export function Footer() {
     return (
-        <footer className='border-t border-border'>
+        <footer className='border-t border-border print:hidden'>
             <Container className='py-14 md:py-20'>
                 <div className='grid grid-cols-2 gap-10 md:grid-cols-6'>
                     <div className='col-span-2 md:col-span-3'>

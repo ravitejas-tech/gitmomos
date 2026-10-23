@@ -1,9 +1,32 @@
-import { LogoMark } from '~/components/ui/logo-mark'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Momi } from '~/components/ui/momi'
+import type { MomiMood } from '~/types/momi'
 
-export function BotAvatar() {
+const botAvatarVariants = cva('flex shrink-0 items-center justify-center rounded-full bg-accent-subtle', {
+    variants: {
+        size: {
+            md: 'size-9 [&_svg]:size-8',
+            lg: 'size-11 [&_svg]:size-10',
+        },
+    },
+    defaultVariants: { size: 'md' },
+})
+
+export interface BotAvatarProps extends VariantProps<typeof botAvatarVariants> {
+    mood?: MomiMood | undefined
+    animated?: boolean
+}
+
+export function BotAvatar({ mood, size, animated }: BotAvatarProps) {
     return (
-        <span className='flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-muted'>
-            <LogoMark className='size-5' />
+        <span className={botAvatarVariants({ size })}>
+            <Momi
+                mood={mood}
+                animated={animated}
+                steam={false}
+                shadow={false}
+                className='translate-y-px'
+            />
         </span>
     )
 }

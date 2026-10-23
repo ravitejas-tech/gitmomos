@@ -15,6 +15,7 @@ export const CHAT_ROLES = ['visitor', 'assistant'] as const
 export const GEMINI_ROLES = { visitor: 'user', assistant: 'model' } as const
 
 export const PROFILE_NOT_FOUND_MESSAGE = 'This profile isn’t public.'
+export const CHAT_UNAVAILABLE_MESSAGE = 'Questions aren’t available on this profile right now.'
 export const TOO_MANY_QUESTIONS_MESSAGE = 'That’s a lot of questions. Try again in a little while.'
 export const QUESTION_REQUIRED_MESSAGE = 'Ask a question'
 export const QUESTION_TOO_LONG_MESSAGE = `Keep your question under ${MAX_QUESTION_CHARS} characters`

@@ -4,7 +4,7 @@ import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
 import { useCopyToClipboard } from '~/hooks/use-copy-to-clipboard'
-import { timeAgo } from '~/lib/format'
+import { formatDay, timeAgo } from '~/lib/format'
 import { reportToMarkdown } from '~/lib/reports/markdown'
 import { reportBadge } from '~/lib/reports/status'
 import { printInLightTheme } from '~/lib/theme'
@@ -36,7 +36,7 @@ export function ReportToolbar({ report, onEdit }: { report: Report; onEdit: () =
                     <Button
                         variant='secondary'
                         size='sm'
-                        onClick={printInLightTheme}>
+                        onClick={() => printInLightTheme(`Daily report – ${formatDay(report.date)}`)}>
                         <Download />
                         PDF
                     </Button>

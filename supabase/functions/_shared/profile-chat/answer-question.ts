@@ -1,6 +1,7 @@
-import { DEFAULT_GEMINI_CHAT_MODEL } from '../constants/gemini.constants.ts'
+import { CHAT_MODELS, CHAT_TIMEOUT_MS } from '../constants/gemini.constants.ts'
 import {
     CHAT_RESPONSE_SCHEMA,
+    CHAT_UNAVAILABLE_MESSAGE,
     GEMINI_ROLES,
     MAX_SOURCES,
     noReportsAnswer,
@@ -12,7 +13,10 @@ import {
     TOO_MANY_QUESTIONS_MESSAGE,
 } from '../constants/profile-chat.constants.ts'
 import { embedTexts } from '../gemini/embed-texts.ts'
+import { findGeminiKey } from '../gemini/find-gemini-key.ts'
+import { GeminiKeyError } from '../gemini/gemini-key-error.ts'
 import { generateJson } from '../gemini/generate-json.ts'
+import { modelChain } from '../gemini/model-chain.ts'
 import { HttpError } from '../http/http-error.ts'
 import { localDate } from '../lib/dates.ts'
 import type { ProfileChatRequest } from '../schemas/profile-chat.schema.ts'
@@ -30,20 +34,32 @@ import { buildChatPrompt } from './build-chat-prompt.ts'
 import { questionEmbeddingText } from './embedding-text.ts'
 import { indexReports } from './index-reports.ts'
 
-export async function answerQuestion(
-    clientHash: string,
-    { handle, question, history }: ProfileChatRequest,
-): Promise<ProfileAnswer> {
-    const owner = await publicOwner(handle)
+export async function answerQuestion(clientHash: string, request: ProfileChatRequest): Promise<ProfileAnswer> {
+    const owner = await publicOwner(request.handle)
+    const apiKey = await findGeminiKey(owner.id)
+    if (!apiKey) throw new HttpError(503, CHAT_UNAVAILABLE_MESSAGE)
+
     await claimQuestion(owner.id, clientHash)
-    await indexReports(owner.id)
+    return answerFromReports(owner, apiKey, request).catch((err) => {
+        throw err instanceof GeminiKeyError ? new HttpError(503, CHAT_UNAVAILABLE_MESSAGE) : err
+    })
+}
+
+async function answerFromReports(
+    owner: ProfileOwner,
+    apiKey: string,
+    { question, history }: ProfileChatRequest,
+): Promise<ProfileAnswer> {
+    await indexReports(owner.id, apiKey)
 
     const previous = history.findLast(({ role }) => role === 'visitor')?.text
-    const reports = await matchReports(owner.id, [previous, question].filter(Boolean).join('\n'))
+    const reports = await matchReports(owner.id, apiKey, [previous, question].filter(Boolean).join('\n'))
     if (!reports.length) return { answer: noReportsAnswer(owner.name), sources: [] }
 
     const reply = await generateJson<ChatReply>({
-        model: Deno.env.get('GEMINI_CHAT_MODEL') ?? DEFAULT_GEMINI_CHAT_MODEL,
+        apiKey,
+        models: modelChain(Deno.env.get('GEMINI_CHAT_MODEL'), CHAT_MODELS),
+        timeoutMs: CHAT_TIMEOUT_MS,
         system: buildChatPrompt(owner.name, localDate(owner.timezone), reports),
         contents: [...history, { role: 'visitor' as const, text: question }].map(({ role, text }) => ({
             role: GEMINI_ROLES[role],
@@ -79,8 +95,8 @@ async function claimQuestion(userId: string, clientHash: string) {
     if (!allowed) throw new HttpError(429, TOO_MANY_QUESTIONS_MESSAGE)
 }
 
-async function matchReports(userId: string, query: string): Promise<ProfileReport[]> {
-    const [embedding = []] = await embedTexts([questionEmbeddingText(query)])
+async function matchReports(userId: string, apiKey: string, query: string): Promise<ProfileReport[]> {
+    const [embedding = []] = await embedTexts(apiKey, [questionEmbeddingText(query)])
     const reports = unwrap(
         await adminClient().rpc('match_profile_reports', {
             p_user_id: userId,

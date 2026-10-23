@@ -4,7 +4,7 @@ Run your own copy of gitmomos on Supabase and a static host such as Vercel. It t
 
 - Node.js 20 or newer. Yarn 4 ships inside the repository, so the global `yarn` command picks it up.
 - A free [Supabase](https://supabase.com) project.
-- A [Gemini API key](https://aistudio.google.com/apikey).
+- A Google account for a free [Gemini API key](https://aistudio.google.com/apikey). Every user adds their own key in the app's **Settings**; the functions hold none.
 - A GitHub account for the OAuth App, and an account with a static host. This guide uses [Vercel](https://vercel.com).
 
 Every step starts with **Where**, so you know which window it happens in:
@@ -29,7 +29,7 @@ Do the parts in order; each one needs something from the one before.
 
 **Where:** [Google AI Studio → API keys](https://aistudio.google.com/apikey)
 
-Click **Create API key** and keep it for step 2.2.
+Click **Create API key** and keep it for part 5. It goes into the app, not into the function secrets.
 
 ### 1.2 GitHub OAuth App
 
@@ -76,13 +76,12 @@ The last command prints a random string. That is your **worker secret**; you nee
 **Where:** Editor → `supabase/functions/.env`
 
 ```
-GEMINI_API_KEY=<key from 1.1>
 GITHUB_CLIENT_ID=<client ID from 1.2>
 GITHUB_CLIENT_SECRET=<client secret from 1.2>
 WORKER_SECRET=<the string from 2.1>
 ```
 
-Leave `ALLOW_LOCAL_GITEA` commented out in production. Set `GEMINI_MODEL` only to override the default `gemini-flash-latest` for reports, and `GEMINI_CHAT_MODEL` only to override `gemini-flash-lite-latest` for the public profile chatbot. The file is gitignored.
+Leave `ALLOW_LOCAL_GITEA` commented out in production. Set `GEMINI_MODEL` only to try a model of your choice before the built-in report models (`gemini-3.5-flash`, then `gemini-3.6-flash`, then `gemini-flash-lite-latest`), and `GEMINI_CHAT_MODEL` to do the same for the public profile chatbot (`gemini-flash-lite-latest`, then `gemini-3.5-flash-lite`, then `gemini-3.1-flash-lite`). The file is gitignored.
 
 ### 2.3 Create the tables and deploy the functions
 
@@ -100,7 +99,7 @@ yarn functions:deploy
 - `db:push` lists the migrations and asks to apply them. Answer `y`.
 - If `functions:deploy` complains about Docker, run `yarn supabase functions deploy connections sync profile-chat --use-api` instead.
 
-**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings` and `profile_questions`, and **Edge Functions** lists `connections`, `sync` and `profile-chat`.
+**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings`, `profile_questions` and `gemini_keys`, **Storage** lists the public `profile-media` bucket, and **Edge Functions** lists `connections`, `sync` and `profile-chat`.
 
 ---
 
@@ -172,11 +171,12 @@ Build with the same two variables set, then upload `build/client/`. Unknown path
 **Where:** `https://<site>`
 
 1. Sign up. You land on the dashboard.
-2. **Repositories → Connect GitHub**, approve, and you come back to the app. For Gitea, use **Connect Gitea** with an access token that has `read:repository` and `read:user`.
-3. Paste a repository URL into **Tracked repositories** and click **Add**.
-4. On **Overview**, click **Sync now**. Today's report appears under **Reports**.
-5. In **Settings**, check your timezone. The nightly report is written just after midnight in it.
-6. In **Public profile**, pick a handle, switch on the repositories to show, and turn the profile on. Open `https://<site>/@<handle>` and ask the chatbot a question.
+2. **Settings → Gemini API key**: paste the key from 1.1 and click **Save key**.
+3. **Repositories → Connect GitHub**, approve, and you come back to the app. For Gitea, use **Connect Gitea** with an access token that has `read:repository` and `read:user`.
+4. Paste a repository URL into **Tracked repositories** and click **Add**.
+5. On **Overview**, click **Sync now**. Today's report appears under **Reports**.
+6. In **Settings**, check your timezone. The nightly report is written just after midnight in it.
+7. In **Public profile**, pick a handle, switch on the repositories to show, and turn the profile on. Open `https://<site>/@<handle>` and ask the chatbot a question.
 
 If a step fails, open Supabase → **Edge Functions →** `connections`, `sync` or `profile-chat` **→ Logs**.
 
@@ -201,6 +201,8 @@ yarn functions:deploy   # always, before the new website goes live
 
 Then let the host deploy the new `main`. Deploy the functions first: a new website calling an action the old functions don't know fails until they are updated.
 
+> **Upgrading to per-user Gemini keys:** after this update a report is written only for a user who has saved a key in **Settings → Gemini API key**, and the public chatbot only answers on profiles whose owner has one. The `GEMINI_API_KEY` function secret is no longer read; remove it with `yarn supabase secrets unset GEMINI_API_KEY`.
+
 > **Upgrading from v1:** v2 replaces the old schema with one fresh migration. Run `yarn supabase db reset --linked` before `yarn db:push`. **This deletes all v1 data.**
 
 ---
@@ -218,4 +220,6 @@ Then let the host deploy the new `main`. Deploy the functions first: a new websi
 | Sign-up email never arrives | Built-in Supabase email limits | Turn off **Confirm email** or add SMTP (3.3) |
 | "Couldn't find owner/repo" when adding a repository | Typo, or the connected account can't read it | Check the URL and that account's access on GitHub or Gitea |
 | Reports never appear overnight | Vault secrets missing or wrong | Redo 3.1; `worker_secret` must equal `WORKER_SECRET` |
-| **Sync now** fails and the `sync` log mentions Gemini | Wrong `GEMINI_API_KEY` | Fix it in `supabase/functions/.env`, then `yarn secrets:set` |
+| A report says "Add your Gemini API key in Settings" | That user has no key saved | Add one in **Settings → Gemini API key** |
+| A report says "Gemini rejected your API key" | The saved key was deleted or restricted in Google AI Studio | Create a new key and use **Replace key** in Settings |
+| A report says "Gemini is busy right now" | Every model in the chain was overloaded or timed out | Write it again later, or set `GEMINI_MODEL` to a model that is answering |

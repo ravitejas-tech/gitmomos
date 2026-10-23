@@ -21,6 +21,10 @@ export const connectionsRequestSchema = z.discriminatedUnion(
             action: z.literal('add_repository'),
             url: z.string({ error: 'Paste a repository URL' }).trim().min(1, 'Paste a repository URL'),
         }),
+        z.object({
+            action: z.literal('gemini_connect'),
+            apiKey: z.string({ error: 'Paste your Gemini API key' }).trim().min(1, 'Paste your Gemini API key'),
+        }),
     ],
     { error: 'Unknown action' },
 )
