@@ -41,6 +41,16 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
                 description:
                     'The GitHub OAuth token or Gitea access token you provide, stored encrypted and used only to read the data above. Disconnecting deletes it.',
             },
+            {
+                term: 'Profile Images',
+                description:
+                    'The profile photo and banner you upload for your public profile. They are stored where anyone with the link can see them, and removing one in the dashboard deletes it.',
+            },
+            {
+                term: 'Gemini API Key',
+                description:
+                    'The Google Gemini API key you add in Settings, stored encrypted and used only to write your reports and answer questions on your public profile. Removing it in Settings deletes it.',
+            },
         ],
     },
     {
@@ -74,7 +84,7 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
     },
     {
         heading: { id: 'data-security', title: 'Data Security', level: 2 },
-        body: 'All data in transit is encrypted using industry-standard Transport Layer Security (TLS). Data at rest is encrypted within our cloud database infrastructure. Provider access tokens are kept in an encrypted vault that is only readable by our background worker, never by the browser.',
+        body: 'All data in transit is encrypted using industry-standard Transport Layer Security (TLS). Data at rest is encrypted within our cloud database infrastructure. Provider access tokens and Gemini API keys are kept in an encrypted vault that is only readable by our background worker, never by the browser.',
     },
     {
         heading: { id: 'third-party-services', title: 'Third-Party Services', level: 2 },
@@ -88,7 +98,7 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
             {
                 term: 'Google Gemini AI',
                 description:
-                    "Processes the commit message text to generate natural language reports. We only transmit commit messages and repository names to this API. If you publish a profile, your reports are also sent to it to build a search index, and visitors' questions are sent to it together with the matching public reports to write an answer.",
+                    "Processes the commit message text to generate natural language reports, using the Gemini API key you provide, so these requests run under your own Google account and its terms. We only transmit commit messages and repository names to this API. If you publish a profile, your reports are also sent to it to build a search index, and visitors' questions are sent to it together with the matching public reports to write an answer.",
             },
             {
                 term: 'GitHub and Gitea',
