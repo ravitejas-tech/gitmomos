@@ -5,7 +5,7 @@ import { PAGE_SEO } from '~/data/seo/pages'
 import { SITE_NAME } from '~/data/seo/site'
 import { handleFromSegment } from '~/lib/public-profile/handle'
 import { pageMeta } from '~/lib/seo/page-meta'
-import type { Route } from './+types/$handle'
+import type { Route } from './+types/index'
 
 export function clientLoader({ params }: Route.ClientLoaderArgs) {
     const handle = handleFromSegment(params.handle)
