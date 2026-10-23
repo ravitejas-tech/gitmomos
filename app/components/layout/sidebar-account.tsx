@@ -12,6 +12,7 @@ export function SidebarAccount() {
         <div className='flex items-center gap-2 rounded-md px-1 py-1'>
             <Avatar
                 name={name}
+                src={profile?.avatar_url}
                 size='md'
             />
             <div className='min-w-0 flex-1'>
