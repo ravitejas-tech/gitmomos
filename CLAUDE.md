@@ -1,6 +1,6 @@
 # gitmomos
 
-Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, and a nightly worker collects the commits they authored and writes one report per day with Gemini. An optional public profile (`/@handle`) shows their highlights and a chatbot that answers visitors from their reports.
+Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, saves their own Gemini API key in Settings, and a nightly worker collects the commits they authored and writes one report per day with that key. An optional public profile (`/@handle`) is a portfolio of what they shipped, a work log (`?tab=log`) of shared reports a visitor can search and save as PDFs, and Momi, a chatbot that answers visitors from their reports.
 
 There is no CLI and no server of our own: a static React Router SPA talks to Supabase, and three edge functions do the work that needs secrets.
 
@@ -41,7 +41,7 @@ Read the one that covers what you are touching. Do not read them all.
 | Toasts | `react-hot-toast` |
 | Database | Supabase Postgres + RLS, Vault, `pg_cron`, `pg_net` |
 | Functions | Supabase Edge Functions (Deno 2) |
-| AI | Gemini over REST: `GEMINI_MODEL` (default `gemini-flash-latest`) for reports, `GEMINI_CHAT_MODEL` (default `gemini-flash-lite-latest`) for the chatbot, `gemini-embedding-2` for search |
+| AI | Gemini over REST with each user's own key: `REPORT_MODELS` and `CHAT_MODELS` fallback chains (`_shared/constants/gemini.constants.ts`), optionally led by `GEMINI_MODEL` / `GEMINI_CHAT_MODEL`; `gemini-embedding-2` for search |
 
 ## Layout
 
@@ -84,7 +84,7 @@ yarn secrets:set          # upload supabase/functions/.env
 | File | Holds |
 |---|---|
 | `.env` | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_PROJECT_ID` |
-| `supabase/functions/.env` | `GEMINI_API_KEY`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `WORKER_SECRET`, optional `GEMINI_MODEL`, `GEMINI_CHAT_MODEL`, `ALLOW_LOCAL_GITEA` |
+| `supabase/functions/.env` | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `WORKER_SECRET`, optional `GEMINI_MODEL`, `GEMINI_CHAT_MODEL`, `ALLOW_LOCAL_GITEA` |
 
 Both are gitignored; the `.example` files beside them list every key.
 
@@ -100,8 +100,17 @@ Both are gitignored; the `.example` files beside them list every key.
 - **`verify_jwt` is off for every function** (`supabase/config.toml`); `connections` and `sync` authenticate with the user's JWT or the worker secret, and `profile-chat` is anonymous, rate-limited per visitor and per profile by `claim_profile_question()`.
 - **A report is public only when every repository in it has `on_profile` on** (`is_profile_report()`). Repository names never leave the server; visitors see the headline, summary, highlights and work areas.
 - **Report embeddings are written lazily** by `profile-chat` before it answers, up to `MAX_INDEX_BATCHES` × `EMBEDDING_BATCH_SIZE` per question. Editing a report's content deletes its embedding (`reports_forget_embedding`), so it is re-embedded on the next question. `EMBEDDING_DIMENSIONS` must match `vector(768)` in the migration.
-- **The chatbot uses Flash-Lite** because `gemini-flash-latest` took 40–90 s per call on the free tier when it was built: fine overnight, not in a chat.
+- **There is no shared Gemini key.** Every call uses the key of the user it works for (`get_gemini_key`); the chatbot uses the profile owner's. Without one, `sync` still collects commits but stores a failed report saying to add a key, and `get_public_profile` returns `can_ask: false` so the chat is hidden.
+- **Gemini models are tried in order** and a 404, 429, 5xx or timeout moves to the next one (`firstAvailable`). The newest Flash models and the `gemini-flash-latest` alias were the ones returning 503 or hanging when this was built, so the chains lead with pinned, older models. Retired models answer 404 to new keys, which the chain also skips.
+- **A failed rewrite keeps a generated report.** `writeReport` only stores `failed` when the day had no generated report yet.
+- **The chatbot leads with Flash-Lite** because Flash took 40–90 s per call on the free tier: fine overnight, not in a chat.
 - **Unknown paths must fall back to `/__spa-fallback.html`** on the static host. `/`, `/roadmap`, `/legal/*`, `/robots.txt` and `/sitemap.xml` are prerendered at build time, so nothing they import may touch browser globals at module scope.
+- **`shared_reports()` is the one definition of a report a visitor may see.** `get_public_profile`, `search_public_reports` and `get_public_report` all read it. `get_public_profile` still returns `stats.commits` and `stats.longest_streak`, which only the site deployed before this layout reads; drop them once that site is gone.
+- **`/@handle/reports/:date` is a shared report and `/@handle/reports?from=&to=&q=` a work summary** of a week, a month or a search. Both PDFs are the print dialog, and `?print=1` opens it once the data loads, so every PDF button is a plain link. `search_public_reports` returns at most 50 reports per call, which caps a work summary.
+- **"Recently shipped" is picked, not curated:** `get_public_profile.shipped` is the first highlight of the six newest shared reports that have one, because the report prompt ranks highlights most important first.
+- **Profile photos and banners live in the public `profile-media` bucket** under `<user id>/`. Storage policies only let a user write their own folder, and `profiles_avatar_path_owned` / `profiles_banner_path_owned` stop a profile pointing at someone else's file. The browser crops and resizes to WebP before uploading (`lib/image.ts`), each upload gets a new name so caches never show the old image, and the previous file is removed after the profile row changes.
+- **The `/@handle` pages have their own layout** (`routes/$handle/layout.tsx`): no navbar or footer, only the logo linking home.
+- **Momi is the chatbot's mascot** (`ui/momi.tsx`, moods in `ui/momi-face.tsx`). Its `momi-*` colour tokens are the same in both themes, so it reads as one character. `public/momi.svg` is a standalone copy for promotion; keep it in step with the component.
 - **`/:handle` matches every top-level path** that no static route claims. Its `clientLoader` throws a 404 unless the segment is `@` plus a valid handle, which keeps unknown URLs on the normal 404 page.
 - **Canonical links, Open Graph tags, `robots.txt` and `sitemap.xml` use `SITE_URL`** (`app/data/seo/site.ts`). Change it when the production domain changes; a public page added to the site goes in `SITEMAP_PATHS`.
 - **`yarn build` needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`** (from `.env` or the CI environment): prerendering imports `services/supabase.ts`, and `createClient` throws on an empty URL.
