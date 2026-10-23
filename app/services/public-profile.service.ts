@@ -3,6 +3,7 @@ import { invokeFunction } from '~/services/functions'
 import { profileMediaService } from '~/services/profile-media.service'
 import { supabase } from '~/services/supabase'
 import { DIGEST_LIMIT, HANDLE_TAKEN, REPORTS_PAGE_SIZE, UNIQUE_VIOLATION } from '~/data/public-profile/constants'
+import { CALENDAR_DAYS } from '~/data/ui/calendar'
 import {
     publicProfileSchema,
     publicReportSchema,
@@ -39,6 +40,11 @@ export const publicProfileService = {
 
     getDigest(query: ReportSearchQuery) {
         return publicProfileService.searchReports(query, 0, DIGEST_LIMIT)
+    },
+
+    async getReportDays(query: ReportSearchQuery) {
+        const search = await publicProfileService.searchReports(query, 0, CALENDAR_DAYS)
+        return search?.reports.map(({ date }) => ({ date })) ?? []
     },
 
     async getReport({ handle, date }: SharedReportQuery) {
