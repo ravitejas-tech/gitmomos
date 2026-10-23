@@ -7,12 +7,12 @@ import { adminClient } from '../supabase/admin-client.ts'
 import { unwrap } from '../supabase/unwrap.ts'
 import { reportEmbeddingText } from './embedding-text.ts'
 
-export async function indexReports(userId: string) {
+export async function indexReports(userId: string, apiKey: string) {
     for (let batch = 0; batch < MAX_INDEX_BATCHES; batch++) {
         const reports = await unindexedReports(userId)
         if (!reports.length) return
 
-        const embeddings = await embedTexts(reports.map(reportEmbeddingText))
+        const embeddings = await embedTexts(apiKey, reports.map(reportEmbeddingText))
         unwrap(
             await adminClient()
                 .from('report_embeddings')
