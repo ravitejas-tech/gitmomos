@@ -13,8 +13,17 @@ export interface GeminiContent {
     parts: { text: string }[]
 }
 
+export interface GeminiCall {
+    apiKey: string
+    path: string
+    body: unknown
+    timeoutMs: number
+}
+
 export interface GenerateJsonRequest {
-    model: string
+    apiKey: string
+    models: string[]
+    timeoutMs: number
     system?: string
     contents: GeminiContent[]
     schema: object
