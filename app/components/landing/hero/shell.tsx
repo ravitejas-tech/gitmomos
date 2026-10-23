@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Backdrop } from '~/components/landing/backdrop'
+import { Backdrop } from '~/components/ui/backdrop'
 import { Container } from '~/components/ui/container'
 import { cn } from '~/lib/utils'
 

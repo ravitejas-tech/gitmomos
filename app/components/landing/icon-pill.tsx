@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { LandingPill } from '~/components/landing/pill'
+import { Pill } from '~/components/ui/pill'
 import { Text } from '~/components/ui/text'
 
 export interface LandingIconPillProps {
@@ -9,7 +9,7 @@ export interface LandingIconPillProps {
 
 export function LandingIconPill({ icon: Icon, label }: LandingIconPillProps) {
     return (
-        <LandingPill>
+        <Pill>
             <Icon className='size-3.5 text-accent-text' />
             <Text
                 as='span'
@@ -17,6 +17,6 @@ export function LandingIconPill({ icon: Icon, label }: LandingIconPillProps) {
                 tone='secondary'>
                 {label}
             </Text>
-        </LandingPill>
+        </Pill>
     )
 }

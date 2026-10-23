@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 import { cn } from '~/lib/utils'
 
-export interface LandingPillProps {
+export interface PillProps {
     className?: string
     children: ReactNode
 }
 
-export function LandingPill({ className, children }: LandingPillProps) {
+export function Pill({ className, children }: PillProps) {
     return (
         <span
             className={cn(
