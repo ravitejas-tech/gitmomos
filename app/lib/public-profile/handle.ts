@@ -35,12 +35,17 @@ export function digestPath(handle: string, { query, from, to }: ReportFilter, pr
     return `${profilePath(handle)}/reports${params.size ? `?${params}` : ''}`
 }
 
+export function isoDateParam(params: URLSearchParams, key: string): string | undefined {
+    const value = params.get(key)
+    return value && ISO_DATE_PATTERN.test(value) ? value : undefined
+}
+
 export function digestFilter(params: URLSearchParams): ReportFilter {
-    const date = (key: string) => {
-        const value = params.get(key)
-        return value && ISO_DATE_PATTERN.test(value) ? value : undefined
+    return {
+        query: params.get(SEARCH_PARAM)?.trim() ?? '',
+        from: isoDateParam(params, FROM_PARAM),
+        to: isoDateParam(params, TO_PARAM),
     }
-    return { query: params.get(SEARCH_PARAM)?.trim() ?? '', from: date(FROM_PARAM), to: date(TO_PARAM) }
 }
 
 export function handleFromSegment(segment: string | undefined): string | null {
