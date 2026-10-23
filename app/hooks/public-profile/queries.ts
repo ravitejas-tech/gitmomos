@@ -22,6 +22,11 @@ export const useReportDigest = createQuery({
     fetcher: (variables: ReportSearchQuery) => publicProfileService.getDigest(variables),
 })
 
+export const useSharedReportDays = createQuery({
+    queryKey: ['shared-report-days'],
+    fetcher: (variables: ReportSearchQuery) => publicProfileService.getReportDays(variables),
+})
+
 export const useSharedReport = createQuery({
     queryKey: ['shared-report'],
     fetcher: (variables: SharedReportQuery) => publicProfileService.getReport(variables),

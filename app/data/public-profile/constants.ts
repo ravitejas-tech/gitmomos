@@ -19,6 +19,8 @@ export const SEARCH_PARAM = 'q'
 export const TAB_PARAM = 'tab'
 export const WORK_LOG_TAB = 'log'
 export const PERIOD_PARAM = 'period'
+export const DATE_PARAM = 'date'
+export const DATE_PICKER_PLACEHOLDER = 'Pick a date'
 export const FROM_PARAM = 'from'
 export const TO_PARAM = 'to'
 export const DIGEST_LIMIT = 50
@@ -40,6 +42,8 @@ export const REPORT_PAGER = [
     { key: 'previous', label: 'Earlier report', icon: ArrowLeft, align: 'start' },
     { key: 'next', label: 'Later report', icon: ArrowRight, align: 'end' },
 ] as const
+
+export const SHARED_DAY_LEGEND = [{ dot: 'bg-accent', label: 'Shared report' }] as const
 
 export const REPORT_PERIODS = [
     { value: 'all', label: 'All' },
