@@ -1,7 +1,8 @@
 import { addRepository } from '../_shared/connections/add-repository.ts'
 import { completeGitHub } from '../_shared/connections/complete-github.ts'
-import { connectGemini } from '../_shared/connections/connect-gemini.ts'
+import { connectAi } from '../_shared/connections/connect-ai.ts'
 import { connectGitea } from '../_shared/connections/connect-gitea.ts'
+import { listAiModels } from '../_shared/connections/list-ai-models.ts'
 import { startGitHub } from '../_shared/connections/start-github.ts'
 import { json } from '../_shared/http/json.ts'
 import { parseBody } from '../_shared/http/parse-body.ts'
@@ -20,7 +21,8 @@ const ACTIONS: ConnectionsHandlers = {
     github_callback: completeGitHub,
     gitea_connect: connectGitea,
     add_repository: addRepository,
-    gemini_connect: connectGemini,
+    ai_models: listAiModels,
+    ai_connect: connectAi,
 }
 
 function dispatch<A extends ConnectionsAction>(userId: string, action: A, body: ConnectionsRequestOf<A>) {
