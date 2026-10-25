@@ -1,4 +1,10 @@
 import { z } from 'npm:zod@4'
+import { AI_KEY_REQUIRED_MESSAGE, AI_MODEL_UNAVAILABLE_MESSAGE } from '../constants/ai.constants.ts'
+import { Constants } from '../database.types.ts'
+
+const aiProvider = z.enum(Constants.public.Enums.ai_provider, { error: 'Choose an AI provider' })
+const apiKey = z.string({ error: AI_KEY_REQUIRED_MESSAGE }).trim().min(1, AI_KEY_REQUIRED_MESSAGE).optional()
+const model = z.string({ error: AI_MODEL_UNAVAILABLE_MESSAGE }).trim().min(1, AI_MODEL_UNAVAILABLE_MESSAGE)
 
 export const connectionsRequestSchema = z.discriminatedUnion(
     'action',
@@ -21,9 +27,13 @@ export const connectionsRequestSchema = z.discriminatedUnion(
             action: z.literal('add_repository'),
             url: z.string({ error: 'Paste a repository URL' }).trim().min(1, 'Paste a repository URL'),
         }),
+        z.object({ action: z.literal('ai_models'), provider: aiProvider, apiKey }),
         z.object({
-            action: z.literal('gemini_connect'),
-            apiKey: z.string({ error: 'Paste your Gemini API key' }).trim().min(1, 'Paste your Gemini API key'),
+            action: z.literal('ai_connect'),
+            provider: aiProvider,
+            apiKey,
+            reportModel: model,
+            chatModel: model,
         }),
     ],
     { error: 'Unknown action' },
