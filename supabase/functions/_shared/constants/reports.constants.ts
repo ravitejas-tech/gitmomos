@@ -1,7 +1,9 @@
+import type { ResponseSchema } from '../types/ai.types.ts'
+
 export const MAX_COMMITS = 300
 export const MAX_MESSAGE_CHARS = 500
 
-export const RESPONSE_SCHEMA = {
+export const RESPONSE_SCHEMA: ResponseSchema = {
     type: 'OBJECT',
     properties: {
         headline: { type: 'STRING' },
