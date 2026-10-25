@@ -19,7 +19,8 @@ supabase/
       sync/                   collect commits, write a day's report
       reports/                report prompt and generation
       profile-chat/           embed reports, match a question, answer it
-      gemini/                 generateContent and batchEmbedContents over REST
+      ai/                     provider-neutral: key lookup, model catalog, JSON answers, fallbacks
+      gemini/ openai/ claude/ one REST client per AI provider (openai/ also serves Groq)
       providers/              GitHub and Gitea clients
       constants/              <topic>.constants.ts
       types/                  <topic>.types.ts
@@ -111,7 +112,7 @@ Regenerate the types in the same change as the migration. They are committed tog
 
 **A provider token is never a table column.** It lives in Supabase Vault, written and read only through `set_connection_token` / `get_connection_token` (service role only). Deleting a connection deletes its secret through a trigger.
 
-**A user's Gemini API key is a Vault secret too**, saved through `save_gemini_key` and read through `get_gemini_key` (service role only). Every Gemini call takes the key of the user it works for; there is no shared key. Deleting the `gemini_keys` row deletes the secret through a trigger.
+**A user's AI provider key is a Vault secret too**, saved through `save_ai_key` and read through `get_ai_key` (service role only) together with the provider and the report and chat models the user chose. Every AI call takes the key of the user it works for; there is no shared key. Deleting the `ai_keys` row deletes the secret through a trigger.
 
 Edge function secrets (`GITHUB_CLIENT_*`, `WORKER_SECRET`) are read through `requireEnv`, which fails loudly when one is missing.
 
