@@ -29,6 +29,6 @@ export const FAQ: readonly LandingFaq[] = [
     },
     {
         question: 'Is gitmomos free?',
-        answer: 'Yes. gitmomos is free and open source under the MIT license. Reports are written with your own Gemini API key, and Google’s free tier covers them. Use the hosted version, or host your own copy on Supabase and Vercel.',
+        answer: 'Yes. gitmomos is free and open source under the MIT license. Reports are written with your own AI provider key: Gemini and Groq have free tiers that cover them, or you can use Claude or OpenAI. Use the hosted version, or host your own copy on Supabase and Vercel.',
     },
 ]
