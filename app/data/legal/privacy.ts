@@ -47,9 +47,9 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
                     'The profile photo and banner you upload for your public profile. They are stored where anyone with the link can see them, and removing one in the dashboard deletes it.',
             },
             {
-                term: 'Gemini API Key',
+                term: 'AI Provider API Key',
                 description:
-                    'The Google Gemini API key you add in Settings, stored encrypted and used only to write your reports and answer questions on your public profile. Removing it in Settings deletes it.',
+                    'The Gemini, Groq, Claude or OpenAI API key you add in Settings, stored encrypted and used only to write your reports and answer questions on your public profile, together with the models you choose. Removing it in Settings deletes it.',
             },
         ],
     },
@@ -84,7 +84,7 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
     },
     {
         heading: { id: 'data-security', title: 'Data Security', level: 2 },
-        body: 'All data in transit is encrypted using industry-standard Transport Layer Security (TLS). Data at rest is encrypted within our cloud database infrastructure. Provider access tokens and Gemini API keys are kept in an encrypted vault that is only readable by our background worker, never by the browser.',
+        body: 'All data in transit is encrypted using industry-standard Transport Layer Security (TLS). Data at rest is encrypted within our cloud database infrastructure. Provider access tokens and AI provider API keys are kept in an encrypted vault that is only readable by our background worker, never by the browser.',
     },
     {
         heading: { id: 'third-party-services', title: 'Third-Party Services', level: 2 },
@@ -96,9 +96,9 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
                     'Serves as our primary cloud backend, handling secure authentication, Postgres database storage, and Edge Functions.',
             },
             {
-                term: 'Google Gemini AI',
+                term: 'Your AI Provider (Google Gemini, Groq, Anthropic Claude or OpenAI)',
                 description:
-                    "Processes the commit message text to generate natural language reports, using the Gemini API key you provide, so these requests run under your own Google account and its terms. We only transmit commit messages and repository names to this API. If you publish a profile, your reports are also sent to it to build a search index, and visitors' questions are sent to it together with the matching public reports to write an answer.",
+                    "Processes the commit message text to generate natural language reports, using the API key you provide for the provider you choose, so these requests run under your own account with that provider and its terms. We only transmit commit messages and repository names to it. If you publish a profile, visitors' questions are sent to it together with the matching public reports to write an answer, and with Gemini your reports are also sent to it to build a search index.",
             },
             {
                 term: 'GitHub and Gitea',
