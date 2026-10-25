@@ -1,14 +1,12 @@
 import { EMBEDDING_DIMENSIONS, EMBEDDING_MODEL, EMBEDDING_TIMEOUT_MS } from '../constants/gemini.constants.ts'
+import { firstAvailable } from '../ai/first-available.ts'
+import { requestJson } from '../ai/request-json.ts'
 import { HttpError } from '../http/http-error.ts'
 import type { GeminiEmbeddings } from '../types/gemini.types.ts'
-import { callGemini } from './call-gemini.ts'
-import { firstAvailable } from './first-available.ts'
 
 export async function embedTexts(apiKey: string, texts: string[]): Promise<number[][]> {
-    const { embeddings } = await firstAvailable([EMBEDDING_MODEL], (model) =>
-        callGemini<GeminiEmbeddings>({
-            apiKey,
-            path: `${model}:batchEmbedContents`,
+    const { embeddings } = await firstAvailable('gemini', [EMBEDDING_MODEL], (model) =>
+        requestJson<GeminiEmbeddings>('gemini', apiKey, `${model}:batchEmbedContents`, {
             timeoutMs: EMBEDDING_TIMEOUT_MS,
             body: {
                 requests: texts.map((text) => ({
