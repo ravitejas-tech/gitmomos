@@ -9,3 +9,7 @@ export const reportContentSchema = z.object({
     suggestions: z.array(z.string()).default([]),
     repositories: z.array(z.object({ name: z.string(), commit_count: z.number(), summary: z.string() })).default([]),
 }) satisfies z.ZodType<ReportContent>
+
+export const generatedReportSchema = reportContentSchema.extend({
+    repositories: z.array(z.object({ name: z.string(), summary: z.string() })).default([]),
+})
