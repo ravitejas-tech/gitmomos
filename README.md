@@ -80,19 +80,19 @@ React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
       ▼                                     │
  Edge function `connections` ───────────────┤  Edge function `sync`
    GitHub OAuth / Gitea token → Vault       │    fetch commits (GitHub/Gitea API)
-   user's Gemini API key → Vault            │
-   add a repository by URL                  ├─── write commits + report (Gemini)
+   user's AI provider key → Vault           │
+   add a repository by URL                  ├─── write commits + report (user's AI)
                                             │
  Edge function `profile-chat` ──────────────┘
    answer a visitor's question from the
-   owner's public reports (Gemini embeddings)
+   owner's public reports (owner's AI)
 ```
 
 - **Website** (`app/`): React Router 7 in SPA mode, served as static files. The landing and legal pages are prerendered at build time. The browser reads only its own rows (RLS) and can change just a few columns: name, timezone and public profile settings, whether a repository is tracked or shown on the public profile, and report edits. Visitors read a public profile through `get_public_profile()`, and search and open its shared reports through `search_public_reports()` and `get_public_report()`, which return only what its owner chose to show.
-- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits` and `reports`, plus `report_embeddings` (pgvector) and `profile_questions` for the public profile chatbot. Provider tokens and each user's Gemini API key (`gemini_keys`) live in Supabase Vault and only the service role can read them.
-- **`connections` function**: GitHub OAuth, connecting Gitea, adding a repository by URL after checking that the account can read it, and saving a Gemini API key after checking it with Google.
-- **`sync` function**: for one user and one local day, collects commits from every tracked repository and writes that day's report with the user's own Gemini key. When a model is overloaded it falls back to the next one. "Sync now" and the nightly worker both call it.
-- **`profile-chat` function**: Momi, the public profile chatbot, answers a visitor's question. It embeds the owner's reports with Gemini, finds the closest public ones in Postgres, and has Gemini answer from those alone, citing the days it used.
+- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits` and `reports`, plus `report_embeddings` (pgvector) and `profile_questions` for the public profile chatbot. Provider tokens and each user's AI provider key (`ai_keys`, which also records the provider and the models they chose) live in Supabase Vault and only the service role can read them.
+- **`connections` function**: GitHub OAuth, connecting Gitea, adding a repository by URL after checking that the account can read it, and saving an AI provider key (Gemini, Groq, Claude or OpenAI) after listing the models it can use, so the user picks a report model and a chat model.
+- **`sync` function**: for one user and one local day, collects commits from every tracked repository and writes that day's report with the user's own key and report model. On Gemini and Groq, when that model is overloaded it falls back to the next built-in one. "Sync now" and the nightly worker both call it.
+- **`profile-chat` function**: Momi, the public profile chatbot, answers a visitor's question. It finds the owner's public reports closest to the question (with Gemini embeddings when the owner uses Gemini, with Postgres full-text search otherwise) and has the owner's chat model answer from those alone, citing the days it used.
 - **Nightly worker**: `pg_cron` runs `enqueue_daily_syncs()` every hour at :05 and makes one `pg_net` call to `sync` for each user whose local clock has just passed midnight.
 
 | Layer | Choice |
@@ -100,13 +100,13 @@ React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
 | Website | React 19, React Router 7, Tailwind 4, TanStack Query, Recharts |
 | Database | Supabase Postgres with RLS, Vault, `pg_cron` and `pg_net` |
 | Functions | Supabase Edge Functions (Deno 2) |
-| AI | Gemini over REST with each user's own API key: `gemini-3.5-flash` for reports (falling back to `gemini-3.6-flash`, then `gemini-flash-lite-latest`), `gemini-flash-lite-latest` for the profile chatbot, `gemini-embedding-2` for search |
+| AI | Each user's own key for Gemini, Groq, Claude or OpenAI, over REST, with the report and chat models they pick from the ones the key can use. Gemini and Groq fall back to built-in models when the chosen one is busy. `gemini-embedding-2` for chatbot search on Gemini |
 
 ---
 
 ## 🚀 Self-hosting
 
-You need a Supabase project, a GitHub OAuth App and a static host. Each user adds their own free Gemini API key in **Settings**. The short version:
+You need a Supabase project, a GitHub OAuth App and a static host. Each user adds their own AI provider key in **Settings**; Gemini and Groq have free tiers. The short version:
 
 ```bash
 yarn install

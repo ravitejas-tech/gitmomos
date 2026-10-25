@@ -23,7 +23,27 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "commits": {
+            "ai_keys": {
+                  Row: {
+                    "chat_model": string,"created_at": string,"hint": string,"provider": Database["public"]['Enums']["ai_provider"],"report_model": string,"secret_id": string,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "chat_model": string,"created_at"?: string,"hint": string,"provider": Database["public"]['Enums']["ai_provider"],"report_model": string,"secret_id": string,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "chat_model"?: string,"created_at"?: string,"hint"?: string,"provider"?: Database["public"]['Enums']["ai_provider"],"report_model"?: string,"secret_id"?: string,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "ai_keys_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"commits": {
                   Row: {
                     "author_email": string | null,"author_name": string | null,"committed_at": string,"created_at": string,"html_url": string | null,"id": string,"kind": Database["public"]['Enums']["work_kind"],"message": string,"repository_id": string,"sha": string,"user_id": string
                   }
@@ -65,26 +85,6 @@ isOneToOne: false
       foreignKeyName: "connections_user_id_fkey"
       columns: ["user_id"]
 isOneToOne: false
-      referencedRelation: "profiles"
-      referencedColumns: ["id"]
-    }
-                  ]
-                },"gemini_keys": {
-                  Row: {
-                    "created_at": string,"hint": string,"secret_id": string,"updated_at": string,"user_id": string
-                  }
-                  ComputedFields: never
-                  Insert: {
-                    "created_at"?: string,"hint": string,"secret_id": string,"updated_at"?: string,"user_id": string
-                  }
-                  Update: {
-                    "created_at"?: string,"hint"?: string,"secret_id"?: string,"updated_at"?: string,"user_id"?: string
-                  }
-                  Relationships: [
-                    {
-      foreignKeyName: "gemini_keys_user_id_fkey"
-      columns: ["user_id"]
-isOneToOne: true
       referencedRelation: "profiles"
       referencedColumns: ["id"]
     }
@@ -236,11 +236,13 @@ isOneToOne: false
 "get_activity":
 { Args: { "p_from": string,"p_to": string }; Returns: Json
                            },
+"get_ai_key":
+{ Args: { "p_user_id": string }; Returns: {
+              "api_key": string,"chat_model": string,"provider": Database["public"]['Enums']["ai_provider"],"report_model": string
+            }[]
+                           },
 "get_connection_token":
 { Args: { "p_connection_id": string }; Returns: string
-                           },
-"get_gemini_key":
-{ Args: { "p_user_id": string }; Returns: string
                            },
 "get_public_profile":
 { Args: { "p_handle": string }; Returns: Json
@@ -262,14 +264,19 @@ isOneToOne: false
               "content": Json,"date": string
             }[]
                            },
+"match_profile_reports_by_text":
+{ Args: { "p_query": string,"p_recent": number,"p_similar": number,"p_user_id": string }; Returns: {
+              "content": Json,"date": string
+            }[]
+                           },
 "record_repository_commits":
 { Args: { "p_commits": Json,"p_repository_id": string }; Returns: undefined
                            },
+"save_ai_key":
+{ Args: { "p_chat_model": string,"p_key": string,"p_provider": Database["public"]['Enums']["ai_provider"],"p_report_model": string,"p_user_id": string }; Returns: undefined
+                           },
 "save_connection":
 { Args: { "p_account_login": string,"p_account_name"?: string,"p_avatar_url"?: string,"p_base_url": string,"p_provider": Database["public"]['Enums']["provider_name"],"p_token": string,"p_user_id": string }; Returns: string
-                           },
-"save_gemini_key":
-{ Args: { "p_key": string,"p_user_id": string }; Returns: undefined
                            },
 "search_public_reports":
 { Args: { "p_from"?: string,"p_handle": string,"p_limit"?: number,"p_offset"?: number,"p_query"?: string,"p_to"?: string }; Returns: Json
@@ -281,7 +288,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "connection_status": "active"|"error","provider_name": "github"|"gitea","report_status": "generated"|"failed","work_kind": "feature"|"fix"|"improvement"|"maintenance"|"docs"|"tests"|"other"
+            "ai_provider": "gemini"|"groq"|"claude"|"openai","connection_status": "active"|"error","provider_name": "github"|"gitea","report_status": "generated"|"failed","work_kind": "feature"|"fix"|"improvement"|"maintenance"|"docs"|"tests"|"other"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -401,7 +408,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "connection_status": ["active", "error"],"provider_name": ["github", "gitea"],"report_status": ["generated", "failed"],"work_kind": ["feature", "fix", "improvement", "maintenance", "docs", "tests", "other"]
+            "ai_provider": ["gemini", "groq", "claude", "openai"],"connection_status": ["active", "error"],"provider_name": ["github", "gitea"],"report_status": ["generated", "failed"],"work_kind": ["feature", "fix", "improvement", "maintenance", "docs", "tests", "other"]
           }
         }
 } as const

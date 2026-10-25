@@ -1,5 +1,5 @@
 import { ConsistencyCard } from '~/components/activity/consistency-card'
-import { MissingGeminiKeyAlert } from '~/components/gemini-key/missing-key-alert'
+import { MissingAiKeyAlert } from '~/components/ai-key/missing-key-alert'
 import { ActivityCard } from '~/components/overview/activity-card'
 import { HoursCard } from '~/components/overview/hours-card'
 import { LatestReportCard } from '~/components/overview/latest-report-card'
@@ -11,7 +11,7 @@ import { ErrorState } from '~/components/ui/error-state'
 import { useActivity } from '~/hooks/activity/queries'
 import { useReports } from '~/hooks/reports/queries'
 import { CONSISTENCY_WEEKS } from '~/data/activity/ranges'
-import { MISSING_GEMINI_KEY } from '~/data/gemini-key/constants'
+import { MISSING_AI_KEY } from '~/data/ai-key/constants'
 import { lastDays, lastWeeks } from '~/lib/activity/range'
 
 export function Overview({ days }: { days: number }) {
@@ -25,7 +25,7 @@ export function Overview({ days }: { days: number }) {
 
     return (
         <div className='space-y-6'>
-            <MissingGeminiKeyAlert>{MISSING_GEMINI_KEY.reports}</MissingGeminiKeyAlert>
+            <MissingAiKeyAlert>{MISSING_AI_KEY.reports}</MissingAiKeyAlert>
             <StatGrid
                 activity={activity}
                 days={days}

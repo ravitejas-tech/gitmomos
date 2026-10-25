@@ -4,7 +4,7 @@ Run your own copy of gitmomos on Supabase and a static host such as Vercel. It t
 
 - Node.js 20 or newer. Yarn 4 ships inside the repository, so the global `yarn` command picks it up.
 - A free [Supabase](https://supabase.com) project.
-- A Google account for a free [Gemini API key](https://aistudio.google.com/apikey). Every user adds their own key in the app's **Settings**; the functions hold none.
+- An API key from one AI provider to try it with: [Gemini](https://aistudio.google.com/apikey) or [Groq](https://console.groq.com/keys), both free, or [Claude](https://platform.claude.com/settings/keys) or [OpenAI](https://platform.openai.com/api-keys). Every user adds their own key in the app's **Settings**; the functions hold none.
 - A GitHub account for the OAuth App, and an account with a static host. This guide uses [Vercel](https://vercel.com).
 
 Every step starts with **Where**, so you know which window it happens in:
@@ -25,11 +25,11 @@ Do the parts in order; each one needs something from the one before.
 
 ## 1. Collect the secrets
 
-### 1.1 Gemini API key
+### 1.1 AI provider key
 
-**Where:** [Google AI Studio → API keys](https://aistudio.google.com/apikey)
+**Where:** [Google AI Studio → API keys](https://aistudio.google.com/apikey) for a free Gemini key, or [GroqCloud → API Keys](https://console.groq.com/keys) for a free Groq key. Claude and OpenAI keys work too.
 
-Click **Create API key** and keep it for part 5. It goes into the app, not into the function secrets.
+Create a key and keep it for part 5. It goes into the app, not into the function secrets.
 
 ### 1.2 GitHub OAuth App
 
@@ -81,7 +81,7 @@ GITHUB_CLIENT_SECRET=<client secret from 1.2>
 WORKER_SECRET=<the string from 2.1>
 ```
 
-Leave `ALLOW_LOCAL_GITEA` commented out in production. Set `GEMINI_MODEL` only to try a model of your choice before the built-in report models (`gemini-3.5-flash`, then `gemini-3.6-flash`, then `gemini-flash-lite-latest`), and `GEMINI_CHAT_MODEL` to do the same for the public profile chatbot (`gemini-flash-lite-latest`, then `gemini-3.5-flash-lite`, then `gemini-3.1-flash-lite`). The file is gitignored.
+Leave `ALLOW_LOCAL_GITEA` commented out in production. The file is gitignored.
 
 ### 2.3 Create the tables and deploy the functions
 
@@ -99,7 +99,7 @@ yarn functions:deploy
 - `db:push` lists the migrations and asks to apply them. Answer `y`.
 - If `functions:deploy` complains about Docker, run `yarn supabase functions deploy connections sync profile-chat --use-api` instead.
 
-**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings`, `profile_questions` and `gemini_keys`, **Storage** lists the public `profile-media` bucket, and **Edge Functions** lists `connections`, `sync` and `profile-chat`.
+**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings`, `profile_questions` and `ai_keys`, **Storage** lists the public `profile-media` bucket, and **Edge Functions** lists `connections`, `sync` and `profile-chat`.
 
 ---
 
@@ -171,7 +171,7 @@ Build with the same two variables set, then upload `build/client/`. Unknown path
 **Where:** `https://<site>`
 
 1. Sign up. You land on the dashboard.
-2. **Settings → Gemini API key**: paste the key from 1.1 and click **Save key**.
+2. **Settings → AI provider**: pick the provider, paste the key from 1.1 and click **Continue**, then choose the report and chat models and click **Save**.
 3. **Repositories → Connect GitHub**, approve, and you come back to the app. For Gitea, use **Connect Gitea** with an access token that has `read:repository` and `read:user`.
 4. Paste a repository URL into **Tracked repositories** and click **Add**.
 5. On **Overview**, click **Sync now**. Today's report appears under **Reports**.
@@ -201,7 +201,9 @@ yarn functions:deploy   # always, before the new website goes live
 
 Then let the host deploy the new `main`. Deploy the functions first: a new website calling an action the old functions don't know fails until they are updated.
 
-> **Upgrading to per-user Gemini keys:** after this update a report is written only for a user who has saved a key in **Settings → Gemini API key**, and the public chatbot only answers on profiles whose owner has one. The `GEMINI_API_KEY` function secret is no longer read; remove it with `yarn supabase secrets unset GEMINI_API_KEY`.
+> **Upgrading to a choice of AI provider:** `gemini_keys` becomes `ai_keys`, and every saved Gemini key keeps the models it used before: `gemini-3.5-flash` for reports and `gemini-flash-lite-latest` for the chatbot. Run `yarn db:push`, `yarn functions:deploy` and the website deploy back to back, because the old functions and the old website both read the renamed table. The `GEMINI_MODEL` and `GEMINI_CHAT_MODEL` function secrets are no longer read, since each user picks their models in **Settings → AI provider**; if you set them, remove them with `yarn supabase secrets unset GEMINI_MODEL GEMINI_CHAT_MODEL`.
+
+> **Upgrading to per-user Gemini keys:** after this update a report is written only for a user who has saved a key in **Settings → AI provider**, and the public chatbot only answers on profiles whose owner has one. The `GEMINI_API_KEY` function secret is no longer read; remove it with `yarn supabase secrets unset GEMINI_API_KEY`.
 
 > **Upgrading from v1:** v2 replaces the old schema with one fresh migration. Run `yarn supabase db reset --linked` before `yarn db:push`. **This deletes all v1 data.**
 
@@ -220,6 +222,8 @@ Then let the host deploy the new `main`. Deploy the functions first: a new websi
 | Sign-up email never arrives | Built-in Supabase email limits | Turn off **Confirm email** or add SMTP (3.3) |
 | "Couldn't find owner/repo" when adding a repository | Typo, or the connected account can't read it | Check the URL and that account's access on GitHub or Gitea |
 | Reports never appear overnight | Vault secrets missing or wrong | Redo 3.1; `worker_secret` must equal `WORKER_SECRET` |
-| A report says "Add your Gemini API key in Settings" | That user has no key saved | Add one in **Settings → Gemini API key** |
-| A report says "Gemini rejected your API key" | The saved key was deleted or restricted in Google AI Studio | Create a new key and use **Replace key** in Settings |
-| A report says "Gemini is busy right now" | Every model in the chain was overloaded or timed out | Write it again later, or set `GEMINI_MODEL` to a model that is answering |
+| A report says "Add an AI provider key in Settings" | That user has no key saved | Add one in **Settings → AI provider** |
+| A report says "… rejected your API key" | The saved key was deleted, restricted or ran out of credit with its provider | Create a new key and use **Replace key** in Settings |
+| A report says "… is busy right now" | The chosen model, and on Gemini or Groq every built-in fallback, was overloaded or timed out | Write it again later, or pick another model with **Change models** in Settings |
+| A report says "… has reached its usage limit" | The key's free tier or rate limit ran out; on Groq a day with many commits can be larger than one request may be | Write it again later, or pick a model or provider with higher limits |
+| A report says "… returned an answer in the wrong format" | The chosen model didn't follow the report format | Pick another model with **Change models** in Settings |

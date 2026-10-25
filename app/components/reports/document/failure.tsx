@@ -1,14 +1,14 @@
 import { TriangleAlert } from 'lucide-react'
-import { AddGeminiKeyButton } from '~/components/gemini-key/add-key-button'
+import { AddAiKeyButton } from '~/components/ai-key/add-key-button'
 import { SyncButton } from '~/components/reports/sync-button'
 import { IconChip } from '~/components/ui/icon-chip'
 import { Text } from '~/components/ui/text'
-import { useGeminiKey } from '~/hooks/gemini-key/queries'
+import { useAiKey } from '~/hooks/ai-key/queries'
 import type { Report } from '~/types/reports'
 
 export function ReportFailure({ report }: { report: Report }) {
-    const { data: geminiKey, isSuccess } = useGeminiKey()
-    const needsKey = isSuccess && !geminiKey
+    const { data: aiKey, isSuccess } = useAiKey()
+    const needsKey = isSuccess && !aiKey
 
     return (
         <div className='flex flex-col gap-4 rounded-xl border border-danger/20 bg-danger-subtle p-5 sm:flex-row sm:items-start'>
@@ -20,7 +20,7 @@ export function ReportFailure({ report }: { report: Report }) {
                 <Text variant='title'>This report couldn’t be written</Text>
                 <Text tone='secondary'>
                     {needsKey
-                        ? 'Your commits for this day are safe. Add your Gemini API key, then write the report again.'
+                        ? 'Your commits for this day are safe. Connect an AI provider, then write the report again.'
                         : 'Your commits for this day are safe. Try writing the report again.'}
                 </Text>
                 {report.error && (
@@ -32,7 +32,7 @@ export function ReportFailure({ report }: { report: Report }) {
                 )}
             </div>
             {needsKey ? (
-                <AddGeminiKeyButton variant='primary' />
+                <AddAiKeyButton variant='primary' />
             ) : (
                 <SyncButton
                     date={report.date}

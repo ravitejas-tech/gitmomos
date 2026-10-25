@@ -28,3 +28,8 @@ export const profileChatRequestSchema = z.object({
 })
 
 export type ProfileChatRequest = z.infer<typeof profileChatRequestSchema>
+
+export const chatReplySchema = z.object({
+    answer: z.string(),
+    sources: z.array(z.string()).default([]),
+})

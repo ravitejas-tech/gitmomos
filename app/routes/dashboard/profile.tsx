@@ -1,11 +1,11 @@
-import { MissingGeminiKeyAlert } from '~/components/gemini-key/missing-key-alert'
+import { MissingAiKeyAlert } from '~/components/ai-key/missing-key-alert'
 import { DashboardPage } from '~/components/layout/dashboard-page'
 import { PublicProfileForm } from '~/components/public-profile/settings/form'
 import { ProfileLinkActions } from '~/components/public-profile/settings/link-actions'
 import { ProfileMediaSection } from '~/components/public-profile/settings/media'
 import { ProfileRepositories } from '~/components/public-profile/settings/repositories'
 import { SettingsSection } from '~/components/settings/settings-section'
-import { MISSING_GEMINI_KEY } from '~/data/gemini-key/constants'
+import { MISSING_AI_KEY } from '~/data/ai-key/constants'
 import { useProfile } from '~/hooks/profile/queries'
 
 export default function PublicProfileSettings() {
@@ -17,7 +17,7 @@ export default function PublicProfileSettings() {
             width='narrow'
             actions={profile?.is_public && profile.handle && <ProfileLinkActions handle={profile.handle} />}>
             <div className='space-y-8'>
-                <MissingGeminiKeyAlert>{MISSING_GEMINI_KEY.chat}</MissingGeminiKeyAlert>
+                <MissingAiKeyAlert>{MISSING_AI_KEY.chat}</MissingAiKeyAlert>
                 <SettingsSection
                     title='Profile'
                     isLoading={!profile}>

@@ -15,11 +15,6 @@ export type PublicReport = Pick<ReportContent, 'headline' | 'summary' | 'highlig
     date: string
 }
 
-export interface ChatReply {
-    answer: string
-    sources: string[]
-}
-
 export interface ProfileAnswer {
     answer: string
     sources: PublicReport[]

@@ -1,6 +1,6 @@
 # gitmomos
 
-Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, saves their own Gemini API key in Settings, and a nightly worker collects the commits they authored and writes one report per day with that key. An optional public profile (`/@handle`) is a portfolio of what they shipped, a work log (`?tab=log`) of shared reports a visitor can search and save as PDFs, and Momi, a chatbot that answers visitors from their reports.
+Daily work reports written from a developer's git commits. A user signs up on the website, connects GitHub (OAuth) or Gitea (access token), adds repositories by URL, picks an AI provider in Settings (Gemini, Groq, Claude or OpenAI), saves their own key and chooses a report model and a chat model from the ones it can use, and a nightly worker collects the commits they authored and writes one report per day with them. An optional public profile (`/@handle`) is a portfolio of what they shipped, a work log (`?tab=log`) of shared reports a visitor can search and save as PDFs, and Momi, a chatbot that answers visitors from their reports.
 
 There is no CLI and no server of our own: a static React Router SPA talks to Supabase, and three edge functions do the work that needs secrets.
 
@@ -41,7 +41,7 @@ Read the one that covers what you are touching. Do not read them all.
 | Toasts | `react-hot-toast` |
 | Database | Supabase Postgres + RLS, Vault, `pg_cron`, `pg_net` |
 | Functions | Supabase Edge Functions (Deno 2) |
-| AI | Gemini over REST with each user's own key: `REPORT_MODELS` and `CHAT_MODELS` fallback chains (`_shared/constants/gemini.constants.ts`), optionally led by `GEMINI_MODEL` / `GEMINI_CHAT_MODEL`; `gemini-embedding-2` for search |
+| AI | Each user's own key for Gemini, Groq, Claude or OpenAI over REST (`_shared/ai/` plus one client per provider), with the report and chat models they chose; on Gemini and Groq the `AI_FALLBACK_MODELS` chains (`_shared/constants/ai.constants.ts`) follow the chosen model; `gemini-embedding-2` for chatbot search on Gemini |
 
 ## Layout
 
@@ -84,7 +84,7 @@ yarn secrets:set          # upload supabase/functions/.env
 | File | Holds |
 |---|---|
 | `.env` | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_PROJECT_ID` |
-| `supabase/functions/.env` | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `WORKER_SECRET`, optional `GEMINI_MODEL`, `GEMINI_CHAT_MODEL`, `ALLOW_LOCAL_GITEA` |
+| `supabase/functions/.env` | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `WORKER_SECRET`, optional `ALLOW_LOCAL_GITEA` |
 
 Both are gitignored; the `.example` files beside them list every key.
 
@@ -99,11 +99,13 @@ Both are gitignored; the `.example` files beside them list every key.
 - **OAuth Apps can only read private repositories with the `repo` scope.** The functions only call read endpoints.
 - **`verify_jwt` is off for every function** (`supabase/config.toml`); `connections` and `sync` authenticate with the user's JWT or the worker secret, and `profile-chat` is anonymous, rate-limited per visitor and per profile by `claim_profile_question()`.
 - **A report is public only when every repository in it has `on_profile` on** (`is_profile_report()`). Repository names never leave the server; visitors see the headline, summary, highlights and work areas.
-- **Report embeddings are written lazily** by `profile-chat` before it answers, up to `MAX_INDEX_BATCHES` × `EMBEDDING_BATCH_SIZE` per question. Editing a report's content deletes its embedding (`reports_forget_embedding`), so it is re-embedded on the next question. `EMBEDDING_DIMENSIONS` must match `vector(768)` in the migration.
-- **There is no shared Gemini key.** Every call uses the key of the user it works for (`get_gemini_key`); the chatbot uses the profile owner's. Without one, `sync` still collects commits but stores a failed report saying to add a key, and `get_public_profile` returns `can_ask: false` so the chat is hidden.
-- **Gemini models are tried in order** and a 404, 429, 5xx or timeout moves to the next one (`firstAvailable`). The newest Flash models and the `gemini-flash-latest` alias were the ones returning 503 or hanging when this was built, so the chains lead with pinned, older models. Retired models answer 404 to new keys, which the chain also skips.
+- **Report embeddings exist only for Gemini.** Groq and Claude have no embeddings API and OpenAI's vectors would not match the stored Gemini ones, so for an owner on any other provider `profile-chat` picks reports with `match_profile_reports_by_text` (Postgres full-text search plus the newest reports). For Gemini owners embeddings are written lazily by `profile-chat` before it answers, up to `MAX_INDEX_BATCHES` × `EMBEDDING_BATCH_SIZE` per question. Editing a report's content deletes its embedding (`reports_forget_embedding`), so it is re-embedded on the next question. `EMBEDDING_DIMENSIONS` must match `vector(768)` in the migration.
+- **There is no shared AI key.** Every call uses the key, provider and models of the user it works for (`get_ai_key`); the chatbot uses the profile owner's. Without one, `sync` still collects commits but stores a failed report saying to add a key, and `get_public_profile` returns `can_ask: false` so the chat is hidden.
+- **The user's chosen model is tried first**, then on Gemini and Groq the built-in `AI_FALLBACK_MODELS` chain; a 404, 408, 413, 429, 498, 5xx, 529, a retired model (`model_decommissioned`) or a timeout moves to the next one (`firstAvailable`). The Gemini chains lead with pinned, older models because the newest Flash models and the `gemini-flash-latest` alias returned 503 or hung when this was built. Claude and OpenAI have no fallbacks: those keys are paid and the user picked the model.
+- **The model list comes from the provider with the user's key** (`ai_models` action, `ai/model-catalog.ts`), so it never goes stale: Gemini models that support `generateContent`, Claude models whose `capabilities.structured_outputs` is supported, and OpenAI and Groq ids filtered by `OPENAI_COMPATIBLE`. Saving checks both models are in that list. "Change models" lists them with the stored key, so the browser never needs it again.
+- **JSON output differs per provider.** Gemini gets `responseSchema`, OpenAI strict `json_schema`, Claude `output_config.format` (with `anthropic-version: 2026-10-21`; the newest Claude models reject forced tool use), and Groq `json_object` with the schema written into the system prompt, because its Llama models reject `json_schema`. `RESPONSE_SCHEMA` and `CHAT_RESPONSE_SCHEMA` are written once in Gemini's form and converted by `ai/json-schema.ts`. Every answer is parsed with Zod (`generatedReportSchema`, `chatReplySchema`), and a wrong shape moves to the next model like an outage.
 - **A failed rewrite keeps a generated report.** `writeReport` only stores `failed` when the day had no generated report yet.
-- **The chatbot leads with Flash-Lite** because Flash took 40–90 s per call on the free tier: fine overnight, not in a chat.
+- **Gemini's chat model defaults to Flash-Lite** because Flash took 40–90 s per call on the free tier: fine overnight, not in a chat. Keys saved before the provider choice were migrated with `gemini-3.5-flash` for reports and `gemini-flash-lite-latest` for chat.
 - **Unknown paths must fall back to `/__spa-fallback.html`** on the static host. `/`, `/roadmap`, `/legal/*`, `/robots.txt` and `/sitemap.xml` are prerendered at build time, so nothing they import may touch browser globals at module scope.
 - **`shared_reports()` is the one definition of a report a visitor may see.** `get_public_profile`, `search_public_reports` and `get_public_report` all read it. `get_public_profile` still returns `stats.commits` and `stats.longest_streak`, which only the site deployed before this layout reads; drop them once that site is gone.
 - **`/@handle/reports/:date` is a shared report and `/@handle/reports?from=&to=&q=` a work summary** of a week, a month or a search. Both PDFs are the print dialog, and `?print=1` opens it once the data loads, so every PDF button is a plain link. `search_public_reports` returns at most 50 reports per call, which caps a work summary.
