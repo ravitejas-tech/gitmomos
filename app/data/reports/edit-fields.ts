@@ -3,4 +3,6 @@ export const REPORT_LIST_FIELDS = [
     { name: 'suggestions', label: 'Next steps', rows: 4 },
 ] as const
 
+export const LIST_PLACEHOLDER = 'One item per line'
+
 export const EMPTY_HIGHLIGHT = { title: '', detail: '' }

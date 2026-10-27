@@ -143,7 +143,7 @@ Messages are written for the user who will read them in a toast.
 
 - `sync` is idempotent: commits upsert on `(repository_id, sha)` and the report upserts on `(user_id, date)`, so a rerun is always safe.
 - **An edited report is never regenerated.** `edited_at` set means the worker leaves it alone.
-- **The report prompt writes for non-engineers** (`_shared/reports/build-prompt.ts`): outcomes in plain language, no jargon, nothing the commits don't show. `RESPONSE_SCHEMA`, `ReportContent`, and `reportContentSchema` in both the app and `_shared/schemas/report.schema.ts` change together.
+- **The report prompt writes like the developer would** (`_shared/reports/build-prompt.ts`): plain words, specific about what changed, no hype or praise, no repository names outside `repositories`, nothing the commits don't show. `brief` is the 3-4 bullets the dashboard offers to copy. `RESPONSE_SCHEMA`, `ReportContent`, and `reportContentSchema` in both the app and `_shared/schemas/report.schema.ts` change together.
 - **`commits.kind` is generated** from the message by `commit_kind()` (conventional prefix first, then keywords). Change the classification in a new migration that replaces the function; the stored column recomputes only for rows that are rewritten, so a backfill is an `update commits set message = message`.
 - Long work fans out from Postgres (one `pg_net` call per user), never as a loop inside one function invocation.
 

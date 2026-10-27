@@ -1,12 +1,13 @@
 import type { ResponseSchema } from '../types/ai.types.ts'
 
-export const MAX_COMMITS = 300
+export const MAX_COMMIT_CHARS = 40_000
 export const MAX_MESSAGE_CHARS = 500
 
 export const RESPONSE_SCHEMA: ResponseSchema = {
     type: 'OBJECT',
     properties: {
         headline: { type: 'STRING' },
+        brief: { type: 'ARRAY', items: { type: 'STRING' } },
         summary: { type: 'STRING' },
         highlights: {
             type: 'ARRAY',
@@ -27,5 +28,5 @@ export const RESPONSE_SCHEMA: ResponseSchema = {
             },
         },
     },
-    required: ['headline', 'summary', 'highlights', 'key_work_areas', 'suggestions', 'repositories'],
+    required: ['headline', 'brief', 'summary', 'highlights', 'key_work_areas', 'suggestions', 'repositories'],
 }

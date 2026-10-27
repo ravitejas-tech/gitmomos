@@ -1,6 +1,7 @@
 import { MAX_DAYS_BACK, INVALID_DATE_MESSAGE } from '../constants/sync.constants.ts'
 import { HttpError } from '../http/http-error.ts'
 import { addDays, dayWindow, isIsoDate, localDate } from '../lib/dates.ts'
+import { uniqueBy } from '../lib/unique-by.ts'
 import { adminClient } from '../supabase/admin-client.ts'
 import { unwrap } from '../supabase/unwrap.ts'
 import type { ReportCommit } from '../types/report.types.ts'
@@ -39,14 +40,15 @@ async function dayCommits(userId: string, start: Date, end: Date): Promise<Repor
     const commits = unwrap(
         await adminClient()
             .from('commits')
-            .select('message, committed_at, repositories!inner(full_name, enabled)')
+            .select('sha, message, committed_at, repositories!inner(full_name, enabled)')
             .eq('user_id', userId)
             .eq('repositories.enabled', true)
             .gte('committed_at', start.toISOString())
             .lt('committed_at', end.toISOString())
-            .order('committed_at', { ascending: true }),
+            .order('committed_at', { ascending: true })
+            .order('repository_id', { ascending: true }),
     )
-    return commits.map(({ message, committed_at, repositories }) => ({
+    return uniqueBy(commits, ({ sha }) => sha).map(({ message, committed_at, repositories }) => ({
         repository: repositories.full_name,
         message,
         committedAt: committed_at,
