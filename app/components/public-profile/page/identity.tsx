@@ -24,9 +24,7 @@ export function ProfileIdentity({ profile, onAsk }: ProfileIdentityProps) {
     const latest = profile.recent[0]
 
     return (
-        <Container
-            size='document'
-            className='pt-4 pb-10'>
+        <Container className='pt-4 pb-10'>
             <ProfileBanner src={profile.banner_url} />
             <div className='relative -mt-12 flex flex-wrap items-end justify-between gap-4 px-4 sm:px-6'>
                 <Avatar
