@@ -1,9 +1,9 @@
-import { Check, Copy, Download, Pencil } from 'lucide-react'
+import { Download, Pencil } from 'lucide-react'
 import { SyncButton } from '~/components/reports/sync-button'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
+import { CopyButton } from '~/components/ui/copy-button'
 import { Text } from '~/components/ui/text'
-import { useCopyToClipboard } from '~/hooks/use-copy-to-clipboard'
 import { formatDay, timeAgo } from '~/lib/format'
 import { reportToMarkdown } from '~/lib/reports/markdown'
 import { reportBadge } from '~/lib/reports/status'
@@ -11,7 +11,6 @@ import { printInLightTheme } from '~/lib/theme'
 import type { Report } from '~/types/reports'
 
 export function ReportToolbar({ report, onEdit }: { report: Report; onEdit: () => void }) {
-    const { copied, copy } = useCopyToClipboard()
     const badge = reportBadge(report)
     const { content } = report
 
@@ -26,13 +25,7 @@ export function ReportToolbar({ report, onEdit }: { report: Report; onEdit: () =
             </Text>
             {content && (
                 <>
-                    <Button
-                        variant='secondary'
-                        size='sm'
-                        onClick={() => copy(reportToMarkdown(report.date, content))}>
-                        {copied ? <Check className='text-success' /> : <Copy />}
-                        {copied ? 'Copied' : 'Copy'}
-                    </Button>
+                    <CopyButton text={reportToMarkdown(report.date, content)} />
                     <Button
                         variant='secondary'
                         size='sm'
