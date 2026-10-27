@@ -3,6 +3,7 @@ import type { ReportContent } from '../types/report.types.ts'
 
 export const reportContentSchema = z.object({
     headline: z.string().default(''),
+    brief: z.array(z.string()).default([]),
     summary: z.string().default(''),
     highlights: z.array(z.object({ title: z.string(), detail: z.string() })).default([]),
     key_work_areas: z.array(z.string()).default([]),
