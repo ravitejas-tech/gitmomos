@@ -4,7 +4,7 @@ export const SITE_URL = 'https://gitmomos.spheo.online'
 export const SITE_NAME = 'gitmomos'
 export const SITE_LOCALE = 'en_US'
 export const SITE_DESCRIPTION =
-    'Free, open-source work report automation for developers. Connect GitHub or Gitea and get a daily work report written from your git commits, automatically.'
+    'Free, open-source work report automation for developers. Daily reports, timesheets and a public portfolio, written from your GitHub or Gitea commits.'
 export const SITEMAP_PATH = '/sitemap.xml'
 
 export const SITE_IMAGE = {
@@ -25,6 +25,11 @@ export const SITE_KEYWORDS = [
     'GitHub work report',
     'Gitea work report',
     'developer productivity',
+    'timesheet from git commits',
+    'automatic timesheet',
+    'developer portfolio',
+    'public work log',
+    'AI work report',
 ] as const
 
 export const SITEMAP_PATHS = [HOME_PATH, ROADMAP_PATH, RELEASES_PATH, PRIVACY_PATH, LICENSE_PATH] as const
