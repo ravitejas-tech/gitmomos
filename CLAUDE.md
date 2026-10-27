@@ -94,6 +94,7 @@ Both are gitignored; the `.example` files beside them list every key.
 - **A report covers a local calendar day.** The worker runs hourly and picks users whose `profiles.timezone` has just passed midnight; it syncs the day that ended. Half-hour and 45-minute offset zones still match exactly once a day.
 - **An edited report is never regenerated** — `edited_at` set means the worker and "Sync now" leave its content alone.
 - **GitHub commits are matched by login** (`author=<login>`); commits made with an email not linked to the GitHub account are missed. Gitea commits match the login or any of the account's emails.
+- **A fork and its upstream share commits.** A report counts each SHA once (`dayCommits`); the commit log and activity charts still count it in both repositories.
 - **Commits are windowed by committer date**, because that is what GitHub's `since`/`until` filter on. A rebase moves a commit into the day it was rebased.
 - **GitHub allows one OAuth callback URL per app.** Local development needs its own OAuth App pointing at `http://localhost:5173/dashboard/connections/github`.
 - **OAuth Apps can only read private repositories with the `repo` scope.** The functions only call read endpoints.
