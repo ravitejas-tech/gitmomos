@@ -2,6 +2,7 @@ import { CalendarClock, FileText, FolderGit2, Globe, LayoutDashboard, Settings }
 import { COMING_SOON } from '~/data/coming-soon/features'
 import { FAQ_ID } from '~/data/landing/faq'
 import { HOW_IT_WORKS_ID } from '~/data/landing/how-it-works'
+import { FEATURES_ID } from '~/data/landing/sections'
 
 export const HOME_PATH = '/'
 export const RELEASES_PATH = '/releases'
@@ -40,6 +41,7 @@ export const SETTINGS_NAV = { label: 'Settings', to: SETTINGS_PATH, icon: Settin
 
 export const FOOTER_LINKS = {
     Product: [
+        { name: 'Features', href: `${HOME_PATH}#${FEATURES_ID}` },
         { name: 'How it works', href: `${HOME_PATH}#${HOW_IT_WORKS_ID}` },
         { name: 'FAQ', href: `${HOME_PATH}#${FAQ_ID}` },
         { name: 'Roadmap', href: ROADMAP_PATH },
