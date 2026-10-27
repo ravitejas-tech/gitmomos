@@ -7,9 +7,11 @@ import { Input } from '~/components/ui/input'
 import { ModalBody } from '~/components/ui/modal-body'
 import { PanelFooter } from '~/components/ui/panel-footer'
 import { Textarea } from '~/components/ui/textarea'
-import { REPORT_LIST_FIELDS } from '~/data/reports/edit-fields'
+import { LIST_PLACEHOLDER, REPORT_LIST_FIELDS } from '~/data/reports/edit-fields'
+import { REPORT_SECTIONS } from '~/data/reports/sections'
 import { useUpdateReport } from '~/hooks/reports/mutations'
 import { fromLines, toLines } from '~/lib/lines'
+import { reportBrief } from '~/lib/reports/brief'
 import { reportEditSchema, type ReportContent, type ReportEditData } from '~/schemas/report.schema'
 
 export interface EditReportFormProps {
@@ -29,6 +31,7 @@ export function EditReportForm({ reportId, content, onDone }: EditReportFormProp
         resolver: zodResolver(reportEditSchema),
         defaultValues: {
             headline: content.headline,
+            brief: toLines(reportBrief(content)),
             summary: content.summary,
             highlights: content.highlights,
             key_work_areas: toLines(content.key_work_areas),
@@ -43,6 +46,7 @@ export function EditReportForm({ reportId, content, onDone }: EditReportFormProp
                 content: {
                     ...content,
                     headline: data.headline,
+                    brief: fromLines(data.brief),
                     summary: data.summary,
                     highlights: data.highlights,
                     key_work_areas: fromLines(data.key_work_areas),
@@ -62,6 +66,16 @@ export function EditReportForm({ reportId, content, onDone }: EditReportFormProp
                     <Input
                         id='headline'
                         {...register('headline')}
+                    />
+                </FormField>
+                <FormField
+                    id='brief'
+                    label={REPORT_SECTIONS.brief}>
+                    <Textarea
+                        id='brief'
+                        rows={4}
+                        placeholder={LIST_PLACEHOLDER}
+                        {...register('brief')}
                     />
                 </FormField>
                 <FormField
@@ -88,7 +102,7 @@ export function EditReportForm({ reportId, content, onDone }: EditReportFormProp
                             <Textarea
                                 id={name}
                                 rows={rows}
-                                placeholder='One item per line'
+                                placeholder={LIST_PLACEHOLDER}
                                 {...register(name)}
                             />
                         </FormField>
