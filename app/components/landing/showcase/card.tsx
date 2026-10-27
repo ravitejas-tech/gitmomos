@@ -3,10 +3,14 @@ import { BulletItem } from '~/components/ui/bullet-item'
 import { Card } from '~/components/ui/card'
 import { IconChip } from '~/components/ui/icon-chip'
 import { Text } from '~/components/ui/text'
-import { ROADMAP_STATUS } from '~/data/landing/roadmap'
-import type { ComingSoonFeature } from '~/types/coming-soon'
+import type { FeatureSummary } from '~/types/landing'
 
-export function RoadmapFeatureCard({ slug, icon, title, description, points }: ComingSoonFeature) {
+export interface ShowcaseCardProps {
+    feature: FeatureSummary
+    badge?: string | undefined
+}
+
+export function ShowcaseCard({ feature: { slug, icon, title, description, points }, badge }: ShowcaseCardProps) {
     return (
         <Card
             id={slug}
@@ -18,7 +22,7 @@ export function RoadmapFeatureCard({ slug, icon, title, description, points }: C
                     tone='accent'
                     size='md'
                 />
-                <Badge>{ROADMAP_STATUS}</Badge>
+                {badge && <Badge>{badge}</Badge>}
             </div>
             <div className='space-y-1.5'>
                 <Text

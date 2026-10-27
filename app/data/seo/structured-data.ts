@@ -1,5 +1,6 @@
 import { CREATOR, CREATOR_LINKS } from '~/data/landing/creator'
 import { FAQ } from '~/data/landing/faq'
+import { EXTRA_FEATURES, SHOWCASE_FEATURES } from '~/data/landing/showcase'
 import { REPO_URL } from '~/data/navigation'
 import { SITE_DESCRIPTION, SITE_IMAGE, SITE_KEYWORDS, SITE_NAME, SITE_URL } from '~/data/seo/site'
 import { siteUrl } from '~/lib/seo/site-url'
@@ -24,6 +25,11 @@ export const HOME_STRUCTURED_DATA = {
             operatingSystem: 'Web',
             image: siteUrl(SITE_IMAGE.path),
             keywords: SITE_KEYWORDS.join(', '),
+            featureList: [
+                'Daily work reports written from your git commits',
+                ...SHOWCASE_FEATURES.map(({ label, description }) => `${label}: ${description}`),
+                ...EXTRA_FEATURES.map(({ title, description }) => `${title}: ${description}`),
+            ],
             isAccessibleForFree: true,
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
             license: `${REPO_URL}/blob/main/LICENSE`,

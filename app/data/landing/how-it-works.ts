@@ -3,22 +3,22 @@ export const HOW_IT_WORKS_ID = 'how-it-works'
 export const HOW_IT_WORKS_STEPS = [
     {
         step: '01',
-        title: 'Sign up',
-        description: 'Create a free account on the website. Nothing to install.',
+        title: 'Sign up and connect',
+        description: 'Create a free account, then link GitHub in one click or any Gitea instance with a token.',
     },
     {
         step: '02',
-        title: 'Connect your forge',
-        description: 'Link GitHub in one click, or any Gitea instance with an access token.',
-    },
-    {
-        step: '03',
         title: 'Add repositories',
         description: 'Paste the URL of each repo your reports should cover.',
     },
     {
+        step: '03',
+        title: 'Bring your AI key',
+        description: 'Gemini or Groq on their free tiers, or Claude or OpenAI. You pick the models.',
+    },
+    {
         step: '04',
-        title: 'Reports on autopilot',
-        description: 'Every night your commits become the day’s work report, automatically.',
+        title: 'On autopilot',
+        description: 'Every night your commits become the day’s report, and your timesheet and profile update too.',
     },
 ] as const

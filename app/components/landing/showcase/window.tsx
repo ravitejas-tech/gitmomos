@@ -3,12 +3,12 @@ import { LandingWindow } from '~/components/landing/window'
 import { Dot } from '~/components/ui/dot'
 import { Text } from '~/components/ui/text'
 
-export interface RoadmapWindowProps {
+export interface ShowcaseWindowProps {
     title: string
     children: ReactNode
 }
 
-export function RoadmapWindow({ title, children }: RoadmapWindowProps) {
+export function ShowcaseWindow({ title, children }: ShowcaseWindowProps) {
     return (
         <LandingWindow>
             <div className='flex items-center gap-4 border-b border-border bg-panel px-4 py-3'>

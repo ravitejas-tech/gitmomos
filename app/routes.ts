@@ -20,6 +20,7 @@ export default [
     layout('routes/dashboard/layout.tsx', [
         route('dashboard', 'routes/dashboard/index.tsx'),
         route('dashboard/reports', 'routes/dashboard/reports.tsx'),
+        route('dashboard/timesheet', 'routes/dashboard/timesheet.tsx'),
         route('dashboard/connections', 'routes/dashboard/connections.tsx'),
         route('dashboard/connections/github', 'routes/dashboard/connections.github.tsx'),
         route('dashboard/settings', 'routes/dashboard/settings.tsx'),

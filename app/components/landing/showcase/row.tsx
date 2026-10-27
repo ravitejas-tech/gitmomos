@@ -1,28 +1,25 @@
-import type { ComponentType } from 'react'
 import { FeaturePointList } from '~/components/coming-soon/feature-point-list'
 import { LandingIconPill } from '~/components/landing/icon-pill'
 import { Reveal } from '~/components/landing/reveal'
-import { RoadmapWindow } from '~/components/landing/roadmap/window'
+import { ShowcaseWindow } from '~/components/landing/showcase/window'
 import { Text } from '~/components/ui/text'
-import { ROADMAP_STATUS } from '~/data/landing/roadmap'
 import { cn } from '~/lib/utils'
-import type { ComingSoonFeature } from '~/types/coming-soon'
+import type { FeatureShowcase } from '~/types/landing'
 
-export interface RoadmapSpotlightRowProps {
-    feature: ComingSoonFeature
-    preview: ComponentType
+export interface ShowcaseRowProps extends FeatureShowcase {
+    tag: string
     reverse: boolean
 }
 
-export function RoadmapSpotlightRow({ feature, preview: Preview, reverse }: RoadmapSpotlightRowProps) {
+export function ShowcaseRow({ feature, preview: Preview, tag, reverse }: ShowcaseRowProps) {
     return (
-        <Reveal className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
-            <div
+        <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
+            <Reveal
                 id={feature.slug}
                 className='scroll-mt-24 space-y-6'>
                 <LandingIconPill
                     icon={feature.icon}
-                    label={ROADMAP_STATUS}
+                    label={tag}
                 />
                 <div className='space-y-3'>
                     <Text
@@ -38,12 +35,14 @@ export function RoadmapSpotlightRow({ feature, preview: Preview, reverse }: Road
                     </Text>
                 </div>
                 <FeaturePointList points={feature.points} />
-            </div>
-            <div className={cn(reverse && 'lg:order-first')}>
-                <RoadmapWindow title={feature.title}>
+            </Reveal>
+            <Reveal
+                order={1}
+                className={cn('min-w-0', reverse && 'lg:order-first')}>
+                <ShowcaseWindow title={feature.label}>
                     <Preview />
-                </RoadmapWindow>
-            </div>
-        </Reveal>
+                </ShowcaseWindow>
+            </Reveal>
+        </div>
     )
 }

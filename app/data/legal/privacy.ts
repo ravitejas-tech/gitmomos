@@ -78,7 +78,7 @@ export const PRIVACY_SECTIONS: readonly LegalSectionContent[] = [
             {
                 term: 'Public Profile (optional)',
                 description:
-                    'Only if you turn it on. Visitors see your name, tagline, commit counts and the reports from repositories you switch on, without repository names, and can ask a chatbot about that work. Turning it off hides everything at once.',
+                    'Only if you turn it on. Visitors see your name, tagline, commit counts, and the reports and estimated daily hours from repositories you switch on, without repository names, and can ask a chatbot about that work. Turning it off hides everything at once.',
             },
         ],
     },

@@ -4,6 +4,11 @@ import { FaqSection } from '~/components/landing/faq/section'
 import { FeaturesSection } from '~/components/landing/features/section'
 import { HeroSection } from '~/components/landing/hero/section'
 import { HowItWorksSection } from '~/components/landing/how-it-works/section'
+import { ShowcaseGridSection } from '~/components/landing/showcase/grid-section'
+import { ShowcaseSection } from '~/components/landing/showcase/section'
+import { LANDING_SECTIONS } from '~/data/landing/sections'
+import { EXTRA_FEATURES } from '~/data/landing/showcase'
+import { SHOWCASE } from '~/data/landing/showcase-previews'
 import { PAGE_SEO } from '~/data/seo/pages'
 import { SITE_KEYWORDS } from '~/data/seo/site'
 import { HOME_STRUCTURED_DATA } from '~/data/seo/structured-data'
@@ -22,6 +27,14 @@ export default function Home() {
         <>
             <HeroSection />
             <FeaturesSection />
+            <ShowcaseSection
+                heading={LANDING_SECTIONS.showcase}
+                items={SHOWCASE}
+            />
+            <ShowcaseGridSection
+                heading={LANDING_SECTIONS.extras}
+                features={EXTRA_FEATURES}
+            />
             <HowItWorksSection />
             <MeetTheCreatorSection />
             <FaqSection />

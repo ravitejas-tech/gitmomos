@@ -6,18 +6,20 @@ import { ProfileIdentity } from '~/components/public-profile/page/identity'
 import { MadeWith } from '~/components/public-profile/page/made-with'
 import { ProfileOverviewContent } from '~/components/public-profile/page/overview/content'
 import { ProfileTabs } from '~/components/public-profile/page/tabs'
+import { ProfileTimesheet } from '~/components/public-profile/page/timesheet'
 import { SharedReportsSection } from '~/components/public-profile/reports/section'
 import { Container } from '~/components/ui/container'
 import { EmptyState } from '~/components/ui/empty-state'
 import { ErrorState } from '~/components/ui/error-state'
 import { LoadingState } from '~/components/ui/loading-state'
-import { TAB_PARAM, WORK_LOG_TAB } from '~/data/public-profile/constants'
+import { OVERVIEW_TAB, TAB_PARAM, TIMESHEET_TAB, WORK_LOG_TAB } from '~/data/public-profile/constants'
 import { usePublicProfile } from '~/hooks/public-profile/queries'
 
 export function PublicProfileView({ handle }: { handle: string }) {
     const [params] = useSearchParams()
     const [isChatOpen, setChatOpen] = useState(false)
-    const tab = params.get(TAB_PARAM) === WORK_LOG_TAB ? WORK_LOG_TAB : 'overview'
+    const requested = params.get(TAB_PARAM)
+    const tab = requested === WORK_LOG_TAB || requested === TIMESHEET_TAB ? requested : OVERVIEW_TAB
     const { data: profile, isPending, isError, refetch } = usePublicProfile({ variables: handle })
 
     if (!profile) {
@@ -47,11 +49,9 @@ export function PublicProfileView({ handle }: { handle: string }) {
                     handle={profile.handle}
                     active={tab}
                 />
-                {tab === WORK_LOG_TAB ? (
-                    <SharedReportsSection handle={profile.handle} />
-                ) : (
-                    <ProfileOverviewContent profile={profile} />
-                )}
+                {tab === OVERVIEW_TAB && <ProfileOverviewContent profile={profile} />}
+                {tab === WORK_LOG_TAB && <SharedReportsSection handle={profile.handle} />}
+                {tab === TIMESHEET_TAB && <ProfileTimesheet handle={profile.handle} />}
                 <MadeWith />
             </Container>
             {profile.can_ask && (

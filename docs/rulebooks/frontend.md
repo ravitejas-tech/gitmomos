@@ -104,6 +104,8 @@ gitmomos is used by developers but its reports are read by people who are not: m
 
 Decoration is limited to three utilities in `global.css`, used on marketing and auth surfaces only: `text-heading-gradient` (via `<Text tone='gradient'>` on large headings), `bg-hero-glow` and `bg-grid-lines`. Nothing else may add a gradient, glow or blur.
 
+Marketing pages animate with `Reveal` (`~/components/landing/reveal`), which ties opacity and position to the scroll position in both directions. Do not wrap anything inside a sticky container in it, since it measures the element's place in the page, not where it is pinned. The dashboard has no scroll animation.
+
 ### Dashboard layout
 
 - The shell is `routes/dashboard/layout.tsx`: a sticky `Sidebar` on `bg-panel` and the page on `bg-bg`. Both are hidden when printing.

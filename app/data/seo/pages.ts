@@ -5,7 +5,7 @@ import type { PageSeo } from '~/types/seo'
 
 export const PAGE_SEO = {
     home: {
-        title: `Work Report Automation from Git Commits | ${SITE_NAME}`,
+        title: `Work Report Automation & Git Timesheets | ${SITE_NAME}`,
         description: SITE_DESCRIPTION,
         path: HOME_PATH,
     },
@@ -29,7 +29,7 @@ export const PAGE_SEO = {
     profile: {
         title: `Public profile | ${SITE_NAME}`,
         description:
-            'A developer’s shipped work at a glance, with Momi, a friendly assistant that answers questions from their daily work reports.',
+            'A developer’s shipped work, work log and timesheet at a glance, with Momi, a friendly assistant that answers questions from their daily work reports.',
         path: HOME_PATH,
     },
     workSummary: {

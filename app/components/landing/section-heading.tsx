@@ -1,3 +1,4 @@
+import { Reveal } from '~/components/landing/reveal'
 import { Text } from '~/components/ui/text'
 import { cn } from '~/lib/utils'
 
@@ -6,12 +7,22 @@ export interface SectionHeadingProps {
     title: string
     description?: string
     align?: 'start' | 'center'
+    animated?: boolean
     className?: string
 }
 
-export function SectionHeading({ eyebrow, title, description, align = 'start', className }: SectionHeadingProps) {
+export function SectionHeading({
+    eyebrow,
+    title,
+    description,
+    align = 'start',
+    animated = true,
+    className,
+}: SectionHeadingProps) {
+    const Root = animated ? Reveal : 'div'
+
     return (
-        <div className={cn('mb-14 max-w-2xl md:mb-20', align === 'center' && 'mx-auto text-center', className)}>
+        <Root className={cn('mb-14 max-w-2xl md:mb-20', align === 'center' && 'mx-auto text-center', className)}>
             {eyebrow && (
                 <Text
                     variant='eyebrow'
@@ -34,6 +45,6 @@ export function SectionHeading({ eyebrow, title, description, align = 'start', c
                     {description}
                 </Text>
             )}
-        </div>
+        </Root>
     )
 }

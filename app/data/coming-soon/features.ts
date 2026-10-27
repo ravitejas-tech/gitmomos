@@ -16,7 +16,6 @@ import {
     Moon,
     Quote,
     Radar,
-    Receipt,
     Repeat,
     ScrollText,
     Share2,
@@ -29,7 +28,7 @@ import {
     Users,
     Zap,
 } from 'lucide-react'
-import type { ComingSoonFeature } from '~/types/coming-soon'
+import type { ProductFeature } from '~/types/landing'
 
 export const COMING_SOON = [
     {
@@ -185,26 +184,6 @@ export const COMING_SOON = [
         ],
     },
     {
-        slug: 'timesheets',
-        label: 'Timesheets',
-        title: 'Timesheets',
-        description: 'Hours per project, worked out from your commits. Ready to invoice.',
-        icon: Clock,
-        points: [
-            {
-                icon: Timer,
-                title: 'Estimated hours',
-                description: 'Work sessions found from your commit times, per project and per day.',
-            },
-            {
-                icon: Receipt,
-                title: 'Invoice ready',
-                description: 'Export a week or a month as CSV for your client or your timesheet tool.',
-            },
-            { icon: Eye, title: 'You stay in control', description: 'Adjust any number before you export.' },
-        ],
-    },
-    {
         slug: 'stats-card',
         label: 'Stats card',
         title: 'README stats card',
@@ -248,4 +227,4 @@ export const COMING_SOON = [
             },
         ],
     },
-] as const satisfies readonly ComingSoonFeature[]
+] as const satisfies readonly ProductFeature[]

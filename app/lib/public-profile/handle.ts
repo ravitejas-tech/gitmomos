@@ -7,7 +7,6 @@ import {
     SEARCH_PARAM,
     TAB_PARAM,
     TO_PARAM,
-    WORK_LOG_TAB,
 } from '~/data/public-profile/constants'
 import type { ReportFilter } from '~/types/public-profile'
 
@@ -15,8 +14,8 @@ export function profilePath(handle: string): string {
     return `/${HANDLE_PREFIX}${handle}`
 }
 
-export function workLogPath(handle: string): string {
-    return `${profilePath(handle)}?${TAB_PARAM}=${WORK_LOG_TAB}`
+export function profileTabPath(handle: string, tab: string): string {
+    return `${profilePath(handle)}?${TAB_PARAM}=${tab}`
 }
 
 export function reportPath(handle: string, date: string, print = false): string {
