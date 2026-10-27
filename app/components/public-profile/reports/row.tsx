@@ -34,7 +34,7 @@ export function SharedReportRow({ handle, report }: SharedReportRowProps) {
                     <Text
                         variant='caption'
                         tone='secondary'
-                        className='line-clamp-2'>
+                        className='line-clamp-2 max-w-3xl'>
                         {report.summary}
                     </Text>
                 )}
