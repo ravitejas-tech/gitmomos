@@ -42,9 +42,7 @@ export function PublicProfileView({ handle }: { handle: string }) {
                 profile={profile}
                 onAsk={() => setChatOpen(true)}
             />
-            <Container
-                size='document'
-                className='space-y-10 pb-16'>
+            <Container className='space-y-10 pb-16'>
                 <ProfileTabs
                     handle={profile.handle}
                     active={tab}
