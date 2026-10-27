@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import type { LucideIcon } from 'lucide-react'
+import type { SHOWCASE_FEATURES } from '~/data/landing/showcase'
 
 export interface LandingAction {
     label: string
@@ -35,6 +36,8 @@ export interface ProductFeature extends FeatureSummary {
     label: string
     points: readonly FeaturePoint[]
 }
+
+export type ShowcaseSlug = (typeof SHOWCASE_FEATURES)[number]['slug']
 
 export interface FeatureShowcase {
     feature: ProductFeature
