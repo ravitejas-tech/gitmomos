@@ -439,6 +439,41 @@ export type Database = {
           },
         ]
       }
+      timesheet_entries: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          minutes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          minutes: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          minutes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timesheet_entries_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -553,6 +588,10 @@ export type Database = {
         }
         Returns: Json
       }
+      set_timesheet_entry: {
+        Args: { p_date: string; p_minutes?: number }
+        Returns: undefined
+      }
       shared_reports: {
         Args: { p_handle: string }
         Returns: {
@@ -567,7 +606,13 @@ export type Database = {
           p_to: string
           p_user_id: string
         }
-        Returns: Json
+        Returns: {
+          commits: number
+          date: string
+          edited: boolean
+          estimated: number
+          minutes: number
+        }[]
       }
     }
     Enums: {
