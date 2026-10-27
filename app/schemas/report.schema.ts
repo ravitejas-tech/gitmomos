@@ -4,6 +4,7 @@ export const highlightSchema = z.object({ title: z.string(), detail: z.string() 
 
 export const reportContentSchema = z.object({
     headline: z.string().default(''),
+    brief: z.array(z.string()).default([]),
     summary: z.string(),
     highlights: z.array(highlightSchema).default([]),
     key_work_areas: z.array(z.string()).default([]),
@@ -16,6 +17,7 @@ export type ReportHighlight = ReportContent['highlights'][number]
 
 export const reportEditSchema = z.object({
     headline: z.string().trim().min(1, 'Write a headline'),
+    brief: z.string(),
     summary: z.string().trim().min(1, 'Write a summary'),
     highlights: z.array(
         z.object({
