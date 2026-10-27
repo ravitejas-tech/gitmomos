@@ -70,6 +70,17 @@ export function formatHour(hour: number): string {
     return new Date(2000, 0, 1, hour).toLocaleTimeString(undefined, { hour: 'numeric' })
 }
 
+export function formatDuration(minutes: number): string {
+    const hours = Math.floor(minutes / 60)
+    const rest = minutes % 60
+    if (!rest) return `${hours}h`
+    return hours ? `${hours}h ${rest}m` : `${rest}m`
+}
+
+export function formatDecimalHours(minutes: number): string {
+    return `${Number((minutes / 60).toFixed(1))}h`
+}
+
 export function formatTime(iso: string): string {
     return new Date(iso).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
 }
