@@ -1,4 +1,5 @@
 import { FaqItem } from '~/components/landing/faq/item'
+import { Reveal } from '~/components/landing/reveal'
 import { LandingSection } from '~/components/landing/section'
 import { SectionHeading } from '~/components/landing/section-heading'
 import { LandingSplit } from '~/components/landing/split'
@@ -14,15 +15,15 @@ export function FaqSection() {
                 aside={
                     <SectionHeading
                         {...LANDING_SECTIONS.faq}
+                        animated={false}
                         className='mb-0 md:mb-0'
                     />
                 }>
                 <div className='divide-y divide-border border-y border-border'>
                     {FAQ.map((item) => (
-                        <FaqItem
-                            key={item.question}
-                            {...item}
-                        />
+                        <Reveal key={item.question}>
+                            <FaqItem {...item} />
+                        </Reveal>
                     ))}
                 </div>
             </LandingSplit>
