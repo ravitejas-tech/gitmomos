@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 const bannerVariants = cva('relative overflow-hidden rounded-2xl border border-border bg-accent-subtle', {
     variants: {
         size: {
-            page: 'h-32 sm:h-44',
+            page: 'h-32 sm:h-44 lg:h-56',
             preview: 'aspect-3/1 w-full',
         },
     },
