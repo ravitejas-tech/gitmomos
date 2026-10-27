@@ -1,9 +1,8 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from '~/components/ui/button'
 import { CalendarDayButton } from '~/components/ui/calendar-day'
+import { MonthStepper } from '~/components/ui/month-stepper'
 import { Text } from '~/components/ui/text'
 import { WEEKDAY_LABELS } from '~/data/ui/calendar'
-import { monthGrid, shiftMonth } from '~/lib/calendar'
+import { monthGrid } from '~/lib/calendar'
 import { formatDay, formatMonth, todayLocal } from '~/lib/format'
 import type { CalendarMark } from '~/types/calendar'
 
@@ -21,24 +20,13 @@ export function Calendar({ month, selected, marks, max, onMonthChange, onSelect 
 
     return (
         <div className='space-y-2'>
-            <div className='flex items-center justify-between'>
-                <Button
-                    variant='ghost'
-                    size='icon'
-                    aria-label='Previous month'
-                    onClick={() => onMonthChange(shiftMonth(month, -1))}>
-                    <ChevronLeft />
-                </Button>
+            <MonthStepper
+                month={month}
+                max={max}
+                onChange={onMonthChange}
+                className='justify-between'>
                 <Text variant='title'>{formatMonth(month)}</Text>
-                <Button
-                    variant='ghost'
-                    size='icon'
-                    aria-label='Next month'
-                    disabled={shiftMonth(month, 1) > max}
-                    onClick={() => onMonthChange(shiftMonth(month, 1))}>
-                    <ChevronRight />
-                </Button>
-            </div>
+            </MonthStepper>
             <div className='grid grid-cols-7 gap-0.5'>
                 {WEEKDAY_LABELS.map((label) => (
                     <Text
