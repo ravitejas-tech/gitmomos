@@ -1,4 +1,5 @@
 export const REPORT_SECTIONS = {
+    brief: 'Quick summary',
     workMix: 'Type of work',
     highlights: 'Highlights',
     projects: 'By project',
