@@ -4,6 +4,7 @@ import { useActivity } from '~/hooks/activity/queries'
 import { useDayCommits, useRecentCommits } from '~/hooks/commits/queries'
 import { useConnections, useRepositories } from '~/hooks/connections/queries'
 import { useReportDays, useReports } from '~/hooks/reports/queries'
+import { useTimesheet } from '~/hooks/timesheet/queries'
 import { SYNC_MESSAGES } from '~/data/reports/sync-messages'
 import { pluralize } from '~/lib/format'
 import { notify } from '~/lib/notify'
@@ -33,6 +34,7 @@ export const useSync = createMutation({
             useReports.getKey(),
             useReportDays.getKey(),
             useActivity.getKey(),
+            useTimesheet.getKey(),
             useDayCommits.getKey(),
             useRecentCommits.getKey(),
             useConnections.getKey(),
