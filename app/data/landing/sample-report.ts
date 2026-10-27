@@ -5,6 +5,12 @@ export const SAMPLE_REPORT_META = '14 commits · 3 projects'
 
 export const SAMPLE_REPORT: ReportContent = {
     headline: 'Customers can now pay with a saved card',
+    brief: [
+        'Added saved cards at checkout for one-click payments',
+        'Fixed payment confirmations getting lost when the provider is slow',
+        'Fixed three flaky automated checks that blocked other work',
+        'Added an alert for the new payment retry queue',
+    ],
     summary:
         'Most of the day went into checkout. Returning customers can now save a card and pay in one click, and payment confirmations no longer get lost when our payment provider is slow to respond.',
     highlights: [
