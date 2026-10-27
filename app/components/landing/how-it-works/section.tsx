@@ -11,9 +11,10 @@ export function HowItWorksSection() {
             className='border-t border-border'>
             <SectionHeading {...LANDING_SECTIONS.howItWorks} />
             <ol className='grid gap-10 md:grid-cols-4 md:gap-0'>
-                {HOW_IT_WORKS_STEPS.map((step) => (
+                {HOW_IT_WORKS_STEPS.map((step, index) => (
                     <HowItWorksStep
                         key={step.step}
+                        order={index}
                         {...step}
                     />
                 ))}
