@@ -4,10 +4,10 @@ import { FeaturePoints } from '~/components/coming-soon/feature-points'
 import { PreviewFrame } from '~/components/coming-soon/preview-frame'
 import { DashboardPage } from '~/components/layout/dashboard-page'
 import { Badge } from '~/components/ui/badge'
-import type { ComingSoonFeature } from '~/types/coming-soon'
+import type { ProductFeature } from '~/types/landing'
 
 export interface ComingSoonPageProps {
-    feature: ComingSoonFeature
+    feature: ProductFeature
     children: ReactNode
 }
 
