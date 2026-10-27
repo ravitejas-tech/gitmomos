@@ -11,6 +11,7 @@ export type ReportHighlight = {
 
 export type ReportContent = {
     headline: string
+    brief: string[]
     summary: string
     highlights: ReportHighlight[]
     key_work_areas: string[]
