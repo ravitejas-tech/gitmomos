@@ -1,5 +1,6 @@
 import { CreatorProfile } from '~/components/landing/creator/profile'
 import { CreatorStory } from '~/components/landing/creator/story'
+import { Reveal } from '~/components/landing/reveal'
 import { LandingSection } from '~/components/landing/section'
 import { SectionHeading } from '~/components/landing/section-heading'
 import { LandingSplit } from '~/components/landing/split'
@@ -11,11 +12,16 @@ export function MeetTheCreatorSection() {
             <LandingSplit
                 aside={
                     <>
-                        <SectionHeading {...LANDING_SECTIONS.creator} />
+                        <SectionHeading
+                            {...LANDING_SECTIONS.creator}
+                            animated={false}
+                        />
                         <CreatorProfile />
                     </>
                 }>
-                <CreatorStory />
+                <Reveal>
+                    <CreatorStory />
+                </Reveal>
             </LandingSplit>
         </LandingSection>
     )
