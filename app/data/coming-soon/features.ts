@@ -28,7 +28,7 @@ import {
     Users,
     Zap,
 } from 'lucide-react'
-import type { ComingSoonFeature } from '~/types/coming-soon'
+import type { ProductFeature } from '~/types/landing'
 
 export const COMING_SOON = [
     {
@@ -227,4 +227,4 @@ export const COMING_SOON = [
             },
         ],
     },
-] as const satisfies readonly ComingSoonFeature[]
+] as const satisfies readonly ProductFeature[]
