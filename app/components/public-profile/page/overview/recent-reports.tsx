@@ -4,8 +4,9 @@ import { OverviewSection } from '~/components/public-profile/page/overview/secti
 import { PdfLinkButton } from '~/components/public-profile/reports/pdf-link-button'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
+import { WORK_LOG_TAB } from '~/data/public-profile/constants'
 import { formatDay, formatShortDay } from '~/lib/format'
-import { reportPath, workLogPath } from '~/lib/public-profile/handle'
+import { profileTabPath, reportPath } from '~/lib/public-profile/handle'
 import type { RecentReport } from '~/types/public-profile'
 
 export interface RecentReportsProps {
@@ -22,7 +23,7 @@ export function RecentReports({ handle, recent }: RecentReportsProps) {
                     asChild
                     variant='ghost'
                     size='sm'>
-                    <Link to={workLogPath(handle)}>
+                    <Link to={profileTabPath(handle, WORK_LOG_TAB)}>
                         Open work log
                         <ArrowRight />
                     </Link>
