@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { Globe } from 'lucide-react'
+import { ProfileCommentsSection } from '~/components/community/comments/section'
 import { MomiDrawer } from '~/components/public-profile/chat/drawer'
 import { ProfileIdentity } from '~/components/public-profile/page/identity'
 import { MadeWith } from '~/components/public-profile/page/made-with'
@@ -12,14 +13,15 @@ import { Container } from '~/components/ui/container'
 import { EmptyState } from '~/components/ui/empty-state'
 import { ErrorState } from '~/components/ui/error-state'
 import { LoadingState } from '~/components/ui/loading-state'
+import { COMMENTS_TAB } from '~/data/community/constants'
 import { OVERVIEW_TAB, TAB_PARAM, TIMESHEET_TAB, WORK_LOG_TAB } from '~/data/public-profile/constants'
+import { profileTabs } from '~/data/public-profile/tabs'
 import { usePublicProfile } from '~/hooks/public-profile/queries'
 
 export function PublicProfileView({ handle }: { handle: string }) {
     const [params] = useSearchParams()
     const [isChatOpen, setChatOpen] = useState(false)
-    const requested = params.get(TAB_PARAM)
-    const tab = requested === WORK_LOG_TAB || requested === TIMESHEET_TAB ? requested : OVERVIEW_TAB
+    const tab = profileTabs(handle).find(({ key }) => key === params.get(TAB_PARAM))?.key ?? OVERVIEW_TAB
     const { data: profile, isPending, isError, refetch } = usePublicProfile({ variables: handle })
 
     if (!profile) {
@@ -52,6 +54,7 @@ export function PublicProfileView({ handle }: { handle: string }) {
                 {tab === OVERVIEW_TAB && <ProfileOverviewContent profile={profile} />}
                 {tab === WORK_LOG_TAB && <SharedReportsSection handle={profile.handle} />}
                 {tab === TIMESHEET_TAB && <ProfileTimesheet handle={profile.handle} />}
+                {tab === COMMENTS_TAB && <ProfileCommentsSection profile={profile} />}
                 <MadeWith />
             </Container>
             {profile.can_ask && (
