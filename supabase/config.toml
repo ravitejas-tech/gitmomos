@@ -403,3 +403,8 @@ entrypoint = "./functions/sync/index.ts"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/profile-chat/index.ts"
+
+[functions.milestones]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/milestones/index.ts"
