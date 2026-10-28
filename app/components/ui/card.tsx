@@ -8,6 +8,8 @@ const cardVariants = cva('relative overflow-hidden rounded-xl border text-text-p
             default: 'border-border bg-surface shadow-card',
             subtle: 'border-border bg-surface-muted',
             interactive: 'border-border bg-surface shadow-card transition-colors hover:border-border-strong',
+            highlight: 'border-accent/30 bg-surface shadow-card',
+            overlay: 'border-border bg-surface shadow-overlay',
         },
         padding: {
             none: '',
