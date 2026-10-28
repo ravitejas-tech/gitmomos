@@ -3,6 +3,10 @@ import type { ResponseSchema } from '../types/ai.types.ts'
 export const MAX_COMMIT_CHARS = 40_000
 export const MAX_MESSAGE_CHARS = 500
 
+export const PLAIN_WORDS_RULE = `- Never use words like seamless, robust, enhanced, streamlined, leveraged, elevated, empowered, crucial,
+  pivotal, comprehensive, significant, holistic, cutting-edge, delve, showcase, foster, unlock, journey,
+  spearheaded or ensuring. No exclamation marks and no emojis.`
+
 export const RESPONSE_SCHEMA: ResponseSchema = {
     type: 'OBJECT',
     properties: {
