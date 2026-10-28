@@ -18,11 +18,21 @@
     --animate-momi-blink: momi-blink 5s ease-in-out infinite;
     --animate-momi-think: momi-think 1.2s ease-in-out infinite;
     --animate-drawer-in: drawer-in 220ms ease-out;
+    --animate-drawer-in-left: drawer-in-left 220ms ease-out;
     --animate-fade-in: fade-in 220ms ease-out;
 
     @keyframes drawer-in {
         from {
             transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes drawer-in-left {
+        from {
+            transform: translateX(-100%);
         }
         to {
             transform: translateX(0);
@@ -112,6 +122,13 @@
     --color-warning: var(--warning);
     --color-warning-subtle: var(--warning-subtle);
 
+    --color-medal-gold: var(--medal-gold);
+    --color-medal-gold-subtle: var(--medal-gold-subtle);
+    --color-medal-silver: var(--medal-silver);
+    --color-medal-silver-subtle: var(--medal-silver-subtle);
+    --color-medal-bronze: var(--medal-bronze);
+    --color-medal-bronze-subtle: var(--medal-bronze-subtle);
+
     --color-shade: var(--shade);
     --color-chart-bar: var(--chart-bar);
 
@@ -163,6 +180,13 @@
     --success-subtle: #e9f7f0;
     --warning: #b26a00;
     --warning-subtle: #fdf5e7;
+
+    --medal-gold: #c08a12;
+    --medal-gold-subtle: #fdf4dc;
+    --medal-silver: #7c8597;
+    --medal-silver-subtle: #f0f2f6;
+    --medal-bronze: #b8682f;
+    --medal-bronze-subtle: #fbede3;
 
     --shade: #0b0c10;
     --chart-bar: #e3e5ea;
@@ -216,6 +240,13 @@
     --success-subtle: #10251b;
     --warning: #f2b84b;
     --warning-subtle: #2b2110;
+
+    --medal-gold: #f1c35a;
+    --medal-gold-subtle: #2a2410;
+    --medal-silver: #c4cad6;
+    --medal-silver-subtle: #21242c;
+    --medal-bronze: #e39a64;
+    --medal-bronze-subtle: #2c1d13;
 
     --shade: #000000;
     --chart-bar: #262932;
