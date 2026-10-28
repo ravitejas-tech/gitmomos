@@ -1,8 +1,8 @@
 import { Link } from 'react-router'
 import { DateTile } from '~/components/public-profile/reports/date-tile'
 import { PdfLinkButton } from '~/components/public-profile/reports/pdf-link-button'
-import { Badge } from '~/components/ui/badge'
 import { ListRow } from '~/components/ui/list-row'
+import { TagList } from '~/components/ui/tag-list'
 import { Text } from '~/components/ui/text'
 import { LISTED_AREAS } from '~/data/public-profile/constants'
 import { formatDay } from '~/lib/format'
@@ -38,17 +38,11 @@ export function SharedReportRow({ handle, report }: SharedReportRowProps) {
                         {report.summary}
                     </Text>
                 )}
-                {report.key_work_areas.length > 0 && (
-                    <div className='flex flex-wrap gap-1.5 pt-1'>
-                        {report.key_work_areas.slice(0, LISTED_AREAS).map((area) => (
-                            <Badge
-                                key={area}
-                                variant='neutral'>
-                                {area}
-                            </Badge>
-                        ))}
-                    </div>
-                )}
+                <TagList
+                    tags={report.key_work_areas}
+                    limit={LISTED_AREAS}
+                    className='pt-1'
+                />
             </div>
             <PdfLinkButton
                 to={reportPath(handle, report.date, true)}
