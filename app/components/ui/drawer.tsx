@@ -1,19 +1,31 @@
 import { useRef, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { useDismiss } from '~/hooks/use-dismiss'
 import { useScrollLock } from '~/hooks/use-scroll-lock'
 
-export interface DrawerProps {
+const drawerVariants = cva('absolute inset-y-0 flex w-full flex-col shadow-overlay', {
+    variants: {
+        side: {
+            right: 'right-0 max-w-md border-l border-border bg-surface motion-safe:animate-drawer-in',
+            left: 'left-0 max-w-72 border-r border-border bg-panel motion-safe:animate-drawer-in-left',
+        },
+    },
+    defaultVariants: { side: 'right' },
+})
+
+export interface DrawerProps extends VariantProps<typeof drawerVariants> {
     label: string
     onClose: () => void
     children: ReactNode
 }
 
-export function Drawer({ label, onClose, children }: DrawerProps) {
+export function Drawer({ label, side, onClose, children }: DrawerProps) {
     const panelRef = useRef<HTMLDivElement>(null)
     useDismiss(panelRef, onClose, true)
     useScrollLock()
 
-    return (
+    return createPortal(
         <div className='fixed inset-0 z-50 print:hidden'>
             <div className='absolute inset-0 bg-shade/50 motion-safe:animate-fade-in' />
             <div
@@ -21,9 +33,10 @@ export function Drawer({ label, onClose, children }: DrawerProps) {
                 role='dialog'
                 aria-modal='true'
                 aria-label={label}
-                className='absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-border bg-surface shadow-overlay motion-safe:animate-drawer-in'>
+                className={drawerVariants({ side })}>
                 {children}
             </div>
-        </div>
+        </div>,
+        document.body,
     )
 }
