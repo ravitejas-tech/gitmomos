@@ -24,7 +24,7 @@ export function ReportsSplit({ reports, selected, selectedDate, isLoadingSelecti
         <div className='grid items-start gap-6 lg:grid-cols-[20rem_minmax(0,1fr)] 2xl:grid-cols-[20rem_minmax(0,1fr)_22rem] print:block'>
             <Card
                 className={cn(
-                    'lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto print:hidden',
+                    'lg:sticky lg:top-22 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto print:hidden',
                     hasSelection && 'max-lg:hidden',
                 )}>
                 <ReportDayList
