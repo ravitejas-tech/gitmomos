@@ -43,6 +43,11 @@ export const PAGE_SEO = {
         description: 'A daily work report written from a developer’s commits, ready to read or save as a PDF.',
         path: HOME_PATH,
     },
+    project: {
+        title: `Project | ${SITE_NAME}`,
+        description: 'A developer’s project and its milestones: the launches, releases and features they shipped.',
+        path: HOME_PATH,
+    },
     license: {
         title: `License | ${SITE_NAME}`,
         description: 'gitmomos is free and open source under the MIT License.',
