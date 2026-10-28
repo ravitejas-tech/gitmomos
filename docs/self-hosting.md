@@ -97,15 +97,15 @@ yarn functions:deploy
 
 - `link` asks for the database password from 1.3. Nothing shows while you paste it.
 - `db:push` lists the migrations and asks to apply them. Answer `y`.
-- If `functions:deploy` complains about Docker, run `yarn supabase functions deploy connections sync profile-chat --use-api` instead.
+- If `functions:deploy` complains about Docker, run `yarn supabase functions deploy connections sync profile-chat milestones --use-api` instead.
 
-**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings`, `profile_questions` and `ai_keys`, **Storage** lists the public `profile-media` bucket, and **Edge Functions** lists `connections`, `sync` and `profile-chat`.
+**Check:** in Supabase, **Table Editor** lists `profiles`, `connections`, `repositories`, `commits`, `reports`, `report_embeddings`, `profile_questions`, `ai_keys`, `projects`, `milestones`, `follows`, `stars` and `profile_comments`, **Storage** lists the public `profile-media` bucket, and **Edge Functions** lists `connections`, `sync`, `profile-chat` and `milestones`.
 
 ---
 
 ## 3. Supabase settings
 
-### 3.1 Let the nightly worker call the sync function
+### 3.1 Let the workers call the sync and milestones functions
 
 **Where:** Supabase → **SQL Editor → New query**
 
@@ -114,7 +114,7 @@ select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
 select vault.create_secret('<worker secret from 2.1>', 'worker_secret');
 ```
 
-Without these two secrets the hourly job runs but does nothing. Delete the query tab afterwards, since it contains the secret.
+Without these two secrets the scheduled jobs run but do nothing. Delete the query tab afterwards, since it contains the secret.
 
 **Check:**
 
@@ -123,7 +123,7 @@ select name from vault.decrypted_secrets;
 select jobname, schedule, active from cron.job;
 ```
 
-The first lists `project_url` and `worker_secret`; the second shows `gitmomos-daily-sync`, `5 * * * *`, `true`.
+The first lists `project_url` and `worker_secret`; the second shows `gitmomos-daily-sync`, `5 * * * *`, `true` and `gitmomos-milestone-scan`, `*/10 * * * *`, `true`.
 
 ### 3.2 Sign-in URLs
 
@@ -177,8 +177,9 @@ Build with the same two variables set, then upload `build/client/`. Unknown path
 5. On **Overview**, click **Sync now**. Today's report appears under **Reports**.
 6. In **Settings**, check your timezone. The nightly report is written just after midnight in it.
 7. In **Public profile**, pick a handle, switch on the repositories to show, and turn the profile on. Open `https://<site>/@<handle>` and ask the chatbot a question.
+8. In **Projects**, click **New project**, pick some repositories and save. Its milestones appear on the project's page, and on your profile when the project is shown there.
 
-If a step fails, open Supabase → **Edge Functions →** `connections`, `sync` or `profile-chat` **→ Logs**.
+If a step fails, open Supabase → **Edge Functions →** `connections`, `sync`, `profile-chat` or `milestones` **→ Logs**.
 
 The next day, confirm the worker ran:
 

@@ -47,7 +47,11 @@ export function formatDayRange(from: string, to: string): string {
 }
 
 export function pluralize(count: number, singular: string, plural = `${singular}s`): string {
-    return `${count} ${count === 1 ? singular : plural}`
+    return `${formatNumber(count)} ${count === 1 ? singular : plural}`
+}
+
+export function formatNumber(value: number): string {
+    return value.toLocaleString()
 }
 
 export function formatShortDay(date: string): string {

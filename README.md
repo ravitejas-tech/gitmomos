@@ -40,6 +40,19 @@ There is nothing to install. Sign up at **[gitmomos.spheo.online](https://gitmom
 - Commit activity by type of work, a breakdown by project, the hours you usually work, and a six-month consistency heatmap with your streak.
 - A timesheet: the hours you worked each day in a month calendar, with weekly and monthly totals, estimated from the work sessions in your commit times. Correct any day by hand.
 
+**Projects and milestones**
+
+- Group repositories into a project, with a name, a description and a link, and keep it private or show it on your profile.
+- gitmomos reads the project's daily reports and picks out its milestones: a launch, an app published to the store, a release, a finished feature. Ordinary days add none. Hide any milestone you'd rather not show.
+
+**A community around your profile**
+
+- Search for other developers from the dashboard and open their profiles.
+- Follow them, star their profile and leave one comment each. The owner replies to comments or removes them.
+- Followers, stars and comments show on the profile and in **Community** on the dashboard.
+- A feed of the people you follow: their shared reports, the hours they worked, new milestones and projects, and who followed, starred or commented on you.
+- A leaderboard of every public profile by all-time commits.
+
 **Your repositories, your choice**
 
 - GitHub through OAuth, any Gitea instance with an access token, and several accounts at once.
@@ -84,17 +97,23 @@ React Router SPA ──(supabase-js, RLS)──► Supabase Postgres
    user's AI provider key → Vault           │
    add a repository by URL                  ├─── write commits + report (user's AI)
                                             │
- Edge function `profile-chat` ──────────────┘
-   answer a visitor's question from the
-   owner's public reports (owner's AI)
+ Edge function `profile-chat` ──────────────┤
+   answer a visitor's question from the     │
+   owner's public reports (owner's AI)      │
+                                            │
+ Edge function `milestones` ────────────────┘
+   pick a project's milestones out of
+   its reports (user's AI)
 ```
 
-- **Website** (`app/`): React Router 7 in SPA mode, served as static files. The landing and legal pages are prerendered at build time. The browser reads only its own rows (RLS) and can change just a few columns: name, timezone and public profile settings, whether a repository is tracked or shown on the public profile, and report edits; it sets a day's timesheet hours through `set_timesheet_entry()`. Visitors read a public profile through `get_public_profile()`, search and open its shared reports through `search_public_reports()` and `get_public_report()`, and see its timesheet through `get_public_timesheet()`, which return only what its owner chose to show.
-- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits`, `reports` and `timesheet_entries` (hours edited by hand), plus `report_embeddings` (pgvector) and `profile_questions` for the public profile chatbot. Provider tokens and each user's AI provider key (`ai_keys`, which also records the provider and the models they chose) live in Supabase Vault and only the service role can read them.
+- **Website** (`app/`): React Router 7 in SPA mode, served as static files. The landing and legal pages are prerendered at build time. The browser reads only its own rows (RLS) and can change just a few columns: name, timezone and public profile settings, whether a repository is tracked or shown on the public profile, and report edits; it sets a day's timesheet hours through `set_timesheet_entry()`, saves a project through `save_project()`, and follows, stars and comments through `set_follow()`, `set_star()` and `save_profile_comment()`. Visitors read a public profile through `get_public_profile()`, search and open its shared reports through `search_public_reports()` and `get_public_report()`, see its timesheet through `get_public_timesheet()` and its projects through `get_public_projects()` and `get_public_project()`, which return only what its owner chose to show.
+- **Database** (`supabase/migrations/`): `profiles`, `connections`, `repositories`, `commits`, `reports` and `timesheet_entries` (hours edited by hand), `projects`, `project_repositories`, `milestones` and `milestone_scans` for projects, `follows`, `stars` and `profile_comments` for the community, plus `report_embeddings` (pgvector) and `profile_questions` for the public profile chatbot. Provider tokens and each user's AI provider key (`ai_keys`, which also records the provider and the models they chose) live in Supabase Vault and only the service role can read them.
 - **`connections` function**: GitHub OAuth, connecting Gitea, adding a repository by URL after checking that the account can read it, and saving an AI provider key (Gemini, Groq, Claude or OpenAI) after listing the models it can use, so the user picks a report model and a chat model.
 - **`sync` function**: for one user and one local day, collects commits from every tracked repository and writes that day's report with the user's own key and report model. On Gemini and Groq, when that model is overloaded it falls back to the next built-in one. "Sync now" and the nightly worker both call it.
 - **`profile-chat` function**: Momi, the public profile chatbot, answers a visitor's question. It finds the owner's public reports closest to the question (with Gemini embeddings when the owner uses Gemini, with Postgres full-text search otherwise) and has the owner's chat model answer from those alone, citing the days it used.
+- **`milestones` function**: for one user, reads the reports of their projects that have not been checked yet, a dozen at a time, and has the user's report model pick out the milestones. Saving a project starts it from the browser, and the milestone worker keeps it going.
 - **Nightly worker**: `pg_cron` runs `enqueue_daily_syncs()` every hour at :05 and makes one `pg_net` call to `sync` for each user whose local clock has just passed midnight.
+- **Milestone worker**: `pg_cron` runs `enqueue_milestone_scans()` every 10 minutes and makes one `pg_net` call to `milestones` for each user with reports still to check.
 
 | Layer | Choice |
 |---|---|
@@ -163,6 +182,8 @@ supabase/
   functions/
     connections/  connect GitHub or Gitea, add repositories
     sync/         collect commits and write a day's report
+    profile-chat/ answer visitors' questions on a public profile
+    milestones/   pick a project's milestones out of its reports
     _shared/      handlers, provider clients, schemas, constants, helpers
 docs/
   self-hosting.md

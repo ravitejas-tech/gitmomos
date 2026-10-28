@@ -1,5 +1,5 @@
 import { ReportDateFilter } from '~/components/public-profile/reports/date-filter'
-import { ReportSearchField } from '~/components/public-profile/reports/search-field'
+import { SearchField } from '~/components/ui/search-field'
 import { SegmentedControl } from '~/components/ui/segmented-control'
 import { REPORT_PERIODS } from '~/data/public-profile/constants'
 import type { ReportPeriod } from '~/types/public-profile'
@@ -27,7 +27,9 @@ export function ReportFilters({
 }: ReportFiltersProps) {
     return (
         <div className='space-y-3 px-5 pb-4'>
-            <ReportSearchField
+            <SearchField
+                label='Search reports'
+                placeholder='Search reports, like “checkout”'
                 value={query}
                 onChange={onQueryChange}
             />

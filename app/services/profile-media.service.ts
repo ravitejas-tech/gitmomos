@@ -37,6 +37,10 @@ export const profileMediaService = {
         return path ? bucket().getPublicUrl(path).data.publicUrl : null
     },
 
+    withAvatarUrl<T extends { avatar_path: string | null }>(member: T) {
+        return { ...member, avatar_url: profileMediaService.publicUrl(member.avatar_path) }
+    },
+
     async upload({ kind, file }: ProfileMediaUpload) {
         if (file.size > MAX_IMAGE_BYTES) throw new Error(IMAGE_TOO_LARGE)
         const { width, height } = PROFILE_MEDIA[kind]

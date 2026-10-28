@@ -15,7 +15,7 @@ export function SettingsSection({ id, title, description, isLoading, children }:
     return (
         <section
             id={id}
-            className='grid scroll-mt-8 gap-3 border-b border-border pb-8 last:border-b-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10'>
+            className='grid scroll-mt-24 gap-3 border-b border-border pb-8 last:border-b-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10'>
             <div className='space-y-1'>
                 <Text
                     as='h2'

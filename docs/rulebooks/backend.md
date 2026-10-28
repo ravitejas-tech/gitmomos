@@ -11,6 +11,7 @@ supabase/
     connections/index.ts      entry point: auth, parse, dispatch
     sync/index.ts             entry point: auth, parse, dispatch
     profile-chat/index.ts     entry point: anonymous, parse, answer
+    milestones/index.ts       entry point: auth, scan
     _shared/
       http/                   serve, HttpError, json, cors
       supabase/               admin client, requireUser, unwrap
@@ -19,6 +20,7 @@ supabase/
       sync/                   collect commits, write a day's report
       reports/                report prompt and generation
       profile-chat/           embed reports, match a question, answer it
+      milestones/             pick a project's milestones out of its reports
       ai/                     provider-neutral: key lookup, model catalog, JSON answers, fallbacks
       gemini/ openai/ claude/ one REST client per AI provider (openai/ also serves Groq)
       providers/              GitHub and Gitea clients
@@ -146,6 +148,7 @@ Messages are written for the user who will read them in a toast.
 - **The report prompt writes like the developer would** (`_shared/reports/build-prompt.ts`): plain words, specific about what changed, no hype or praise, no repository names outside `repositories`, nothing the commits don't show. `brief` is the 3-4 bullets the dashboard offers to copy. `RESPONSE_SCHEMA`, `ReportContent`, and `reportContentSchema` in both the app and `_shared/schemas/report.schema.ts` change together.
 - **`commits.kind` is generated** from the message by `commit_kind()` (conventional prefix first, then keywords). Change the classification in a new migration that replaces the function; the stored column recomputes only for rows that are rewritten, so a backfill is an `update commits set message = message`.
 - Long work fans out from Postgres (one `pg_net` call per user), never as a loop inside one function invocation.
+- `pg_cron` also runs `enqueue_milestone_scans()` every 10 minutes, one call to `milestones` per user with unchecked reports. A call stops starting new batches after `SCAN_BUDGET_MS`, so a backfill spreads over several runs. `milestone_scans` marks a report checked; editing its content deletes that row (`reports_forget_milestone_scan`), and `record_milestones` skips a report whose `updated_at` changed during the scan.
 
 ## External APIs
 

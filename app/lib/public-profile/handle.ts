@@ -18,6 +18,10 @@ export function profileTabPath(handle: string, tab: string): string {
     return `${profilePath(handle)}?${TAB_PARAM}=${tab}`
 }
 
+export function projectPath(handle: string, slug: string): string {
+    return `${profilePath(handle)}/projects/${slug}`
+}
+
 export function reportPath(handle: string, date: string, print = false): string {
     return `${profilePath(handle)}/reports/${date}${print ? `?${PRINT_PARAM}=1` : ''}`
 }

@@ -190,6 +190,136 @@ export type Database = {
           },
         ]
       }
+      follows: {
+        Row: {
+          created_at: string
+          id: string
+          profile_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profile_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profile_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestone_scans: {
+        Row: {
+          created_at: string
+          id: string
+          report_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestone_scans_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: true
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestone_scans_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestones: {
+        Row: {
+          created_at: string
+          date: string
+          detail: string
+          hidden: boolean
+          id: string
+          report_id: string
+          repository_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          detail?: string
+          hidden?: boolean
+          id?: string
+          report_id: string
+          repository_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          detail?: string
+          hidden?: boolean
+          id?: string
+          report_id?: string
+          repository_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestones_repository_id_fkey"
+            columns: ["repository_id"]
+            isOneToOne: false
+            referencedRelation: "repositories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestones_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       oauth_states: {
         Row: {
           created_at: string
@@ -212,6 +342,54 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "oauth_states_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_comments: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          profile_id: string
+          replied_at: string | null
+          reply: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          profile_id: string
+          replied_at?: string | null
+          reply?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          profile_id?: string
+          replied_at?: string | null
+          reply?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_comments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profile_comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -289,6 +467,99 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      project_repositories: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          repository_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          repository_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          repository_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_repositories_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_repositories_repository_id_fkey"
+            columns: ["repository_id"]
+            isOneToOne: false
+            referencedRelation: "repositories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_repositories_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          name: string
+          slug: string
+          tracks_milestones: boolean
+          updated_at: string
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          name: string
+          slug: string
+          tracks_milestones?: boolean
+          updated_at?: string
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          name?: string
+          slug?: string
+          tracks_milestones?: boolean
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       report_embeddings: {
         Row: {
@@ -439,6 +710,42 @@ export type Database = {
           },
         ]
       }
+      stars: {
+        Row: {
+          created_at: string
+          id: string
+          profile_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profile_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profile_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stars_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       timesheet_entries: {
         Row: {
           created_at: string
@@ -489,11 +796,28 @@ export type Database = {
         }
         Returns: boolean
       }
+      comment_page: {
+        Args: { p_limit: number; p_offset: number; p_profile_id: string }
+        Returns: Json
+      }
       commit_kind: {
         Args: { message: string }
         Returns: Database["public"]["Enums"]["work_kind"]
       }
+      commit_leaderboard: {
+        Args: never
+        Returns: {
+          commits: number
+          handle: string
+          profile_id: string
+          rank: number
+        }[]
+      }
+      community_counts: { Args: { p_profile_id: string }; Returns: Json }
+      community_member: { Args: { p_profile_id: string }; Returns: Json }
+      delete_profile_comment: { Args: { p_id: string }; Returns: undefined }
       enqueue_daily_syncs: { Args: never; Returns: number }
+      enqueue_milestone_scans: { Args: never; Returns: number }
       get_activity: { Args: { p_from: string; p_to: string }; Returns: Json }
       get_ai_key: {
         Args: { p_user_id: string }
@@ -504,17 +828,42 @@ export type Database = {
           report_model: string
         }[]
       }
+      get_community: { Args: never; Returns: Json }
       get_connection_token: {
         Args: { p_connection_id: string }
         Returns: string
       }
+      get_feed: { Args: { p_from: string; p_to: string }; Returns: Json }
+      get_leaderboard: {
+        Args: { p_limit?: number; p_offset?: number }
+        Returns: Json
+      }
+      get_people: {
+        Args: { p_relation: Database["public"]["Enums"]["community_relation"] }
+        Returns: Json
+      }
+      get_profile_comments: {
+        Args: { p_handle: string; p_limit?: number; p_offset?: number }
+        Returns: Json
+      }
+      get_profile_community: { Args: { p_handle: string }; Returns: Json }
+      get_projects: { Args: never; Returns: Json }
       get_public_profile: { Args: { p_handle: string }; Returns: Json }
+      get_public_project: {
+        Args: { p_handle: string; p_slug: string }
+        Returns: Json
+      }
+      get_public_projects: { Args: { p_handle: string }; Returns: Json }
       get_public_report: {
         Args: { p_date: string; p_handle: string }
         Returns: Json
       }
       get_public_timesheet: {
         Args: { p_from: string; p_handle: string; p_to: string }
+        Returns: Json
+      }
+      get_received_comments: {
+        Args: { p_limit?: number; p_offset?: number }
         Returns: Json
       }
       get_timesheet: { Args: { p_from: string; p_to: string }; Returns: Json }
@@ -551,9 +900,64 @@ export type Database = {
           date: string
         }[]
       }
+      pending_milestone_reports: {
+        Args: { p_limit: number; p_user_id: string }
+        Returns: {
+          content: Json
+          date: string
+          id: string
+          updated_at: string
+        }[]
+      }
+      project_milestones: {
+        Args: { p_project_id: string }
+        Returns: {
+          date: string
+          detail: string
+          id: string
+          report_id: string
+          title: string
+        }[]
+      }
+      public_profile_id: { Args: { p_handle: string }; Returns: string }
+      public_projects: {
+        Args: { p_handle: string }
+        Returns: {
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          name: string
+          slug: string
+          tracks_milestones: boolean
+          updated_at: string
+          url: string | null
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "projects"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      record_milestones: {
+        Args: { p_milestones: Json; p_reports: Json; p_user_id: string }
+        Returns: undefined
+      }
       record_repository_commits: {
         Args: { p_commits: Json; p_repository_id: string }
         Returns: undefined
+      }
+      reply_to_profile_comment: {
+        Args: { p_id: string; p_reply?: string }
+        Returns: undefined
+      }
+      report_repository_ids: {
+        Args: { p_content: Json; p_user_id: string }
+        Returns: {
+          repository_id: string
+        }[]
       }
       save_ai_key: {
         Args: {
@@ -577,6 +981,26 @@ export type Database = {
         }
         Returns: string
       }
+      save_profile_comment: {
+        Args: { p_body: string; p_handle: string }
+        Returns: undefined
+      }
+      save_project: {
+        Args: {
+          p_description?: string
+          p_id?: string
+          p_is_public: boolean
+          p_name: string
+          p_repository_ids: string[]
+          p_tracks_milestones: boolean
+          p_url?: string
+        }
+        Returns: string
+      }
+      search_profiles: {
+        Args: { p_limit?: number; p_query?: string }
+        Returns: Json
+      }
       search_public_reports: {
         Args: {
           p_from?: string
@@ -587,6 +1011,14 @@ export type Database = {
           p_to?: string
         }
         Returns: Json
+      }
+      set_follow: {
+        Args: { p_following: boolean; p_handle: string }
+        Returns: undefined
+      }
+      set_star: {
+        Args: { p_handle: string; p_starred: boolean }
+        Returns: undefined
       }
       set_timesheet_entry: {
         Args: { p_date: string; p_minutes?: number }
@@ -617,6 +1049,7 @@ export type Database = {
     }
     Enums: {
       ai_provider: "gemini" | "groq" | "claude" | "openai"
+      community_relation: "followers" | "following" | "stargazers"
       connection_status: "active" | "error"
       provider_name: "github" | "gitea"
       report_status: "generated" | "failed"
@@ -759,6 +1192,7 @@ export const Constants = {
   public: {
     Enums: {
       ai_provider: ["gemini", "groq", "claude", "openai"],
+      community_relation: ["followers", "following", "stargazers"],
       connection_status: ["active", "error"],
       provider_name: ["github", "gitea"],
       report_status: ["generated", "failed"],

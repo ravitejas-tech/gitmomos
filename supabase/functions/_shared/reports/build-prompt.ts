@@ -1,4 +1,4 @@
-import { MAX_COMMIT_CHARS, MAX_MESSAGE_CHARS } from '../constants/reports.constants.ts'
+import { MAX_COMMIT_CHARS, MAX_MESSAGE_CHARS, PLAIN_WORDS_RULE } from '../constants/reports.constants.ts'
 import type { ReportCommit } from '../types/report.types.ts'
 
 export function buildPrompt(date: string, commits: ReportCommit[]): string {
@@ -19,9 +19,7 @@ How to write:
   done to it. Write "Fixed the bug where the invoice total ignored discounts", not "Improved billing accuracy".
 - Say what was done, not why it is great. No praise, no selling, no claims about impact or results that
   the commits do not state, and no made-up numbers.
-- Never use words like seamless, robust, enhanced, streamlined, leveraged, elevated, empowered, crucial,
-  pivotal, comprehensive, significant, holistic, cutting-edge, delve, showcase, foster, unlock, journey,
-  spearheaded or ensuring. No exclamation marks and no emojis.
+${PLAIN_WORDS_RULE}
 - Common technical words are fine when they are the clearest name for something (API, database, login,
   tests, bug, release). Leave out commit hashes, file, function and branch names, and prefixes like "feat:".
 - Refer to a project by what it is ("the mobile app", "the billing service"), never by its repository

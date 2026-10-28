@@ -8,9 +8,8 @@ import { Card } from '~/components/ui/card'
 import { CardHeader } from '~/components/ui/card-header'
 import { EmptyState } from '~/components/ui/empty-state'
 import { ErrorState } from '~/components/ui/error-state'
-import { PanelFooter } from '~/components/ui/panel-footer'
+import { LoadMoreFooter } from '~/components/ui/load-more-footer'
 import { Skeleton } from '~/components/ui/skeleton'
-import { Spinner } from '~/components/ui/spinner'
 import { LOADING_ROWS, REPORTS_ID } from '~/data/public-profile/constants'
 import { useSharedReports } from '~/hooks/public-profile/queries'
 import { useReportFilters } from '~/hooks/public-profile/use-report-filters'
@@ -107,15 +106,11 @@ export function SharedReportsSection({ handle }: { handle: string }) {
                 />
             ))}
             {hasNextPage && (
-                <PanelFooter className='flex justify-center'>
-                    <Button
-                        variant='secondary'
-                        onClick={() => fetchNextPage()}
-                        disabled={isFetchingNextPage}>
-                        {isFetchingNextPage && <Spinner />}
-                        Show more reports
-                    </Button>
-                </PanelFooter>
+                <LoadMoreFooter
+                    label='Show more reports'
+                    isLoading={isFetchingNextPage}
+                    onLoadMore={() => fetchNextPage()}
+                />
             )}
         </Card>
     )

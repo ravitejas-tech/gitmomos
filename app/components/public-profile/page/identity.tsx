@@ -1,4 +1,6 @@
 import { AtSign, CalendarHeart, Check, Clock, Link2, MessageCircleHeart } from 'lucide-react'
+import { ProfileCommunityActions } from '~/components/community/profile/actions'
+import { ProfileCommunityCounts } from '~/components/community/profile/counts'
 import { ProfileBanner } from '~/components/public-profile/banner'
 import { LatestLink } from '~/components/public-profile/page/latest-link'
 import { Avatar } from '~/components/ui/avatar'
@@ -40,6 +42,7 @@ export function ProfileIdentity({ profile, onAsk }: ProfileIdentityProps) {
                         {copied ? <Check className='text-success' /> : <Link2 />}
                         {copied ? 'Link copied' : 'Copy link'}
                     </Button>
+                    <ProfileCommunityActions handle={profile.handle} />
                     {profile.can_ask && (
                         <Button onClick={onAsk}>
                             <MessageCircleHeart />
@@ -66,6 +69,7 @@ export function ProfileIdentity({ profile, onAsk }: ProfileIdentityProps) {
                 <div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
                     {latest && <MetaItem icon={Clock}>{updatedLabel(latest.date)}</MetaItem>}
                     <MetaItem icon={AtSign}>{profile.handle}</MetaItem>
+                    <ProfileCommunityCounts handle={profile.handle} />
                     {profile.since && (
                         <MetaItem icon={CalendarHeart}>Sharing since {formatMonth(profile.since)}</MetaItem>
                     )}
