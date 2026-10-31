@@ -1,3 +1,8 @@
+---
+paths:
+    - 'supabase/**'
+---
+
 # Backend Rules
 
 Supabase: Postgres migrations, Row Level Security, Vault, pg_cron, and Deno edge functions. Applies to `supabase/`.

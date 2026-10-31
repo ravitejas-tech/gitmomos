@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json.schemastore.org/claude-code-settings.json",
+    "attribution": {
+        "commit": "",
+        "pr": "",
+        "sessionUrl": false
+    },
+    "permissions": {
+        "allow": [
+            "Bash(yarn ts:check *)",
+            "Bash(yarn lint *)",
+            "Bash(yarn build *)",
+            "Bash(yarn functions:check *)",
+            "Bash(git status *)",
+            "Bash(git diff *)",
+            "Bash(git log *)",
+            "Bash(git show *)"
+        ],
+        "ask": [
+            "Bash(git commit *)",
+            "Bash(git push *)",
+            "Bash(git tag *)",
+            "Bash(gh pr create *)",
+            "Bash(gh release *)",
+            "Bash(yarn db:push *)",
+            "Bash(yarn functions:deploy *)",
+            "Bash(yarn secrets:set *)"
+        ],
+        "deny": [
+            "Bash(git push --force *)",
+            "Bash(git push --force-with-lease *)",
+            "Bash(git push -f *)",
+            "Bash(npm install *)",
+            "Bash(npm i *)",
+            "Bash(supabase db reset --linked *)",
+            "Bash(yarn supabase db reset --linked *)",
+            "Bash(yarn db:reset --linked *)",
+            "Edit(/supabase/migrations/20261015000000_v2_schema.sql)",
+            "Read(.env)",
+            "Read(supabase/functions/.env)"
+        ]
+    }
+}

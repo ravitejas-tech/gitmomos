@@ -1,3 +1,9 @@
+---
+paths:
+    - 'app/**'
+    - 'react-router.config.ts'
+---
+
 # Frontend Rules
 
 React 19 + React Router 7 (SPA mode) + TypeScript + Tailwind 4 + TanStack Query. Applies to `app/`.

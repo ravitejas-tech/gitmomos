@@ -25,3 +25,8 @@ supabase/functions/deno.lock
 # yarn
 .yarn/*
 !.yarn/releases
+
+# claude code personal settings
+.claude/settings.local.json
+.claude/worktrees/
+CLAUDE.local.md
