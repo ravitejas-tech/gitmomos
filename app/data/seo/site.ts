@@ -14,6 +14,12 @@ export const SITE_IMAGE = {
     alt: 'gitmomos: work report automation from your git commits',
 } as const
 
+export const SITE_LOGO = {
+    path: '/logo.png',
+    width: 512,
+    height: 512,
+} as const
+
 export const SITE_KEYWORDS = [
     'work report automation',
     'automated work reports',
