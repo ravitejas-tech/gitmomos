@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo-dark.png">
-    <img src="docs/images/logo-light.png" alt="gitmomos" height="56">
+    <source media="(prefers-color-scheme: dark)" srcset=".github/images/logo-dark.png">
+    <img src=".github/images/logo-light.png" alt="gitmomos" height="56">
   </picture>
 </p>
 
@@ -15,8 +15,8 @@
 </p>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/overview-dark.png">
-  <img src="docs/images/overview-light.png" alt="The gitmomos overview: commits, active days, commit activity by type of work and a breakdown of the work">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/images/overview-dark.png">
+  <img src=".github/images/overview-light.png" alt="The gitmomos overview: commits, active days, commit activity by type of work and a breakdown of the work">
 </picture>
 
 gitmomos automates your daily work report: it turns the commits you author each day into a short report that your manager or client can follow. Connect GitHub or Gitea, add the repositories you work in, and every morning yesterday's report is waiting, with charts of where your time went.
@@ -72,15 +72,15 @@ There is nothing to install. Sign up at **[gitmomos.spheo.online](https://gitmom
 ### Reports
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/reports-dark.png">
-  <img src="docs/images/reports-light.png" alt="A daily report with its headline, summary, focus areas and type of work, next to the list of earlier days">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/images/reports-dark.png">
+  <img src=".github/images/reports-light.png" alt="A daily report with its headline, summary, focus areas and type of work, next to the list of earlier days">
 </picture>
 
 ### Repositories
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/repositories-dark.png">
-  <img src="docs/images/repositories-light.png" alt="Tracked repositories with a field to add one by URL, next to the connected GitHub and Gitea accounts">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/images/repositories-dark.png">
+  <img src=".github/images/repositories-light.png" alt="Tracked repositories with a field to add one by URL, next to the connected GitHub and Gitea accounts">
 </picture>
 
 ---
@@ -185,10 +185,14 @@ supabase/
     profile-chat/ answer visitors' questions on a public profile
     milestones/   pick a project's milestones out of its reports
     _shared/      handlers, provider clients, schemas, constants, helpers
+.claude/
+  rules/          coding, frontend, backend and git rules
+  agents/ skills/ the Claude Code reviewer and slash commands
+.github/
+  images/         README screenshots and logo
 docs/
   self-hosting.md
-  rulebooks/      coding, frontend, backend and git rules
-  images/         README screenshots and logo
+  claude-code.md  how the Claude Code setup works
 ```
 
 ---
@@ -198,7 +202,7 @@ docs/
 Contributions are welcome.
 
 1. Fork the repository and branch from `main` (`git checkout -b feat/short-slug`).
-2. Read [CLAUDE.md](CLAUDE.md) and the [rulebook](docs/rulebooks/) for the area you touch. `yarn build` and `yarn functions:check` must pass.
+2. Read [CLAUDE.md](CLAUDE.md) and the [rulebook](.claude/rules/) for the area you touch. `yarn build` and `yarn functions:check` must pass.
 3. Commit with Conventional Commits, one file per commit (`feat(web): add report export`).
 4. Open a pull request against `main`.
 
