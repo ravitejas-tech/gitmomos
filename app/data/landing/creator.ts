@@ -3,7 +3,7 @@ import { Github, Linkedin, Mail } from 'lucide-react'
 export const CREATOR = {
     name: 'Raviteja Salva',
     role: 'Full Stack Engineer',
-    photo: '/images/screenshots/ravitejasalva.webp',
+    photo: '/images/screenshots/ravitejasalva.jpg',
     quote: '“Developers already document their work through commits. Gitmomos turns that existing documentation into meaningful progress reports.”',
     story: [
         'Gitmomos was born from a real-world problem I faced as a software engineer. Every day, I had to fill out and send work reports, and it often felt repetitive and time-consuming.',
