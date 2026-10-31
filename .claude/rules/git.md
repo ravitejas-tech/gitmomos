@@ -1,3 +1,8 @@
+---
+paths:
+    - 'package.json'
+---
+
 # Git Rules
 
 Governs branches, commits, and history. Read before committing.
