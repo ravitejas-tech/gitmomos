@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
+import { IconLink } from '~/components/ui/icon-link'
 import { Logo } from '~/components/ui/logo'
 import { TextLink } from '~/components/ui/text-link'
 import { ThemeToggle } from '~/components/ui/theme-toggle'
-import { NAVBAR_LINKS } from '~/data/layout/navbar'
+import { NAVBAR_LINKS, NAVBAR_REPO_LINK } from '~/data/layout/navbar'
 import { DASHBOARD_PATH, HOME_PATH, LOGIN_PATH, SIGNUP_PATH } from '~/data/navigation'
 import { useSession } from '~/hooks/auth/use-session'
 
@@ -32,6 +33,10 @@ export function Navbar() {
                 </div>
 
                 <div className='flex items-center gap-1.5'>
+                    <IconLink
+                        {...NAVBAR_REPO_LINK}
+                        className='hidden sm:inline-flex'
+                    />
                     <ThemeToggle />
                     {!session && (
                         <Button
