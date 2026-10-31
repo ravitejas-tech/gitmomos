@@ -4,13 +4,14 @@ import { CREATOR, CREATOR_LINKS } from '~/data/landing/creator'
 
 export function CreatorProfile() {
     return (
-        <div className='flex items-center gap-4'>
+        <div className='max-w-sm'>
             <img
                 src={CREATOR.photo}
                 alt={CREATOR.name}
-                className='size-16 shrink-0 rounded-lg border border-border object-cover'
+                loading='lazy'
+                className='aspect-square w-full rounded-xl border border-border object-cover shadow-card'
             />
-            <div className='min-w-0'>
+            <div className='mt-5'>
                 <Text
                     as='h3'
                     variant='title'>
