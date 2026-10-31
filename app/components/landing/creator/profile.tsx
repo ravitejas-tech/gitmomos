@@ -1,4 +1,4 @@
-import { Button } from '~/components/ui/button'
+import { IconLink } from '~/components/ui/icon-link'
 import { Text } from '~/components/ui/text'
 import { CREATOR, CREATOR_LINKS } from '~/data/landing/creator'
 
@@ -23,21 +23,11 @@ export function CreatorProfile() {
                     {CREATOR.role}
                 </Text>
                 <div className='mt-2 -ml-1.5 flex items-center gap-0.5'>
-                    {CREATOR_LINKS.map(({ label, href, icon: Icon }) => (
-                        <Button
-                            key={label}
-                            asChild
-                            variant='ghost'
-                            size='icon'>
-                            <a
-                                href={href}
-                                target='_blank'
-                                rel='noreferrer'
-                                aria-label={label}
-                                title={label}>
-                                <Icon />
-                            </a>
-                        </Button>
+                    {CREATOR_LINKS.map((link) => (
+                        <IconLink
+                            key={link.label}
+                            {...link}
+                        />
                     ))}
                 </div>
             </div>
