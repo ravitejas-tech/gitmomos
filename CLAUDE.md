@@ -6,16 +6,26 @@ There is no CLI and no server of our own: a static React Router SPA talks to Sup
 
 ## Rulebooks
 
-Read the one that covers what you are touching. Do not read them all.
+The rulebooks live in `.claude/rules/` and load on their own: `global.md` at the start of every session, the others the first time a file in their area is opened. If the one for what you are touching is not in context, read it. Do not read them all.
 
 | Editing | Read |
 |---|---|
-| Anything | [global.md](docs/rulebooks/global.md) — naming, no-comments, imports, file structure |
-| `app/` | [frontend.md](docs/rulebooks/frontend.md) |
-| `supabase/` | [backend.md](docs/rulebooks/backend.md) |
-| Committing, branching or releasing | [git.md](docs/rulebooks/git.md) |
+| Anything | [global.md](.claude/rules/global.md) — naming, no-comments, imports, file structure |
+| `app/` | [frontend.md](.claude/rules/frontend.md) |
+| `supabase/` | [backend.md](.claude/rules/backend.md) |
+| Committing, branching or releasing | [git.md](.claude/rules/git.md) |
 
-`global.md` is short and always applies. The others are read on demand.
+`global.md` is short and always applies. A rulebook's `paths` frontmatter decides when it loads; keep it in step with the table above. The rest of the setup (agents, slash commands, permissions) is described in [docs/claude-code.md](docs/claude-code.md).
+
+## Workflow
+
+| When | Use |
+|---|---|
+| Starting an issue | `/issue <number or text>` |
+| Changing the schema | `/migration <name>` |
+| A change is finished | `/handover` — the checks and the `rulebook-reviewer` agent |
+| Committing, once approved | `/commit` |
+| Releasing a version | `/release` |
 
 ## The rules that bite most often
 
@@ -54,10 +64,15 @@ app/
 supabase/
   migrations/    schema, RLS, Vault helpers, cron
   functions/     connections/, sync/, profile-chat/, milestones/, _shared/
+.claude/
+  rules/           the rulebooks
+  agents/ skills/  the reviewer and the slash commands
+  settings.json    shared permissions and attribution
+.github/
+  images/          README screenshots and logo
 docs/
   self-hosting.md  deployment guide, kept in step with the setup it describes
-  rulebooks/       the rules
-  images/          README screenshots and logo
+  claude-code.md   how the Claude Code setup works
 ```
 
 ## Commands
