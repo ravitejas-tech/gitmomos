@@ -1,9 +1,20 @@
 import type { ReactNode } from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { Card } from '~/components/ui/card'
 import { Skeleton } from '~/components/ui/skeleton'
 import { Text } from '~/components/ui/text'
 
-export interface SettingsSectionProps {
+const settingsSectionVariants = cva('grid scroll-mt-24 gap-3 border-b border-border pb-8 last:border-b-0', {
+    variants: {
+        layout: {
+            split: 'lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10',
+            stacked: '',
+        },
+    },
+    defaultVariants: { layout: 'split' },
+})
+
+export interface SettingsSectionProps extends VariantProps<typeof settingsSectionVariants> {
     id?: string
     title: string
     description?: string
@@ -11,11 +22,11 @@ export interface SettingsSectionProps {
     children: ReactNode
 }
 
-export function SettingsSection({ id, title, description, isLoading, children }: SettingsSectionProps) {
+export function SettingsSection({ id, title, description, isLoading, layout, children }: SettingsSectionProps) {
     return (
         <section
             id={id}
-            className='grid scroll-mt-24 gap-3 border-b border-border pb-8 last:border-b-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10'>
+            className={settingsSectionVariants({ layout })}>
             <div className='space-y-1'>
                 <Text
                     as='h2'
