@@ -8,7 +8,9 @@ export const profileService = {
         const userId = await authService.requireUserId()
         const { data, error } = await supabase
             .from('profiles')
-            .select('id, email, full_name, timezone, handle, tagline, is_public, avatar_path, banner_path')
+            .select(
+                'id, email, full_name, timezone, handle, tagline, is_public, avatar_path, banner_path, onboarded_at',
+            )
             .eq('id', userId)
             .single()
         if (error) throw error
