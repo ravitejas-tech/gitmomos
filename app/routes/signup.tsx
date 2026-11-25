@@ -3,7 +3,7 @@ import { AuthCard } from '~/components/auth/auth-card'
 import { AuthLink } from '~/components/auth/auth-link'
 import { SignupForm } from '~/components/auth/signup-form'
 import { Alert } from '~/components/ui/alert'
-import { CONNECTIONS_PATH, DASHBOARD_PATH, LOGIN_PATH } from '~/data/navigation'
+import { DASHBOARD_PATH, LOGIN_PATH, ONBOARDING_PATH } from '~/data/navigation'
 import { useSignup } from '~/hooks/auth/mutations'
 import { useSession } from '~/hooks/auth/use-session'
 
@@ -17,7 +17,7 @@ export default function Signup() {
         variables,
     } = useSignup({
         onSuccess: (result) => {
-            if (result.session) navigate(CONNECTIONS_PATH)
+            if (result.session) navigate(ONBOARDING_PATH)
         },
     })
 
