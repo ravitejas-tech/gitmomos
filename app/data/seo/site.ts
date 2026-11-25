@@ -1,4 +1,12 @@
-import { DASHBOARD_PATH, HOME_PATH, LICENSE_PATH, PRIVACY_PATH, RELEASES_PATH, ROADMAP_PATH } from '~/data/navigation'
+import {
+    DASHBOARD_PATH,
+    HOME_PATH,
+    LICENSE_PATH,
+    ONBOARDING_PATH,
+    PRIVACY_PATH,
+    RELEASES_PATH,
+    ROADMAP_PATH,
+} from '~/data/navigation'
 
 export const SITE_URL = 'https://gitmomos.spheo.online'
 export const SITE_NAME = 'gitmomos'
@@ -34,4 +42,4 @@ export const SITE_KEYWORDS = [
 
 export const SITEMAP_PATHS = [HOME_PATH, ROADMAP_PATH, RELEASES_PATH, PRIVACY_PATH, LICENSE_PATH] as const
 
-export const CRAWL_DISALLOW = [DASHBOARD_PATH] as const
+export const CRAWL_DISALLOW = [DASHBOARD_PATH, ONBOARDING_PATH] as const
