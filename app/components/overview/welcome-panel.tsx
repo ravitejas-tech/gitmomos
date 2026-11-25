@@ -3,7 +3,7 @@ import { NumberedStep } from '~/components/ui/numbered-step'
 import { Card } from '~/components/ui/card'
 import { LogoMark } from '~/components/ui/logo-mark'
 import { Text } from '~/components/ui/text'
-import { WELCOME_STEPS } from '~/data/activity/welcome'
+import { ONBOARDING_STEPS } from '~/data/onboarding/steps'
 
 export function WelcomePanel() {
     return (
@@ -27,11 +27,12 @@ export function WelcomePanel() {
                 </div>
             </div>
             <ol className='space-y-5 self-center rounded-xl border border-border bg-surface-muted/50 p-6'>
-                {WELCOME_STEPS.map((step, index) => (
+                {ONBOARDING_STEPS.map(({ id, title, description }, index) => (
                     <NumberedStep
-                        key={step.title}
+                        key={id}
                         step={index + 1}
-                        {...step}
+                        title={title}
+                        description={description}
                     />
                 ))}
             </ol>
