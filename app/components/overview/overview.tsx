@@ -13,13 +13,14 @@ import { useReports } from '~/hooks/reports/queries'
 import { CONSISTENCY_WEEKS } from '~/data/activity/ranges'
 import { MISSING_AI_KEY } from '~/data/ai-key/constants'
 import { lastDays, lastWeeks } from '~/lib/activity/range'
+import { writtenReports } from '~/lib/reports/written'
 
 export function Overview({ days }: { days: number }) {
     const range = lastDays(days)
     const { data: activity, isError, refetch } = useActivity({ variables: range })
     const { data: consistency } = useActivity({ variables: lastWeeks(CONSISTENCY_WEEKS) })
     const { data: reports, isLoading: reportsLoading } = useReports({ variables: undefined })
-    const written = reports?.filter((report) => report.status === 'generated')
+    const written = writtenReports(reports)
 
     if (isError) return <ErrorState onRetry={() => refetch()} />
 
