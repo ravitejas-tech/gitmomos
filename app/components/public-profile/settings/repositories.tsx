@@ -1,20 +1,21 @@
 import { FolderGit2 } from 'lucide-react'
 import { Link } from 'react-router'
 import { ProfileRepositoryRow } from '~/components/public-profile/settings/repository-row'
-import { SettingsSection } from '~/components/settings/settings-section'
+import { SettingsSection, type SettingsSectionProps } from '~/components/settings/settings-section'
 import { Button } from '~/components/ui/button'
 import { EmptyState } from '~/components/ui/empty-state'
 import { CONNECTIONS_PATH } from '~/data/navigation'
 import { useRepositories } from '~/hooks/connections/queries'
 
-export function ProfileRepositories() {
+export function ProfileRepositories({ layout }: Pick<SettingsSectionProps, 'layout'>) {
     const { data: repositories } = useRepositories()
 
     return (
         <SettingsSection
             title='Repositories'
             description='A day’s report is shown only when every repository in it is switched on.'
-            isLoading={!repositories}>
+            isLoading={!repositories}
+            layout={layout}>
             {repositories?.length === 0 && (
                 <EmptyState
                     tone='plain'
