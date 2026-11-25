@@ -1,3 +1,4 @@
+import { RoundBadge } from '~/components/ui/round-badge'
 import { Text } from '~/components/ui/text'
 import type { ReportHighlight } from '~/schemas/report.schema'
 
@@ -8,14 +9,7 @@ export function ReportHighlights({ highlights }: { highlights: ReportHighlight[]
                 <li
                     key={highlight.title}
                     className='flex gap-4 rounded-xl border border-border bg-surface-muted/40 p-4 break-inside-avoid sm:p-5'>
-                    <Text
-                        as='span'
-                        variant='caption-strong'
-                        tone='accent'
-                        numeric
-                        className='flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-subtle'>
-                        {index + 1}
-                    </Text>
+                    <RoundBadge>{index + 1}</RoundBadge>
                     <div className='min-w-0 space-y-1'>
                         <Text
                             as='h4'

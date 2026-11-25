@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
-import { GitHubCallbackStatus } from '~/components/connections/github-callback-status'
+import { GitHubCallbackStatus } from '~/components/connections/accounts/github-callback-status'
 import { DashboardPage } from '~/components/layout/dashboard-page'
 import { CONNECTIONS_PATH } from '~/data/navigation'
 import { useCompleteGitHub } from '~/hooks/connections/mutations'

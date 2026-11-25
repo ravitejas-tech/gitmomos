@@ -32,6 +32,7 @@ export default [
         route('dashboard/leaderboard', 'routes/dashboard/leaderboard.tsx'),
         route('dashboard/:feature', 'routes/dashboard/$feature.tsx'),
     ]),
+    route('onboarding', 'routes/onboarding.tsx'),
     route('login', 'routes/login.tsx'),
     route('signup', 'routes/signup.tsx'),
     route('robots.txt', 'routes/robots[.]txt.ts'),

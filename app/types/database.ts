@@ -436,6 +436,7 @@ export type Database = {
           handle: string | null
           id: string
           is_public: boolean
+          onboarded_at: string | null
           tagline: string | null
           timezone: string
           updated_at: string
@@ -449,6 +450,7 @@ export type Database = {
           handle?: string | null
           id: string
           is_public?: boolean
+          onboarded_at?: string | null
           tagline?: string | null
           timezone?: string
           updated_at?: string
@@ -462,6 +464,7 @@ export type Database = {
           handle?: string | null
           id?: string
           is_public?: boolean
+          onboarded_at?: string | null
           tagline?: string | null
           timezone?: string
           updated_at?: string
