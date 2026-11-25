@@ -1,23 +1,33 @@
-import type { ReactNode } from 'react'
-import { Text } from '~/components/ui/text'
+import type { LiHTMLAttributes, ReactNode } from 'react'
+import { Text, type TextTone } from '~/components/ui/text'
+import { cn } from '~/lib/utils'
 
-export interface DetailItemProps {
+export interface DetailItemProps extends Pick<LiHTMLAttributes<HTMLLIElement>, 'aria-current'> {
     leading: ReactNode
     title: string
-    description: string
+    description?: string
+    tone?: TextTone
 }
 
-export function DetailItem({ leading, title, description }: DetailItemProps) {
+export function DetailItem({ leading, title, description, tone, ...props }: DetailItemProps) {
     return (
-        <li className='flex gap-3'>
+        <li
+            className={cn('flex gap-3', !description && 'items-center')}
+            {...props}>
             {leading}
             <div className='space-y-0.5'>
-                <Text variant='strong'>{title}</Text>
                 <Text
-                    variant='caption'
-                    tone='secondary'>
-                    {description}
+                    variant='strong'
+                    tone={tone}>
+                    {title}
                 </Text>
+                {description && (
+                    <Text
+                        variant='caption'
+                        tone='secondary'>
+                        {description}
+                    </Text>
+                )}
             </div>
         </li>
     )
