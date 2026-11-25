@@ -170,13 +170,13 @@ Build with the same two variables set, then upload `build/client/`. Unknown path
 
 **Where:** `https://<site>`
 
-1. Sign up. You land on the dashboard.
-2. **Settings → AI provider**: pick the provider, paste the key from 1.1 and click **Continue**, then choose the report and chat models and click **Save**.
-3. **Repositories → Connect GitHub**, approve, and you come back to the app. For Gitea, use **Connect Gitea** with an access token that has `read:repository` and `read:user`.
-4. Paste a repository URL into **Tracked repositories** and click **Add**.
-5. On **Overview**, click **Sync now**. Today's report appears under **Reports**.
-6. In **Settings**, check your timezone. The nightly report is written just after midnight in it.
-7. In **Public profile**, pick a handle, switch on the repositories to show, and turn the profile on. Open `https://<site>/@<handle>` and ask the chatbot a question.
+1. Sign up. You land on the setup at `/onboarding`, which takes you through steps 2–6 one at a time. **Next** stays disabled until a step is done, and the dashboard opens only once you finish.
+2. **Connect GitHub**, approve, and you come back to the setup. For Gitea, use **Connect Gitea** with an access token that has `read:repository` and `read:user`.
+3. Paste a repository URL into **Tracked repositories** and click **Add**.
+4. Pick the AI provider, paste the key from 1.1 and click **Continue**, then choose the report and chat models and click **Save**.
+5. Click **Sync now**. Today's report appears once it is written.
+6. Optionally pick a handle, turn the profile on and switch on the repositories to show, then click **Go to dashboard**. Open `https://<site>/@<handle>` and ask the chatbot a question.
+7. In **Settings**, check your timezone. The nightly report is written just after midnight in it.
 8. In **Projects**, click **New project**, pick some repositories and save. Its milestones appear on the project's page, and on your profile when the project is shown there.
 
 If a step fails, open Supabase → **Edge Functions →** `connections`, `sync`, `profile-chat` or `milestones` **→ Logs**.
