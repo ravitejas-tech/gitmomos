@@ -1,5 +1,5 @@
-import { AccountRow } from '~/components/connections/account-row'
-import { ConnectActions } from '~/components/connections/connect-actions'
+import { AccountRow } from '~/components/connections/accounts/row'
+import { ConnectActions } from '~/components/connections/accounts/connect-actions'
 import { Card } from '~/components/ui/card'
 import { CardHeader } from '~/components/ui/card-header'
 import { PanelFooter } from '~/components/ui/panel-footer'

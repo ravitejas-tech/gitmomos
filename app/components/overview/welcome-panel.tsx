@@ -1,4 +1,4 @@
-import { ConnectActions } from '~/components/connections/connect-actions'
+import { ConnectActions } from '~/components/connections/accounts/connect-actions'
 import { NumberedStep } from '~/components/ui/numbered-step'
 import { Card } from '~/components/ui/card'
 import { LogoMark } from '~/components/ui/logo-mark'

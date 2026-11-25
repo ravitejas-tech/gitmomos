@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Github, Server } from 'lucide-react'
-import { GiteaForm } from '~/components/connections/gitea-form'
+import { GiteaForm } from '~/components/connections/accounts/gitea-form'
 import { Button } from '~/components/ui/button'
 import { Modal } from '~/components/ui/modal'
 import { Spinner } from '~/components/ui/spinner'

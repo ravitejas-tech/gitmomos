@@ -1,6 +1,6 @@
 import { FolderGit2 } from 'lucide-react'
-import { AddRepositoryForm } from '~/components/connections/add-repository-form'
-import { RepositoryRow } from '~/components/connections/repository-row'
+import { AddRepositoryForm } from '~/components/connections/repositories/add-form'
+import { RepositoryRow } from '~/components/connections/repositories/row'
 import { Badge } from '~/components/ui/badge'
 import { Card } from '~/components/ui/card'
 import { CardContent } from '~/components/ui/card-content'
