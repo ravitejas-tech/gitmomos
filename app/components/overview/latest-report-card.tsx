@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { NavLink } from 'react-router'
 import { ArrowRight, FileText } from 'lucide-react'
 import { LatestHighlights } from '~/components/overview/latest-highlights'
@@ -16,17 +17,19 @@ import type { Report } from '~/types/reports'
 export interface LatestReportCardProps {
     report: Report | undefined
     isLoading: boolean
+    actions?: ReactNode
     className?: string
 }
 
-export function LatestReportCard({ report, isLoading, className }: LatestReportCardProps) {
+export function LatestReportCard({ report, isLoading, actions, className }: LatestReportCardProps) {
     return (
         <Card className={cn('flex flex-col', className)}>
             <CardHeader
                 title='Latest report'
                 description={report ? formatDay(report.date) : undefined}
                 actions={
-                    report && (
+                    actions ??
+                    (report && (
                         <Button
                             asChild
                             variant='secondary'
@@ -36,7 +39,7 @@ export function LatestReportCard({ report, isLoading, className }: LatestReportC
                                 <ArrowRight />
                             </NavLink>
                         </Button>
-                    )
+                    ))
                 }
             />
             <CardContent className='flex-1'>
